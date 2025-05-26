@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ht-sb-frontend
+  namespace: ht-sb
+  labels:
+    app: ht-sb-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ht-sb-frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ht-sb-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ghcr.io/teamshackathon/prod/ht-sb-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
