@@ -1,34 +1,27 @@
-import { useState } from "react";
-import viteLogo from "/vite.svg";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
+import { ProtectedRoute } from "@/lib/route/ProtectedRoute";
+import { BrowserRouter, Route, Routes } from "react-router";
+
+import CallbackPage from "@/components/pages/CallbackPage";
+import LoginPage from "@/components/pages/LoginPage";
+import MainPage from "@/components/pages/MainPage";
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
-		<>
-			<div>
-				<a href="https://vite.dev" target="_blank" rel="noreferrer">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank" rel="noreferrer">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>博報堂テクノロジーズ × ソフトバンク</h1>
-			<div className="card">
-				<button type="button" onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</>
+		<BrowserRouter basename="/ht-sb">
+			<Routes>
+				<Route path="/" element={<MainPage />} />
+
+				{/* ログイン関係のルート */}
+				<Route path="/auth/login" element={<LoginPage />} />
+				<Route path="/auth/callback" element={<CallbackPage />} />
+
+				{/* ルートが存在しない場合の404ページ */}
+				{/* 認証が必要なルート */}
+				<Route element={<ProtectedRoute />}>
+					<Route path="/main" element={<MainPage />} />
+				</Route>
+			</Routes>
+		</BrowserRouter>
 	);
 }
 
