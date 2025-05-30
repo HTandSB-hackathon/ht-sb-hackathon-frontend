@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import CallbackPage from "@/components/pages/CallbackPage";
 import LoginPage from "@/components/pages/LoginPage";
 import MainPage from "@/components/pages/MainPage";
+import ProfilePage from "@/components/pages/ProfilePage";
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 				{/* 認証が必要なルート */}
 				<Route element={<ProtectedRoute />}>
 					<Route path="/main" element={<MainPage />} />
+					<Route path="/profile" element={<ProfilePage />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
