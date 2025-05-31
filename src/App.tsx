@@ -15,12 +15,12 @@ function App() {
 				{/* ログイン関係のルート */}
 				<Route path="/auth/login" element={<LoginPage />} />
 				<Route path="/auth/callback" element={<CallbackPage />} />
+				<Route path="/profile" element={<ProfilePage />} />
 
 				{/* ルートが存在しない場合の404ページ */}
 				{/* 認証が必要なルート */}
 				<Route element={<ProtectedRoute />}>
 					<Route path="/main" element={<MainPage />} />
-					<Route path="/profile" element={<ProfilePage />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
