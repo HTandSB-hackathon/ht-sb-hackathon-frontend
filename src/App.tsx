@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import CallbackPage from "@/components/pages/CallbackPage";
 import LoginPage from "@/components/pages/LoginPage";
 import MainPage from "@/components/pages/MainPage";
+import ProfilePage from "@/components/pages/ProfilePage";
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 				{/* ログイン関係のルート */}
 				<Route path="/auth/login" element={<LoginPage />} />
 				<Route path="/auth/callback" element={<CallbackPage />} />
+				<Route path="/profile" element={<ProfilePage />} />
 
 				{/* ルートが存在しない場合の404ページ */}
 				{/* 認証が必要なルート */}
