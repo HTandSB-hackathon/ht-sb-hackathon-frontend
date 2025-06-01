@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { useNavigate } from "react-router";
 import {
 	Box,
@@ -83,7 +83,7 @@ const LandingPage: React.FC = () => {
 	const heroButtonDirection = useBreakpointValue({
 		base: "column",
 		md: "row",
-	}) as any;
+	}) as "column" | "row";
 	const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 	const testimonialColumns = useBreakpointValue({ base: 1, lg: 2 });
 
@@ -121,6 +121,11 @@ const LandingPage: React.FC = () => {
 		},
 	};
 
+	// Static keys for decorative elements
+	const decorationKeys = Array.from({ length: 6 }, (_, i) => `decoration-${i}`);
+	const particleKeys = Array.from({ length: 30 }, (_, i) => `particle-${i}`);
+	const starKeys = Array.from({ length: 20 }, (_, i) => `star-${i}`);
+
 	return (
 		<Box minH="100vh" bg={bgGradient} position="relative" overflow="hidden">
 			{/* 背景装飾エフェクト */}
@@ -140,7 +145,7 @@ const LandingPage: React.FC = () => {
 					}}
 					transition={{
 						duration: 30,
-						repeat: Infinity,
+						repeat: Number.POSITIVE_INFINITY,
 						ease: "linear",
 					}}
 				/>
@@ -158,14 +163,14 @@ const LandingPage: React.FC = () => {
 					}}
 					transition={{
 						duration: 40,
-						repeat: Infinity,
+						repeat: Number.POSITIVE_INFINITY,
 						ease: "linear",
 					}}
 				/>
 				{/* 追加装飾 */}
-				{[...Array(6)].map((_, i) => (
+				{decorationKeys.map((key, i) => (
 					<MotionBox
-						key={i}
+						key={key}
 						position="absolute"
 						top={`${Math.random() * 100}%`}
 						left={`${Math.random() * 100}%`}
@@ -180,7 +185,7 @@ const LandingPage: React.FC = () => {
 						}}
 						transition={{
 							duration: 8 + Math.random() * 4,
-							repeat: Infinity,
+							repeat: Number.POSITIVE_INFINITY,
 							ease: "easeInOut",
 							delay: Math.random() * 2,
 						}}
@@ -241,9 +246,9 @@ const LandingPage: React.FC = () => {
 									{ icon: MdSecurity, text: "安全・安心", color: "blue" },
 									{ icon: MdGroup, text: "10万人が利用", color: "purple" },
 									{ icon: MdLocationOn, text: "福島限定", color: "teal" },
-								].map((badge, index) => (
+								].map((badge) => (
 									<MotionBox
-										key={index}
+										key={badge.text}
 										whileHover={{ scale: 1.05 }}
 										whileTap={{ scale: 0.95 }}
 									>
@@ -332,7 +337,7 @@ const LandingPage: React.FC = () => {
 							}}
 							transition={{
 								duration: 2,
-								repeat: Infinity,
+								repeat: Number.POSITIVE_INFINITY,
 								ease: "easeInOut",
 							}}
 						>
@@ -427,9 +432,9 @@ const LandingPage: React.FC = () => {
 									color: "orange",
 									gradient: "linear(to-br, orange.400, yellow.400)",
 								},
-							].map((product, index) => (
+							].map((product) => (
 								<MotionCard
-									key={index}
+									key={product.title}
 									variants={fadeInUp}
 									{...scaleOnHover}
 									bg={cardBg}
@@ -472,8 +477,8 @@ const LandingPage: React.FC = () => {
 											<Text fontWeight="bold" color="gray.800" fontSize="sm">
 												🎯 具体的な機能：
 											</Text>
-											{product.features.map((feature, idx) => (
-												<HStack key={idx} spacing={2} align="start">
+											{product.features.map((feature) => (
+												<HStack key={feature} spacing={2} align="start">
 													<Icon
 														as={FaCheck}
 														color={`${product.color}.500`}
@@ -553,9 +558,9 @@ const LandingPage: React.FC = () => {
 										"福島の深い魅力発見",
 									],
 								},
-							].map((step, index) => (
+							].map((step) => (
 								<MotionCard
-									key={index}
+									key={step.step}
 									variants={fadeInUp}
 									{...scaleOnHover}
 									bg={cardBg}
@@ -603,8 +608,8 @@ const LandingPage: React.FC = () => {
 												{step.description}
 											</Text>
 											<VStack spacing={2} mt={4}>
-												{step.details.map((detail, idx) => (
-													<HStack key={idx} spacing={2}>
+												{step.details.map((detail) => (
+													<HStack key={detail} spacing={2}>
 														<Icon
 															as={FaCheck}
 															color={`${step.color}.500`}
@@ -694,9 +699,9 @@ const LandingPage: React.FC = () => {
 									color: "pink",
 									gradient: "linear(to-br, pink.400, purple.400)",
 								},
-							].map((feature, index) => (
+							].map((feature) => (
 								<MotionCard
-									key={index}
+									key={feature.title}
 									variants={fadeInUp}
 									{...scaleOnHover}
 									bg={cardBg}
@@ -745,9 +750,9 @@ const LandingPage: React.FC = () => {
 				>
 					{/* 3D効果の背景 */}
 					<Box position="absolute" inset="0">
-						{[...Array(30)].map((_, i) => (
+						{particleKeys.map((key, i) => (
 							<MotionBox
-								key={i}
+								key={key}
 								position="absolute"
 								top={`${Math.random() * 100}%`}
 								left={`${Math.random() * 100}%`}
@@ -764,7 +769,7 @@ const LandingPage: React.FC = () => {
 								}}
 								transition={{
 									duration: 8 + Math.random() * 4,
-									repeat: Infinity,
+									repeat: Number.POSITIVE_INFINITY,
 									ease: "easeInOut",
 									delay: Math.random() * 5,
 								}}
@@ -831,9 +836,9 @@ const LandingPage: React.FC = () => {
 										gradient: "linear(to-br, blue.400, teal.500)",
 										description: "365日サポート",
 									},
-								].map((stat, index) => (
+								].map((stat) => (
 									<MotionCard
-										key={index}
+										key={stat.label}
 										variants={fadeInUp}
 										whileHover={{
 											scale: 1.08,
@@ -863,7 +868,7 @@ const LandingPage: React.FC = () => {
 											}}
 											transition={{
 												duration: 20,
-												repeat: Infinity,
+												repeat: Number.POSITIVE_INFINITY,
 												ease: "linear",
 											}}
 										/>
@@ -883,7 +888,7 @@ const LandingPage: React.FC = () => {
 													}}
 													transition={{
 														duration: 3,
-														repeat: Infinity,
+														repeat: Number.POSITIVE_INFINITY,
 														ease: "easeInOut",
 													}}
 												>
@@ -952,8 +957,8 @@ const LandingPage: React.FC = () => {
 														value: "94.7%",
 														change: "+98%",
 													},
-												].map((metric, index) => (
-													<VStack key={index} spacing={2}>
+												].map((metric) => (
+													<VStack key={metric.metric} spacing={2}>
 														<Text color="gray.300" fontSize="sm">
 															{metric.metric}
 														</Text>
@@ -996,9 +1001,9 @@ const LandingPage: React.FC = () => {
 				>
 					{/* 高級感のある背景装飾 */}
 					<Box position="absolute" inset="0" opacity="0.1">
-						{[...Array(20)].map((_, i) => (
+						{starKeys.map((key, i) => (
 							<MotionBox
-								key={i}
+								key={key}
 								position="absolute"
 								top={`${Math.random() * 100}%`}
 								left={`${Math.random() * 100}%`}
@@ -1012,7 +1017,7 @@ const LandingPage: React.FC = () => {
 								}}
 								transition={{
 									duration: 3 + Math.random() * 2,
-									repeat: Infinity,
+									repeat: Number.POSITIVE_INFINITY,
 									delay: Math.random() * 3,
 								}}
 							/>
@@ -1092,9 +1097,9 @@ const LandingPage: React.FC = () => {
 										bgGradient: "linear(to-br, gray.600, purple.700)",
 										achievement: "歴史の証人",
 									},
-								].map((testimonial, index) => (
+								].map((testimonial) => (
 									<MotionCard
-										key={index}
+										key={testimonial.name}
 										variants={fadeInUp}
 										whileHover={{
 											scale: 1.02,
@@ -1148,9 +1153,9 @@ const LandingPage: React.FC = () => {
 															対話相手: {testimonial.character}
 														</Badge>
 														<HStack spacing={1}>
-															{[...Array(testimonial.rating)].map((_, i) => (
+															{Array.from({ length: testimonial.rating }, (_, i) => (
 																<Icon
-																	key={i}
+																	key={`${testimonial.name}-star-${i}`}
 																	as={FaStar}
 																	color="yellow.300"
 																	boxSize={4}
@@ -1165,7 +1170,7 @@ const LandingPage: React.FC = () => {
 													borderRadius="xl"
 													p={4}
 													borderLeft="4px solid"
-													borderColor="purple.400"
+													borderLeftColor="purple.400"
 													border="1px solid"
 													borderColor="whiteAlpha.300"
 												>
@@ -1213,8 +1218,8 @@ const LandingPage: React.FC = () => {
 												{ label: "平均親密度", value: "87%", icon: FaHeart },
 												{ label: "満足度", value: "98%", icon: FaStar },
 												{ label: "リピート率", value: "94%", icon: FaRocket },
-											].map((stat, index) => (
-												<VStack key={index} spacing={2}>
+											].map((stat) => (
+												<VStack key={stat.label} spacing={2}>
 													<Icon as={stat.icon} color="blue.600" boxSize={6} />
 													<Text
 														fontSize="2xl"
