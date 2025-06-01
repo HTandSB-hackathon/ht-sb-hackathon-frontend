@@ -1153,14 +1153,17 @@ const LandingPage: React.FC = () => {
 															対話相手: {testimonial.character}
 														</Badge>
 														<HStack spacing={1}>
-															{Array.from({ length: testimonial.rating }, (_, i) => (
-																<Icon
-																	key={`${testimonial.name}-star-${i}`}
-																	as={FaStar}
-																	color="yellow.300"
-																	boxSize={4}
-																/>
-															))}
+															{Array.from(
+																{ length: testimonial.rating },
+																(_, i) => (
+																	<Icon
+																		key={`${testimonial.name}-star-${i}`}
+																		as={FaStar}
+																		color="yellow.300"
+																		boxSize={4}
+																	/>
+																),
+															)}
 														</HStack>
 													</VStack>
 												</HStack>
