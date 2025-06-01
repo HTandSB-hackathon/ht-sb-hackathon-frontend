@@ -1,17 +1,91 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useAtom } from 'jotai';
+import {
+  Box,
+  Container,
+  VStack,
+  HStack,
+  Text,
+  Heading,
+  Avatar,
+  Badge,
+  Progress,
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  CardHeader,
+  SimpleGrid,
+  Image,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  useColorModeValue,
+  useBreakpointValue,
+  Flex,
+  Spacer,
+  Icon,
+  IconButton,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  Center,
+  useToast,
+  Tooltip,
+  Divider,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+  Stack,
+  Wrap,
+  WrapItem,
+} from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CharacterProfile } from '../molecules/CharacterProfile';
+import { 
+  FaArrowLeft, 
+  FaShare, 
+  FaHeart, 
+  FaComment,
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaGift,
+  FaStar,
+  FaLock,
+  FaUnlock
+} from 'react-icons/fa';
+import { 
+  MdLocationCity, 
+  MdPerson, 
+  MdBook, 
+  MdFavorite,
+  MdChat,
+  MdCake,
+  MdWork
+} from 'react-icons/md';
+
 import { CharacterQuery } from '../../lib/domain/CharacterQuery';
 import {
   selectedCharacterDetailAtom,
   characterDetailLoadingAtom
 } from '../../lib/atom/CharacterAtom';
+import { TRUST_LEVELS } from '../../lib/types/character';
+
+const MotionBox = motion(Box);
+const MotionCard = motion(Card);
 
 /**
- * キャラクター詳細ページ
- * 福島の魅力を表現する美しく洗練されたデザイン
+ * キャラクター詳細ページ - 最高のデザイン
  */
 export const CharacterDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,19 +93,63 @@ export const CharacterDetailPage: React.FC = () => {
   const [characterDetail, setCharacterDetail] = useAtom(selectedCharacterDetailAtom);
   const [isLoading, setIsLoading] = useAtom(characterDetailLoadingAtom);
   const [error, setError] = React.useState<string | null>(null);
-  const [currentSeason, setCurrentSeason] = React.useState('spring');
-  const [activeTab, setActiveTab] = React.useState('profile');
+  const [tabIndex, setTabIndex] = React.useState(0);
+  const [isFavorite, setIsFavorite] = React.useState(false);
 
-  // 季節の取得
-  React.useEffect(() => {
-    const month = new Date().getMonth() + 1;
-    if (month >= 3 && month <= 5) setCurrentSeason('spring');
-    else if (month >= 6 && month <= 8) setCurrentSeason('summer');
-    else if (month >= 9 && month <= 11) setCurrentSeason('autumn');
-    else setCurrentSeason('winter');
-  }, []);
+  const toast = useToast();
 
-  // キャラクター詳細データの取得
+  // レスポンシブデザイン
+  const isMobile = useBreakpointValue({ base: true, md: false });
+  const headerSize = useBreakpointValue({ base: 'xl', md: '2xl' });
+  const avatarSize = useBreakpointValue({ base: '2xl', md: '3xl' });
+  const containerPadding = useBreakpointValue({ base: 4, md: 6, lg: 8 });
+
+  // カラーテーマ
+  const bgGradient = useColorModeValue(
+    'linear(to-br, blue.50, purple.50, pink.50)',
+    'linear(to-br, gray.900, purple.900, blue.900)'
+  );
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const headerBg = useColorModeValue('rgba(255, 255, 255, 0.9)', 'rgba(26, 32, 44, 0.9)');
+
+  // 地域テーマ
+  const getCityTheme = (city: string) => {
+    const themes: Record<string, { 
+      color: string; 
+      emoji: string; 
+      gradient: string;
+      specialty: string;
+    }> = {
+      '須賀川市': { 
+        color: 'purple', 
+        emoji: '🍇', 
+        gradient: 'linear(to-r, purple.400, pink.400)',
+        specialty: 'ウルトラマンの故郷'
+      },
+      '三春町': { 
+        color: 'pink', 
+        emoji: '🌸', 
+        gradient: 'linear(to-r, pink.400, rose.400)',
+        specialty: '滝桜で有名'
+      },
+      '中島村': { 
+        color: 'green', 
+        emoji: '🌾', 
+        gradient: 'linear(to-r, green.400, teal.400)',
+        specialty: '豊かな田園風景'
+      },
+    };
+    return themes[city] || { 
+      color: 'gray', 
+      emoji: '🏔️', 
+      gradient: 'linear(to-r, gray.400, gray.500)',
+      specialty: '自然の恵み'
+    };
+  };
+
+  const cityTheme = characterDetail ? getCityTheme(characterDetail.city) : null;
+
+  // データ取得
   React.useEffect(() => {
     if (id) {
       loadCharacterDetail(id);
@@ -48,6 +166,13 @@ export const CharacterDetailPage: React.FC = () => {
     } catch (err) {
       console.error('キャラクター詳細読み込みエラー:', err);
       setError('キャラクター情報の読み込みに失敗しました');
+      toast({
+        title: 'エラー',
+        description: 'データの読み込みに失敗しました',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -63,551 +188,707 @@ export const CharacterDetailPage: React.FC = () => {
     navigate('/characters');
   };
 
-  // 季節テーマ
-  const seasonThemes = {
-    spring: {
-      bg: 'from-pink-50 via-rose-50 to-orange-50',
-      accent: 'from-pink-400 to-rose-500',
-      emoji: '🌸',
-      name: '春'
-    },
-    summer: {
-      bg: 'from-green-50 via-emerald-50 to-teal-50',
-      accent: 'from-green-400 to-teal-500',
-      emoji: '🌿',
-      name: '夏'
-    },
-    autumn: {
-      bg: 'from-amber-50 via-orange-50 to-red-50',
-      accent: 'from-amber-400 to-orange-500',
-      emoji: '🍁',
-      name: '秋'
-    },
-    winter: {
-      bg: 'from-slate-50 via-blue-50 to-indigo-50',
-      accent: 'from-blue-400 to-indigo-500',
-      emoji: '❄️',
-      name: '冬'
-    }
+  const handleFavoriteToggle = () => {
+    setIsFavorite(!isFavorite);
+    toast({
+      title: isFavorite ? 'お気に入りから削除' : 'お気に入りに追加',
+      status: 'success',
+      duration: 2000,
+      isClosable: true,
+    });
   };
-
-  const theme = seasonThemes[currentSeason as keyof typeof seasonThemes];
-
-  // 福島の地域色を表現
-  const getCityTheme = (city: string) => {
-    const themes: Record<string, { color: string; emoji: string; bg: string; specialty: string }> = {
-      '福島市': { color: 'rose', emoji: '🌸', bg: 'from-rose-100 to-pink-100', specialty: '桃とりんご' },
-      '郡山市': { color: 'blue', emoji: '🏞️', bg: 'from-blue-100 to-cyan-100', specialty: '猪苗代湖' },
-      'いわき市': { color: 'orange', emoji: '🌊', bg: 'from-orange-100 to-amber-100', specialty: 'アクアマリン' },
-      '会津若松市': { color: 'green', emoji: '🏯', bg: 'from-green-100 to-emerald-100', specialty: '鶴ヶ城' },
-      '須賀川市': { color: 'purple', emoji: '🍇', bg: 'from-purple-100 to-violet-100', specialty: 'ウルトラマン' },
-      '白河市': { color: 'indigo', emoji: '⛰️', bg: 'from-indigo-100 to-blue-100', specialty: '小峰城' },
-      '三春町': { color: 'pink', emoji: '🌸', bg: 'from-pink-100 to-rose-100', specialty: '滝桜' },
-      '中島村': { color: 'teal', emoji: '🌾', bg: 'from-teal-100 to-green-100', specialty: '豊かな田園' }
-    };
-    return themes[city] || { color: 'gray', emoji: '🏔️', bg: 'from-gray-100 to-slate-100', specialty: '自然の恵み' };
-  };
-
-  const cityTheme = characterDetail ? getCityTheme(characterDetail.city) : null;
 
   // ローディング表示
   if (isLoading) {
     return (
-      <div className={`min-h-screen bg-gradient-to-br ${theme.bg} flex items-center justify-center relative overflow-hidden`}>
-        {/* 背景装飾 */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            animate={{
-              x: [0, 30, 0],
-              y: [0, -20, 0],
-              rotate: [0, 180, 360]
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-white/30 to-transparent rounded-full blur-3xl"
-          />
-        </div>
+      <Box minH="100vh" bgGradient={bgGradient} position="relative">
+        <Container maxW="6xl" p={containerPadding}>
+          <VStack spacing={8} align="stretch" py={8}>
+            {/* ヘッダースケルトン */}
+            <Card bg={cardBg} borderRadius="2xl" shadow="xl">
+              <CardBody p={6}>
+                <HStack spacing={4}>
+                  <Skeleton borderRadius="full" boxSize="50px" />
+                  <VStack align="start" spacing={2} flex={1}>
+                    <SkeletonText noOfLines={1} width="150px" />
+                    <SkeletonText noOfLines={1} width="100px" />
+                  </VStack>
+                </HStack>
+              </CardBody>
+            </Card>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center relative z-10"
-        >
-          <motion.div
-            animate={{ 
-              rotate: 360,
-              scale: [1, 1.2, 1]
-            }}
-            transition={{ 
-              rotate: { duration: 2, repeat: Infinity, ease: 'linear' },
-              scale: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' }
-            }}
-            className="inline-block text-6xl mb-6"
-          >
-            {theme.emoji}
-          </motion.div>
-          <motion.p 
-            className="text-gray-600 text-lg font-medium"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            福島のこころを読み込み中...
-          </motion.p>
-        </motion.div>
-      </div>
+            {/* プロフィールスケルトン */}
+            <Card bg={cardBg} borderRadius="2xl" shadow="xl">
+              <CardBody p={8}>
+                <VStack spacing={6}>
+                  <SkeletonCircle size="150px" />
+                  <SkeletonText noOfLines={3} width="80%" textAlign="center" />
+                  <Skeleton height="40px" width="200px" borderRadius="2xl" />
+                </VStack>
+              </CardBody>
+            </Card>
+
+            {/* コンテンツスケルトン */}
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Card key={index} bg={cardBg} borderRadius="xl" shadow="lg">
+                  <CardBody>
+                    <SkeletonText noOfLines={5} />
+                  </CardBody>
+                </Card>
+              ))}
+            </SimpleGrid>
+          </VStack>
+        </Container>
+      </Box>
     );
   }
 
   // エラー表示
   if (error || !characterDetail) {
     return (
-      <div className={`min-h-screen bg-gradient-to-br ${theme.bg} flex items-center justify-center relative overflow-hidden`}>
-        {/* 背景装飾 */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            animate={{
-              x: [0, -30, 0],
-              y: [0, 20, 0],
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-white/20 to-transparent rounded-full blur-3xl"
-          />
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 max-w-md w-full mx-6 relative z-10 border border-white/50"
-        >
-          <div className="text-center">
-            <motion.span 
-              className="text-8xl block mb-6"
-              animate={{ 
-                rotate: [0, 10, -10, 0],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              😢
-            </motion.span>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">
-              読み込みエラー
-            </h2>
-            <p className="text-gray-600 mb-8 leading-relaxed">
-              {error || 'キャラクター情報が見つかりませんでした'}
-            </p>
-            <div className="flex gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => id && loadCharacterDetail(id)}
-                className={`px-6 py-3 bg-gradient-to-r ${theme.accent} text-white rounded-2xl hover:shadow-lg transition-all font-medium`}
-              >
-                🔄 再読み込み
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleBack}
-                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-2xl hover:bg-gray-300 transition-all font-medium"
-              >
-                📋 一覧に戻る
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
-      </div>
+      <Box minH="100vh" bgGradient={bgGradient} display="flex" alignItems="center" justifyContent="center">
+        <Container maxW="md">
+          <MotionCard
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            bg={cardBg}
+            borderRadius="2xl"
+            shadow="2xl"
+            p={8}
+            textAlign="center"
+          >
+            <VStack spacing={6}>
+              <Text fontSize="6xl">😞</Text>
+              <Heading size="lg" color="gray.600">
+                読み込みエラー
+              </Heading>
+              <Text color="gray.500">
+                {error || 'キャラクター情報が見つかりませんでした'}
+              </Text>
+              <HStack spacing={4}>
+                <Button
+                  colorScheme="purple"
+                  onClick={() => id && loadCharacterDetail(id)}
+                  leftIcon={<Icon as={FaArrowLeft} />}
+                >
+                  再読み込み
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleBack}
+                >
+                  一覧に戻る
+                </Button>
+              </HStack>
+            </VStack>
+          </MotionCard>
+        </Container>
+      </Box>
     );
   }
 
+  const trustLevel = characterDetail.relationship?.trustLevel || 1;
+  const trustInfo = TRUST_LEVELS[trustLevel as keyof typeof TRUST_LEVELS];
+  const progress = characterDetail.relationship 
+    ? (characterDetail.relationship.trustPoints / characterDetail.relationship.nextLevelPoints) * 100 
+    : 0;
+
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${theme.bg} relative overflow-hidden`}>
+    <Box minH="100vh" bgGradient={bgGradient} position="relative">
       {/* 背景装飾 */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
+      <Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
+        <MotionBox
+          position="absolute"
+          top="-20%"
+          right="-20%"
+          width="40%"
+          height="40%"
+          bgGradient="radial(circle, purple.200 0%, transparent 70%)"
+          opacity="0.4"
           animate={{
-            x: [0, 30, 0],
-            y: [0, -20, 0],
+            rotate: [0, 360],
+            scale: [1, 1.1, 1],
           }}
           transition={{
             duration: 20,
             repeat: Infinity,
             ease: "linear"
           }}
-          className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-white/30 to-transparent rounded-full blur-3xl"
         />
-        <motion.div
-          animate={{
-            x: [0, -20, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-white/20 to-transparent rounded-full blur-3xl"
-        />
-        
-        {/* 福島の山々のシルエット */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-200/30 to-transparent">
-          <svg viewBox="0 0 1200 200" className="w-full h-full">
-            <path d="M0,200 L0,120 L200,60 L400,100 L600,40 L800,80 L1000,20 L1200,60 L1200,200 Z" 
-                  fill="currentColor" className="text-gray-300/50"/>
-          </svg>
-        </div>
-      </div>
+      </Box>
 
-      {/* ヘッダー */}
-      <motion.div 
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-30 backdrop-blur-xl bg-white/70 border-b border-white/50"
-      >
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <motion.button
-              whileHover={{ scale: 1.05, x: -5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleBack}
-              className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-white/60 rounded-2xl transition-all font-medium"
-            >
-              <motion.span 
-                className="text-2xl"
-                animate={{ x: [-2, 2, -2] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                ←
-              </motion.span>
-              <span>福島のこころへ戻る</span>
-            </motion.button>
-
-            <div className="flex items-center gap-4">
-              {/* 地域バッジ */}
-              {cityTheme && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className={`px-4 py-2 rounded-full bg-gradient-to-r from-${cityTheme.color}-400 to-${cityTheme.color}-500 text-white text-sm font-medium shadow-lg flex items-center gap-2`}
+      <Container maxW="6xl" p={containerPadding} position="relative" zIndex="1">
+        <VStack spacing={8} align="stretch">
+          {/* ヘッダー */}
+          <MotionCard
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            bg={headerBg}
+            backdropFilter="blur(20px)"
+            borderRadius="2xl"
+            shadow="xl"
+            border="1px solid"
+            borderColor="whiteAlpha.200"
+          >
+            <CardBody p={6}>
+              <Flex align="center" gap={4}>
+                <Button
+                  leftIcon={<FaArrowLeft />}
+                  variant="ghost"
+                  onClick={handleBack}
+                  borderRadius="xl"
+                  _hover={{ bg: "whiteAlpha.200" }}
                 >
-                  <span>{cityTheme.emoji}</span>
-                  <span>{characterDetail.city}</span>
-                </motion.div>
+                  戻る
+                </Button>
+
+                <Spacer />
+
+                {cityTheme && (
+                  <Badge
+                    colorScheme={cityTheme.color}
+                    variant="solid"
+                    px={4}
+                    py={2}
+                    borderRadius="full"
+                    fontSize="sm"
+                    fontWeight="bold"
+                  >
+                    {cityTheme.emoji} {characterDetail.city}
+                  </Badge>
+                )}
+
+                <Tooltip label="シェア">
+                  <IconButton
+                    aria-label="share"
+                    icon={<FaShare />}
+                    variant="ghost"
+                    borderRadius="full"
+                    _hover={{ bg: "whiteAlpha.200" }}
+                  />
+                </Tooltip>
+              </Flex>
+            </CardBody>
+          </MotionCard>
+
+          {/* メインプロフィール */}
+          <MotionCard
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            bg={cardBg}
+            borderRadius="2xl"
+            shadow="2xl"
+            overflow="hidden"
+          >
+            {/* カバー画像 */}
+            <Box
+              height="200px"
+              bgGradient={cityTheme?.gradient || 'linear(to-r, gray.400, gray.500)'}
+              position="relative"
+            >
+              {characterDetail.coverImage && (
+                <Image
+                  src={characterDetail.coverImage}
+                  alt=""
+                  w="full"
+                  h="full"
+                  objectFit="cover"
+                />
               )}
+              <Box
+                position="absolute"
+                inset="0"
+                bgGradient="linear(to-t, blackAlpha.600, transparent)"
+              />
+            </Box>
 
-              {/* シェアボタン */}
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-3 text-gray-600 hover:bg-white/60 rounded-2xl transition-all"
-                title="この人を共有"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.632 8.048c.533.552.854 1.306.854 2.146 0 1.657-1.343 3-3 3s-3-1.343-3-3c0-.84.321-1.594.854-2.146M15 7.5a3 3 0 11-6 0 3 3 0 016 0zm3 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* メインコンテンツ */}
-      <div className="px-6 py-8 relative z-10">
-        {/* プロフィールセクション */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <CharacterProfile
-            character={characterDetail}
-            onStartConversation={handleStartConversation}
-          />
-        </motion.div>
-
-        {/* タブナビゲーション */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
-        >
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-2 shadow-xl border border-white/50">
-            <div className="flex gap-2">
-              {[
-                { id: 'profile', name: '詳細情報', emoji: '👤' },
-                { id: 'local', name: '地域の魅力', emoji: cityTheme?.emoji || '🏔️' },
-                { id: 'stories', name: 'ストーリー', emoji: '📖' },
-                { id: 'connection', name: 'つながり', emoji: '💕' }
-              ].map((tab) => (
-                <motion.button
-                  key={tab.id}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-sm font-medium transition-all ${
-                    activeTab === tab.id
-                      ? `bg-gradient-to-r ${theme.accent} text-white shadow-lg`
-                      : 'text-gray-600 hover:bg-white/60'
-                  }`}
-                >
-                  <span>{tab.emoji}</span>
-                  <span>{tab.name}</span>
-                </motion.button>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* タブコンテンツ */}
-        <AnimatePresence mode="wait">
-          {activeTab === 'profile' && (
-            <motion.div
-              key="profile"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
-              {/* 基本情報カード */}
-              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <span>👤</span>
-                  <span>基本情報</span>
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-sm font-medium text-gray-500 block mb-1">お名前</label>
-                      <p className="text-lg font-semibold text-gray-800">{characterDetail.name}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500 block mb-1">年齢</label>
-                      <p className="text-lg text-gray-700">{characterDetail.age}歳</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500 block mb-1">お仕事</label>
-                      <p className="text-lg text-gray-700">{characterDetail.occupation}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-sm font-medium text-gray-500 block mb-1">出身地</label>
-                      <p className="text-lg text-gray-700 flex items-center gap-2">
-                        <span>{cityTheme?.emoji}</span>
-                        <span>{characterDetail.city}</span>
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-500 block mb-1">趣味</label>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {characterDetail.hobbies?.map((hobby, index) => (
-                          <span key={index} className={`px-3 py-1 bg-${cityTheme?.color}-50 text-${cityTheme?.color}-600 rounded-full text-sm font-medium border border-${cityTheme?.color}-200`}>
-                            {hobby}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 自己紹介カード */}
-              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <span>💭</span>
-                  <span>自己紹介</span>
-                </h3>
-                <p className="text-gray-700 leading-relaxed">{characterDetail.introduction}</p>
-              </div>
-            </motion.div>
-          )}
-
-          {activeTab === 'local' && cityTheme && (
-            <motion.div
-              key="local"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
-              {/* 地域の魅力セクション */}
-              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <span>{cityTheme.emoji}</span>
-                  <span>{characterDetail.city}の魅力</span>
-                </h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* 観光スポット */}
-                  <motion.div 
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    className={`text-center p-6 bg-gradient-to-br ${cityTheme.bg} rounded-2xl border border-white/50 shadow-lg`}
+            <CardBody p={8} mt={-16} position="relative">
+              <VStack spacing={6} align="center">
+                {/* アバター */}
+                <Box position="relative">
+                  <Avatar
+                    size={avatarSize}
+                    src={characterDetail.profileImage}
+                    name={characterDetail.name}
+                    border="6px solid white"
+                    shadow="2xl"
+                  />
+                  <Box
+                    position="absolute"
+                    bottom="2"
+                    right="2"
+                    bg="white"
+                    borderRadius="full"
+                    p="2"
+                    border="2px solid"
+                    borderColor={`${cityTheme?.color}.400`}
+                    fontSize="lg"
                   >
-                    <motion.span 
-                      className="text-4xl block mb-4"
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      🏞️
-                    </motion.span>
-                    <h4 className="font-bold text-gray-800 mb-2">観光スポット</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      美しい自然と歴史的建造物が織りなす絶景を楽しめます
-                    </p>
-                  </motion.div>
+                    {cityTheme?.emoji}
+                  </Box>
+                </Box>
 
-                  {/* グルメ */}
-                  <motion.div 
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    className={`text-center p-6 bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl border border-white/50 shadow-lg`}
-                  >
-                    <motion.span 
-                      className="text-4xl block mb-4"
-                      animate={{ rotate: [0, -10, 10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                    >
-                      🍜
-                    </motion.span>
-                    <h4 className="font-bold text-gray-800 mb-2">ご当地グルメ</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      地元の食材を使った心温まる絶品料理をご堪能ください
-                    </p>
-                  </motion.div>
+                {/* 基本情報 */}
+                <VStack spacing={2} textAlign="center">
+                  <Heading size={headerSize} color="gray.800">
+                    {characterDetail.name}
+                  </Heading>
+                  <Text fontSize="lg" color="gray.500" fontWeight="medium">
+                    {characterDetail.nameKana}
+                  </Text>
+                  <HStack spacing={4} fontSize="sm" color="gray.600" wrap="wrap" justify="center">
+                    <HStack>
+                      <Icon as={MdCake} />
+                      <Text>{characterDetail.age}歳</Text>
+                    </HStack>
+                    <HStack>
+                      <Icon as={MdWork} />
+                      <Text>{characterDetail.occupation}</Text>
+                    </HStack>
+                    <HStack>
+                      <Icon as={FaMapMarkerAlt} />
+                      <Text>{characterDetail.city}</Text>
+                    </HStack>
+                  </HStack>
+                </VStack>
 
-                  {/* 特産品 */}
-                  <motion.div 
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    className={`text-center p-6 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl border border-white/50 shadow-lg`}
-                  >
-                    <motion.span 
-                      className="text-4xl block mb-4"
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                    >
-                      🎭
-                    </motion.span>
-                    <h4 className="font-bold text-gray-800 mb-2">特産品</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {cityTheme.specialty}など、その土地ならではの魅力がいっぱい
-                    </p>
-                  </motion.div>
-                </div>
+                {/* 信頼度 */}
+                {characterDetail.relationship && (
+                  <Card bg="gray.50" borderRadius="xl" w="full" maxW="md">
+                    <CardBody p={4}>
+                      <VStack spacing={3}>
+                        <HStack justify="space-between" w="full">
+                          <Badge
+                            colorScheme={trustInfo.color}
+                            variant="subtle"
+                            px={3}
+                            py={1}
+                            borderRadius="full"
+                            fontSize="sm"
+                          >
+                            <HStack spacing={1}>
+                              <FaStar />
+                              <Text>{trustInfo.name}</Text>
+                            </HStack>
+                          </Badge>
+                          <Text fontSize="sm" color="gray.600">
+                            Lv.{trustLevel} ({characterDetail.relationship.trustPoints}/{characterDetail.relationship.nextLevelPoints})
+                          </Text>
+                        </HStack>
+                        <Progress
+                          value={progress}
+                          colorScheme={trustInfo.color}
+                          size="lg"
+                          borderRadius="full"
+                          w="full"
+                          hasStripe
+                          isAnimated
+                        />
+                      </VStack>
+                    </CardBody>
+                  </Card>
+                )}
 
-                <motion.div 
-                  className="mt-8 text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {characterDetail.name}さんと一緒に、{characterDetail.city}の魅力を探してみませんか？
-                  </p>
-                  <motion.button
-                    whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }}
-                    whileTap={{ scale: 0.95 }}
+                {/* アクションボタン */}
+                <HStack spacing={4}>
+                  <Button
+                    colorScheme="purple"
+                    size="lg"
+                    leftIcon={<FaComment />}
                     onClick={handleStartConversation}
-                    className={`px-8 py-4 bg-gradient-to-r ${theme.accent} text-white font-bold rounded-2xl shadow-lg transition-all flex items-center gap-3 mx-auto`}
+                    borderRadius="2xl"
+                    px={8}
+                    _hover={{
+                      transform: "translateY(-2px)",
+                      boxShadow: "lg",
+                    }}
                   >
-                    <span>💬</span>
-                    <span>今すぐ会話を始める</span>
-                  </motion.button>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
+                    会話を始める
+                  </Button>
+                  <IconButton
+                    aria-label="favorite"
+                    icon={isFavorite ? <FaHeart /> : <FaHeart />}
+                    colorScheme={isFavorite ? "red" : "gray"}
+                    variant={isFavorite ? "solid" : "outline"}
+                    size="lg"
+                    borderRadius="2xl"
+                    onClick={handleFavoriteToggle}
+                    _hover={{
+                      transform: "scale(1.1)",
+                    }}
+                  />
+                </HStack>
+              </VStack>
+            </CardBody>
+          </MotionCard>
 
-          {activeTab === 'stories' && (
-            <motion.div
-              key="stories"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
-              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <span>📖</span>
-                  <span>ストーリー</span>
-                </h3>
-                <div className="text-center py-12">
-                  <motion.div
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="text-6xl mb-4"
-                  >
-                    🚧
-                  </motion.div>
-                  <p className="text-gray-600">この機能は準備中です</p>
-                </div>
-              </div>
-            </motion.div>
-          )}
+          {/* タブセクション */}
+          <MotionCard
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            bg={cardBg}
+            borderRadius="2xl"
+            shadow="xl"
+          >
+            <Tabs index={tabIndex} onChange={setTabIndex} variant="enclosed" isLazy>
+              <TabList borderBottom="none" bg="gray.50" borderTopRadius="2xl">
+                <Tab
+                  flex="1"
+                  _selected={{ bg: cardBg, borderColor: "gray.200" }}
+                  borderRadius="xl"
+                  m={2}
+                  fontWeight="bold"
+                >
+                  <HStack>
+                    <Icon as={MdPerson} />
+                    <Text>プロフィール</Text>
+                  </HStack>
+                </Tab>
+                <Tab
+                  flex="1"
+                  _selected={{ bg: cardBg, borderColor: "gray.200" }}
+                  borderRadius="xl"
+                  m={2}
+                  fontWeight="bold"
+                >
+                  <HStack>
+                    <Icon as={MdLocationCity} />
+                    <Text>地域の魅力</Text>
+                  </HStack>
+                </Tab>
+                <Tab
+                  flex="1"
+                  _selected={{ bg: cardBg, borderColor: "gray.200" }}
+                  borderRadius="xl"
+                  m={2}
+                  fontWeight="bold"
+                >
+                  <HStack>
+                    <Icon as={MdBook} />
+                    <Text>ストーリー</Text>
+                  </HStack>
+                </Tab>
+                <Tab
+                  flex="1"
+                  _selected={{ bg: cardBg, borderColor: "gray.200" }}
+                  borderRadius="xl"
+                  m={2}
+                  fontWeight="bold"
+                >
+                  <HStack>
+                    <Icon as={FaGift} />
+                    <Text>つながり</Text>
+                  </HStack>
+                </Tab>
+              </TabList>
 
-          {activeTab === 'connection' && (
-            <motion.div
-              key="connection"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-6"
-            >
-              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/50">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                  <span>💕</span>
-                  <span>つながり</span>
-                </h3>
-                <div className="text-center py-12">
-                  <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="text-6xl mb-4"
-                  >
-                    🤝
-                  </motion.div>
-                  <p className="text-gray-600">関係性機能は準備中です</p>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              <TabPanels>
+                {/* プロフィールタブ */}
+                <TabPanel p={8}>
+                  <VStack spacing={8} align="stretch">
+                    {/* 自己紹介 */}
+                    <Box>
+                      <Heading size="md" mb={4} color="gray.700">
+                        💭 自己紹介
+                      </Heading>
+                      <Text color="gray.600" lineHeight="tall" fontSize="lg">
+                        {characterDetail.introduction}
+                      </Text>
+                    </Box>
+
+                    <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
+                      {/* 性格 */}
+                      <Box>
+                        <Heading size="sm" mb={4} color="gray.700">
+                          ✨ 性格
+                        </Heading>
+                        <Wrap>
+                          {characterDetail.personality.map((trait, index) => (
+                            <WrapItem key={index}>
+                              <Tag colorScheme="green" size="lg" borderRadius="full">
+                                <TagLabel>{trait}</TagLabel>
+                              </Tag>
+                            </WrapItem>
+                          ))}
+                        </Wrap>
+                      </Box>
+
+                      {/* 趣味 */}
+                      <Box>
+                        <Heading size="sm" mb={4} color="gray.700">
+                          🎯 趣味
+                        </Heading>
+                        <Wrap>
+                          {characterDetail.hobbies.map((hobby, index) => (
+                            <WrapItem key={index}>
+                              <Tag colorScheme="blue" size="lg" borderRadius="full">
+                                <TagLabel>{hobby}</TagLabel>
+                              </Tag>
+                            </WrapItem>
+                          ))}
+                        </Wrap>
+                      </Box>
+
+                      {/* 得意なこと */}
+                      <Box>
+                        <Heading size="sm" mb={4} color="gray.700">
+                          🏆 得意なこと
+                        </Heading>
+                        <Wrap>
+                          {characterDetail.specialties.map((specialty, index) => (
+                            <WrapItem key={index}>
+                              <Tag colorScheme="purple" size="lg" borderRadius="full">
+                                <TagLabel>{specialty}</TagLabel>
+                              </Tag>
+                            </WrapItem>
+                          ))}
+                        </Wrap>
+                      </Box>
+
+                      {/* 地域の特産品 */}
+                      <Box>
+                        <Heading size="sm" mb={4} color="gray.700">
+                          🏞️ 地域の特産品
+                        </Heading>
+                        <SimpleGrid columns={2} spacing={4}>
+                          {characterDetail.localSpecialties.map((specialty) => (
+                            <MotionBox
+                              key={specialty.id}
+                              whileHover={{ scale: 1.05 }}
+                              cursor="pointer"
+                            >
+                              <Card size="sm" borderRadius="xl" overflow="hidden">
+                                <Image
+                                  src={specialty.imageUrl}
+                                  alt={specialty.name}
+                                  height="100px"
+                                  objectFit="cover"
+                                />
+                                <CardBody p={3}>
+                                  <Text fontWeight="bold" fontSize="sm" textAlign="center">
+                                    {specialty.name}
+                                  </Text>
+                                  {specialty.season && (
+                                    <Text fontSize="xs" color="gray.500" textAlign="center">
+                                      旬: {specialty.season}
+                                    </Text>
+                                  )}
+                                </CardBody>
+                              </Card>
+                            </MotionBox>
+                          ))}
+                        </SimpleGrid>
+                      </Box>
+                    </SimpleGrid>
+                  </VStack>
+                </TabPanel>
+
+                {/* 地域の魅力タブ */}
+                <TabPanel p={8}>
+                  <VStack spacing={8}>
+                    <Box textAlign="center">
+                      <Heading size="lg" mb={4}>
+                        {cityTheme?.emoji} {characterDetail.city}の魅力
+                      </Heading>
+                      <Text color="gray.600" fontSize="lg">
+                        {cityTheme?.specialty}
+                      </Text>
+                    </Box>
+
+                    <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
+                      <MotionCard
+                        whileHover={{ y: -5 }}
+                        bg="blue.50"
+                        borderRadius="xl"
+                        textAlign="center"
+                        p={6}
+                      >
+                        <Text fontSize="4xl" mb={4}>🏞️</Text>
+                        <Heading size="md" mb={2}>観光スポット</Heading>
+                        <Text color="gray.600">
+                          美しい自然と歴史的建造物が織りなす絶景
+                        </Text>
+                      </MotionCard>
+
+                      <MotionCard
+                        whileHover={{ y: -5 }}
+                        bg="orange.50"
+                        borderRadius="xl"
+                        textAlign="center"
+                        p={6}
+                      >
+                        <Text fontSize="4xl" mb={4}>🍜</Text>
+                        <Heading size="md" mb={2}>ご当地グルメ</Heading>
+                        <Text color="gray.600">
+                          地元食材を使った心温まる絶品料理
+                        </Text>
+                      </MotionCard>
+
+                      <MotionCard
+                        whileHover={{ y: -5 }}
+                        bg="green.50"
+                        borderRadius="xl"
+                        textAlign="center"
+                        p={6}
+                      >
+                        <Text fontSize="4xl" mb={4}>🎭</Text>
+                        <Heading size="md" mb={2}>伝統文化</Heading>
+                        <Text color="gray.600">
+                          受け継がれる伝統と現代の融合
+                        </Text>
+                      </MotionCard>
+                    </SimpleGrid>
+
+                    <Center>
+                      <Button
+                        colorScheme="purple"
+                        size="lg"
+                        leftIcon={<FaComment />}
+                        onClick={handleStartConversation}
+                        borderRadius="2xl"
+                      >
+                        {characterDetail.name}さんと地域について語る
+                      </Button>
+                    </Center>
+                  </VStack>
+                </TabPanel>
+
+                {/* ストーリータブ */}
+                <TabPanel p={8}>
+                  <VStack spacing={6} align="stretch">
+                    <Heading size="md" textAlign="center" color="gray.700">
+                      📖 {characterDetail.name}さんのストーリー
+                    </Heading>
+                    
+                    <VStack spacing={4}>
+                      {characterDetail.stories.map((story) => (
+                        <Card
+                          key={story.id}
+                          w="full"
+                          borderRadius="xl"
+                          shadow={story.isUnlocked ? "md" : "sm"}
+                          opacity={story.isUnlocked ? 1 : 0.6}
+                          bg={story.isUnlocked ? "white" : "gray.50"}
+                        >
+                          <CardBody p={6}>
+                            <HStack justify="space-between" mb={3}>
+                              <Heading size="sm">
+                                {story.isUnlocked ? story.title : '???'}
+                              </Heading>
+                              <HStack>
+                                <Icon 
+                                  as={story.isUnlocked ? FaUnlock : FaLock} 
+                                  color={story.isUnlocked ? "green.500" : "gray.400"}
+                                />
+                                <Badge colorScheme={story.isUnlocked ? "green" : "gray"}>
+                                  Lv.{story.requiredTrustLevel}必要
+                                </Badge>
+                              </HStack>
+                            </HStack>
+                            <Text color="gray.600">
+                              {story.isUnlocked 
+                                ? story.content 
+                                : `信頼レベルを${story.requiredTrustLevel}まで上げると解放されます`
+                              }
+                            </Text>
+                          </CardBody>
+                        </Card>
+                      ))}
+                    </VStack>
+                  </VStack>
+                </TabPanel>
+
+                {/* つながりタブ */}
+                <TabPanel p={8}>
+                  <VStack spacing={8}>
+                    <Heading size="md" textAlign="center" color="gray.700">
+                      💕 {characterDetail.name}さんとのつながり
+                    </Heading>
+
+                    {characterDetail.relationship && (
+                      <SimpleGrid columns={{ base: 2, md: 4 }} spacing={6} w="full">
+                        <Stat textAlign="center">
+                          <StatLabel>
+                            <Icon as={FaCalendarAlt} mr={2} />
+                            初回出会い
+                          </StatLabel>
+                          <StatNumber fontSize="md">
+                            {new Date(characterDetail.relationship.firstMetAt).toLocaleDateString('ja-JP')}
+                          </StatNumber>
+                        </Stat>
+
+                        <Stat textAlign="center">
+                          <StatLabel>
+                            <Icon as={FaComment} mr={2} />
+                            会話回数
+                          </StatLabel>
+                          <StatNumber>{characterDetail.relationship.totalConversations}</StatNumber>
+                          <StatHelpText>回</StatHelpText>
+                        </Stat>
+
+                        <Stat textAlign="center">
+                          <StatLabel>
+                            <Icon as={FaStar} mr={2} />
+                            信頼度
+                          </StatLabel>
+                          <StatNumber>{characterDetail.relationship.trustPoints}</StatNumber>
+                          <StatHelpText>ポイント</StatHelpText>
+                        </Stat>
+
+                        <Stat textAlign="center">
+                          <StatLabel>
+                            <Icon as={FaGift} mr={2} />
+                            贈り物
+                          </StatLabel>
+                          <StatNumber>{characterDetail.relationship.receivedGifts.length}</StatNumber>
+                          <StatHelpText>個</StatHelpText>
+                        </Stat>
+                      </SimpleGrid>
+                    )}
+
+                    <Center>
+                      <Text color="gray.500" fontStyle="italic">
+                        更なる信頼関係を築いて、特別なストーリーを解放しましょう
+                      </Text>
+                    </Center>
+                  </VStack>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </MotionCard>
+        </VStack>
+      </Container>
 
       {/* フローティングアクションボタン */}
-      <motion.button
+      <MotionBox
+        position="fixed"
+        bottom="8"
+        right="8"
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
-        transition={{ delay: 1, type: "spring", stiffness: 200 }}
-        whileHover={{ 
-          scale: 1.1,
-          rotate: 5,
-          boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
-        }}
-        whileTap={{ scale: 0.9 }}
-        onClick={handleStartConversation}
-        className={`fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br ${theme.accent} text-white rounded-3xl shadow-2xl flex items-center justify-center z-30 border-4 border-white/50`}
+        transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+        zIndex="1000"
       >
-        <motion.span 
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="text-2xl"
-        >
-          💬
-        </motion.span>
-      </motion.button>
-    </div>
+        <Tooltip label="会話を始める" placement="left">
+          <IconButton
+            aria-label="start conversation"
+            icon={<FaComment />}
+            colorScheme="purple"
+            size="lg"
+            borderRadius="2xl"
+            boxSize="16"
+            shadow="2xl"
+            onClick={handleStartConversation}
+            _hover={{
+              transform: "scale(1.1) rotate(5deg)",
+              boxShadow: "2xl",
+            }}
+          />
+        </Tooltip>
+      </MotionBox>
+    </Box>
   );
 };
