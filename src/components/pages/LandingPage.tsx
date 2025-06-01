@@ -848,6 +848,7 @@ const LandingPage: React.FC = () => {
 											animate={{
 												rotate: [0, 360],
 											}}
+											{/* biome-ignore lint/suspicious/noExplicitAny: framer-motion transition type issue */}
 											transition={
 												{
 													duration: 20,
@@ -870,6 +871,7 @@ const LandingPage: React.FC = () => {
 															`0 0 20px ${stat.color}.400`,
 														],
 													}}
+													{/* biome-ignore lint/suspicious/noExplicitAny: framer-motion transition type issue */}
 													transition={
 														{
 															duration: 3,
