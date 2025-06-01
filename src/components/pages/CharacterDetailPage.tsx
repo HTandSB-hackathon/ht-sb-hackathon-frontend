@@ -431,24 +431,54 @@ export const CharacterDetailPage: React.FC = () => {
                 </Box>
 
                 {/* 基本情報 */}
-                <VStack spacing={2} textAlign="center">
-                  <Heading size={headerSize} color="gray.800">
+                <VStack spacing={3} textAlign="center">
+                  <Heading size={headerSize} color="gray.800" noOfLines={1}>
                     {characterDetail.name}
                   </Heading>
-                  <Text fontSize="lg" color="gray.500" fontWeight="medium">
+                  <Text fontSize="lg" color="gray.500" fontWeight="medium" noOfLines={1}>
                     {characterDetail.nameKana}
                   </Text>
-                  <HStack spacing={4} fontSize="sm" color="gray.600" wrap="wrap" justify="center">
+                  
+                  {/* スマホ表示最適化: 縦並びレイアウト */}
+                  <VStack 
+                    spacing={2} 
+                    display={{ base: "flex", md: "none" }}
+                    fontSize="sm" 
+                    color="gray.600"
+                  >
+                    <HStack spacing={2}>
+                      <Icon as={MdCake} color="purple.500" />
+                      <Text fontWeight="medium">{characterDetail.age}歳</Text>
+                    </HStack>
+                    <HStack spacing={2}>
+                      <Icon as={MdWork} color="blue.500" />
+                      <Text fontWeight="medium" noOfLines={1}>{characterDetail.occupation}</Text>
+                    </HStack>
+                    <HStack spacing={2}>
+                      <Icon as={FaMapMarkerAlt} color="green.500" />
+                      <Text fontWeight="medium">{characterDetail.city}</Text>
+                    </HStack>
+                  </VStack>
+                  
+                  {/* デスクトップ表示: 横並びレイアウト */}
+                  <HStack 
+                    spacing={4} 
+                    fontSize="sm" 
+                    color="gray.600" 
+                    wrap="wrap" 
+                    justify="center"
+                    display={{ base: "none", md: "flex" }}
+                  >
                     <HStack>
-                      <Icon as={MdCake} />
+                      <Icon as={MdCake} color="purple.500" />
                       <Text>{characterDetail.age}歳</Text>
                     </HStack>
                     <HStack>
-                      <Icon as={MdWork} />
+                      <Icon as={MdWork} color="blue.500" />
                       <Text>{characterDetail.occupation}</Text>
                     </HStack>
                     <HStack>
-                      <Icon as={FaMapMarkerAlt} />
+                      <Icon as={FaMapMarkerAlt} color="green.500" />
                       <Text>{characterDetail.city}</Text>
                     </HStack>
                   </HStack>
@@ -492,14 +522,20 @@ export const CharacterDetailPage: React.FC = () => {
                 )}
 
                 {/* アクションボタン */}
-                <HStack spacing={4}>
+                <Stack 
+                  direction={{ base: "column", sm: "row" }} 
+                  spacing={4} 
+                  w={{ base: "full", sm: "auto" }}
+                  align="center"
+                >
                   <Button
                     colorScheme="purple"
-                    size="lg"
+                    size={{ base: "md", md: "lg" }}
                     leftIcon={<FaComment />}
                     onClick={handleStartConversation}
                     borderRadius="2xl"
-                    px={8}
+                    px={{ base: 6, md: 8 }}
+                    w={{ base: "full", sm: "auto" }}
                     _hover={{
                       transform: "translateY(-2px)",
                       boxShadow: "lg",
@@ -512,14 +548,14 @@ export const CharacterDetailPage: React.FC = () => {
                     icon={isFavorite ? <FaHeart /> : <FaHeart />}
                     colorScheme={isFavorite ? "red" : "gray"}
                     variant={isFavorite ? "solid" : "outline"}
-                    size="lg"
+                    size={{ base: "md", md: "lg" }}
                     borderRadius="2xl"
                     onClick={handleFavoriteToggle}
                     _hover={{
                       transform: "scale(1.1)",
                     }}
                   />
-                </HStack>
+                </Stack>
               </VStack>
             </CardBody>
           </MotionCard>
@@ -534,15 +570,21 @@ export const CharacterDetailPage: React.FC = () => {
             shadow="xl"
           >
             <Tabs index={tabIndex} onChange={setTabIndex} variant="enclosed" isLazy>
-              <TabList borderBottom="none" bg="gray.50" borderTopRadius="2xl">
+              <TabList borderBottom="none" bg="gray.50" borderTopRadius="2xl" overflowX="auto">
                 <Tab
                   flex="1"
                   _selected={{ bg: cardBg, borderColor: "gray.200" }}
                   borderRadius="xl"
                   m={2}
                   fontWeight="bold"
+                  minW={{ base: "120px", md: "auto" }}
+                  fontSize={{ base: "xs", md: "sm" }}
                 >
-                  <HStack>
+                  <VStack spacing={1} display={{ base: "flex", sm: "none" }}>
+                    <Icon as={MdPerson} boxSize={4} />
+                    <Text>プロフィール</Text>
+                  </VStack>
+                  <HStack display={{ base: "none", sm: "flex" }}>
                     <Icon as={MdPerson} />
                     <Text>プロフィール</Text>
                   </HStack>
@@ -553,8 +595,14 @@ export const CharacterDetailPage: React.FC = () => {
                   borderRadius="xl"
                   m={2}
                   fontWeight="bold"
+                  minW={{ base: "120px", md: "auto" }}
+                  fontSize={{ base: "xs", md: "sm" }}
                 >
-                  <HStack>
+                  <VStack spacing={1} display={{ base: "flex", sm: "none" }}>
+                    <Icon as={MdLocationCity} boxSize={4} />
+                    <Text>地域の魅力</Text>
+                  </VStack>
+                  <HStack display={{ base: "none", sm: "flex" }}>
                     <Icon as={MdLocationCity} />
                     <Text>地域の魅力</Text>
                   </HStack>
@@ -565,8 +613,14 @@ export const CharacterDetailPage: React.FC = () => {
                   borderRadius="xl"
                   m={2}
                   fontWeight="bold"
+                  minW={{ base: "120px", md: "auto" }}
+                  fontSize={{ base: "xs", md: "sm" }}
                 >
-                  <HStack>
+                  <VStack spacing={1} display={{ base: "flex", sm: "none" }}>
+                    <Icon as={MdBook} boxSize={4} />
+                    <Text>ストーリー</Text>
+                  </VStack>
+                  <HStack display={{ base: "none", sm: "flex" }}>
                     <Icon as={MdBook} />
                     <Text>ストーリー</Text>
                   </HStack>
@@ -577,8 +631,14 @@ export const CharacterDetailPage: React.FC = () => {
                   borderRadius="xl"
                   m={2}
                   fontWeight="bold"
+                  minW={{ base: "120px", md: "auto" }}
+                  fontSize={{ base: "xs", md: "sm" }}
                 >
-                  <HStack>
+                  <VStack spacing={1} display={{ base: "flex", sm: "none" }}>
+                    <Icon as={FaGift} boxSize={4} />
+                    <Text>つながり</Text>
+                  </VStack>
+                  <HStack display={{ base: "none", sm: "flex" }}>
                     <Icon as={FaGift} />
                     <Text>つながり</Text>
                   </HStack>
