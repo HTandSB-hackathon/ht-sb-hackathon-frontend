@@ -848,11 +848,13 @@ const LandingPage: React.FC = () => {
 											animate={{
 												rotate: [0, 360],
 											}}
-											transition={{
-												duration: 20,
-												repeat: Number.POSITIVE_INFINITY,
-												ease: "linear",
-											} as any}
+											transition={
+												{
+													duration: 20,
+													repeat: Number.POSITIVE_INFINITY,
+													ease: "linear",
+												} as any
+											}
 										/>
 
 										<CardBody p={8} textAlign="center" position="relative">
@@ -868,11 +870,13 @@ const LandingPage: React.FC = () => {
 															`0 0 20px ${stat.color}.400`,
 														],
 													}}
-													transition={{
-														duration: 3,
-														repeat: Number.POSITIVE_INFINITY,
-														ease: "easeInOut",
-													} as any}
+													transition={
+														{
+															duration: 3,
+															repeat: Number.POSITIVE_INFINITY,
+															ease: "easeInOut",
+														} as any
+													}
 												>
 													<Icon as={stat.icon} boxSize={8} color="white" />
 												</Circle>
