@@ -1,16 +1,16 @@
 import GitHubLoginButton from "@/components/atoms/GitHubLoginButton";
 import LoginForm from "@/components/atoms/LoginForm";
-import { 
-	Box, 
-	Divider, 
-	Text, 
-	VStack, 
+import {
+	Box,
+	Divider,
+	Text,
+	VStack,
 	Link,
 	Card,
 	CardBody,
 	useColorModeValue,
 	HStack,
-	Icon
+	Icon,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { FaHeart } from "react-icons/fa";
@@ -23,7 +23,7 @@ export default function LoginPage() {
 	const navigate = useNavigate();
 
 	// カラーテーマ
-	const cardBg = useColorModeValue('white', 'gray.800');
+	const cardBg = useColorModeValue("white", "gray.800");
 
 	return (
 		<Box maxW="md" mx="auto">
@@ -46,12 +46,17 @@ export default function LoginPage() {
 				>
 					<CardBody p={6}>
 						<VStack spacing={4}>
-							<Text textAlign="center" color="gray.500" fontSize="sm" fontWeight="medium">
+							<Text
+								textAlign="center"
+								color="gray.500"
+								fontSize="sm"
+								fontWeight="medium"
+							>
 								または、ソーシャルアカウントでログイン
 							</Text>
-							
+
 							<Divider />
-							
+
 							<GitHubLoginButton />
 						</VStack>
 					</CardBody>
@@ -66,20 +71,20 @@ export default function LoginPage() {
 					p={4}
 				>
 					<Text fontSize="sm" color="gray.500">
-						初めての方ですか？{' '}
-						<Link 
-							color="purple.500" 
-							fontWeight="bold" 
-							onClick={() => navigate('/register')}
-							_hover={{ 
-								textDecoration: 'underline',
-								color: 'purple.600'
+						初めての方ですか？{" "}
+						<Link
+							color="purple.500"
+							fontWeight="bold"
+							onClick={() => navigate("/register")}
+							_hover={{
+								textDecoration: "underline",
+								color: "purple.600",
 							}}
 						>
 							新規登録はこちら
 						</Link>
 					</Text>
-					
+
 					<HStack justify="center" mt={3} spacing={1}>
 						<Icon as={FaHeart} color="red.400" boxSize={3} />
 						<Text fontSize="xs" color="gray.400">

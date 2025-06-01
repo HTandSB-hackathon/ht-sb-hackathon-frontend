@@ -22,12 +22,12 @@ import {
 	CardBody,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-	FaEye, 
-	FaEyeSlash, 
-	FaEnvelope, 
+import {
+	FaEye,
+	FaEyeSlash,
+	FaEnvelope,
 	FaLock,
-	FaSignInAlt
+	FaSignInAlt,
 } from "react-icons/fa";
 import { useSetAtom } from "jotai";
 import { useState } from "react";
@@ -39,7 +39,9 @@ export default function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
-	const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+	const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+		{},
+	);
 
 	const login = useSetAtom(loginInPasswordAtom);
 	const setIsLoading = useSetAtom(isLoadingAuthAtom);
@@ -47,25 +49,26 @@ export default function LoginForm() {
 	const navigate = useNavigate();
 
 	// カラーテーマ
-	const cardBg = useColorModeValue('white', 'gray.800');
+	const cardBg = useColorModeValue("white", "gray.800");
 	const cardPadding = useBreakpointValue({ base: 6, md: 8, lg: 10 });
 
 	const validateForm = () => {
 		const newErrors: { email?: string; password?: string } = {};
 		if (!email) newErrors.email = "メールアドレスは必須です";
-		if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "有効なメールアドレスを入力してください";
+		if (!/\S+@\S+\.\S+/.test(email))
+			newErrors.email = "有効なメールアドレスを入力してください";
 		if (!password) newErrors.password = "パスワードは必須です";
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
 	};
 
 	const handleInputChange = (field: string, value: string) => {
-		if (field === 'email') setEmail(value);
-		if (field === 'password') setPassword(value);
-		
+		if (field === "email") setEmail(value);
+		if (field === "password") setPassword(value);
+
 		// エラーをクリア
 		if (errors[field as keyof typeof errors]) {
-			setErrors(prev => ({ ...prev, [field]: '' }));
+			setErrors((prev) => ({ ...prev, [field]: "" }));
 		}
 	};
 
@@ -107,10 +110,12 @@ export default function LoginForm() {
 				<VStack spacing={6} align="stretch">
 					{/* ヘッダー */}
 					<Box textAlign="center">
-						<Text fontSize="3xl" mb={2}>🌸</Text>
-						<Heading 
-							size="xl" 
-							bgGradient="linear(to-r, purple.600, blue.600)" 
+						<Text fontSize="3xl" mb={2}>
+							🌸
+						</Text>
+						<Heading
+							size="xl"
+							bgGradient="linear(to-r, purple.600, blue.600)"
 							bgClip="text"
 							fontWeight="extrabold"
 							mb={2}
@@ -136,7 +141,7 @@ export default function LoginForm() {
 									type="email"
 									placeholder="例: tanaka@example.com"
 									value={email}
-									onChange={(e) => handleInputChange('email', e.target.value)}
+									onChange={(e) => handleInputChange("email", e.target.value)}
 									size="lg"
 									borderRadius="xl"
 									bg="gray.50"
@@ -145,7 +150,7 @@ export default function LoginForm() {
 									_focus={{
 										borderColor: "blue.400",
 										bg: "white",
-										boxShadow: "0 0 0 1px blue.400"
+										boxShadow: "0 0 0 1px blue.400",
 									}}
 								/>
 								<AnimatePresence>
@@ -174,7 +179,9 @@ export default function LoginForm() {
 										type={showPassword ? "text" : "password"}
 										placeholder="パスワードを入力"
 										value={password}
-										onChange={(e) => handleInputChange('password', e.target.value)}
+										onChange={(e) =>
+											handleInputChange("password", e.target.value)
+										}
 										size="lg"
 										borderRadius="xl"
 										bg="gray.50"
@@ -183,7 +190,7 @@ export default function LoginForm() {
 										_focus={{
 											borderColor: "purple.400",
 											bg: "white",
-											boxShadow: "0 0 0 1px purple.400"
+											boxShadow: "0 0 0 1px purple.400",
 										}}
 									/>
 									<InputRightElement height="100%">
@@ -210,9 +217,9 @@ export default function LoginForm() {
 							</FormControl>
 
 							{/* ログインボタン */}
-							<Button 
-								type="submit" 
-								colorScheme="purple" 
+							<Button
+								type="submit"
+								colorScheme="purple"
 								size="lg"
 								w="full"
 								borderRadius="xl"
