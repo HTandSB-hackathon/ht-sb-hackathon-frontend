@@ -848,14 +848,12 @@ const LandingPage: React.FC = () => {
 											animate={{
 												rotate: [0, 360],
 											}}
-											{/* biome-ignore lint/suspicious/noExplicitAny: framer-motion transition type issue */}
-											transition={
-												{
-													duration: 20,
-													repeat: Number.POSITIVE_INFINITY,
-													ease: "linear",
-												} as any
-											}
+											// @ts-ignore
+											transition={{
+												duration: 20,
+												repeat: Number.POSITIVE_INFINITY,
+												ease: "linear",
+											}}
 										/>
 
 										<CardBody p={8} textAlign="center" position="relative">
@@ -871,14 +869,12 @@ const LandingPage: React.FC = () => {
 															`0 0 20px ${stat.color}.400`,
 														],
 													}}
-													{/* biome-ignore lint/suspicious/noExplicitAny: framer-motion transition type issue */}
-													transition={
-														{
-															duration: 3,
-															repeat: Number.POSITIVE_INFINITY,
-															ease: "easeInOut",
-														} as any
-													}
+													// @ts-ignore
+													transition={{
+														duration: 3,
+														repeat: Number.POSITIVE_INFINITY,
+														ease: "easeInOut",
+													}}
 												>
 													<Icon as={stat.icon} boxSize={8} color="white" />
 												</Circle>
