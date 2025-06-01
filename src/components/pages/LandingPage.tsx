@@ -1,28 +1,22 @@
 import {
-	Avatar,
 	Badge,
 	Box,
 	Button,
 	Card,
 	CardBody,
-	Center,
 	Circle,
 	Container,
-	Divider,
-	Flex,
 	HStack,
 	Heading,
 	Icon,
-	Image,
 	SimpleGrid,
-	Spacer,
 	Stack,
 	Text,
 	VStack,
 	useBreakpointValue,
 	useColorModeValue,
 } from "@chakra-ui/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import type React from "react";
 import {
 	FaBolt,
@@ -30,33 +24,22 @@ import {
 	FaChevronDown,
 	FaComment,
 	FaCrown,
-	FaFireAlt,
-	FaGem,
 	FaGift,
-	FaGlobe,
-	FaHandshake,
 	FaHeart,
 	FaLeaf,
 	FaMapMarkerAlt,
 	FaMountain,
-	FaPlay,
 	FaRocket,
-	FaSearch,
 	FaShieldAlt,
 	FaSignInAlt,
-	FaSnowflake,
 	FaStar,
 	FaUserPlus,
 	FaUsers,
 } from "react-icons/fa";
 import {
-	MdChat,
-	MdFavorite,
 	MdGroup,
 	MdLocationOn,
 	MdSecurity,
-	MdSpeed,
-	MdTrendingUp,
 	MdVerifiedUser,
 } from "react-icons/md";
 import { useNavigate } from "react-router";
@@ -74,7 +57,6 @@ const LandingPage: React.FC = () => {
 	const navigate = useNavigate();
 
 	// レスポンシブデザイン
-	const isMobile = useBreakpointValue({ base: true, md: false });
 	const containerMaxW = useBreakpointValue({
 		base: "full",
 		md: "container.xl",
@@ -750,7 +732,7 @@ const LandingPage: React.FC = () => {
 				>
 					{/* 3D効果の背景 */}
 					<Box position="absolute" inset="0">
-						{particleKeys.map((key, i) => (
+						{particleKeys.map((key) => (
 							<MotionBox
 								key={key}
 								position="absolute"
@@ -870,7 +852,7 @@ const LandingPage: React.FC = () => {
 												duration: 20,
 												repeat: Number.POSITIVE_INFINITY,
 												ease: "linear",
-											}}
+											} as any}
 										/>
 
 										<CardBody p={8} textAlign="center" position="relative">
@@ -890,7 +872,7 @@ const LandingPage: React.FC = () => {
 														duration: 3,
 														repeat: Number.POSITIVE_INFINITY,
 														ease: "easeInOut",
-													}}
+													} as any}
 												>
 													<Icon as={stat.icon} boxSize={8} color="white" />
 												</Circle>
@@ -1001,7 +983,7 @@ const LandingPage: React.FC = () => {
 				>
 					{/* 高級感のある背景装飾 */}
 					<Box position="absolute" inset="0" opacity="0.1">
-						{starKeys.map((key, i) => (
+						{starKeys.map((key) => (
 							<MotionBox
 								key={key}
 								position="absolute"
