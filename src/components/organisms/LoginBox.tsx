@@ -2,15 +2,15 @@ import GitHubLoginButton from "@/components/atoms/GitHubLoginButton";
 import LoginForm from "@/components/atoms/LoginForm";
 import {
 	Box,
-	Divider,
-	Text,
-	VStack,
-	Link,
 	Card,
 	CardBody,
-	useColorModeValue,
+	Divider,
 	HStack,
 	Icon,
+	Link,
+	Text,
+	VStack,
+	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { FaHeart } from "react-icons/fa";

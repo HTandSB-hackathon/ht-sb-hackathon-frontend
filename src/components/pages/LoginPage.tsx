@@ -2,8 +2,8 @@ import LoginBox from "@/components/organisms/LoginBox";
 import {
 	Box,
 	Container,
-	useColorModeValue,
 	useBreakpointValue,
+	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 

@@ -4,33 +4,33 @@ import { isLoadingAuthAtom, loginInPasswordAtom } from "@/lib/atom/AuthAtom";
 import {
 	Box,
 	Button,
+	Card,
+	CardBody,
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
+	HStack,
 	Heading,
+	Icon,
+	IconButton,
 	Input,
 	InputGroup,
 	InputRightElement,
-	IconButton,
-	VStack,
-	HStack,
 	Text,
-	Icon,
-	useColorModeValue,
+	VStack,
 	useBreakpointValue,
-	Card,
-	CardBody,
+	useColorModeValue,
 } from "@chakra-ui/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSetAtom } from "jotai";
+import { useState } from "react";
 import {
+	FaEnvelope,
 	FaEye,
 	FaEyeSlash,
-	FaEnvelope,
 	FaLock,
 	FaSignInAlt,
 } from "react-icons/fa";
-import { useSetAtom } from "jotai";
-import { useState } from "react";
 import { useNavigate } from "react-router";
 
 const MotionCard = motion(Card);
@@ -226,10 +226,6 @@ export default function LoginForm() {
 								rightIcon={<FaSignInAlt />}
 								isLoading={false}
 								loadingText="ログイン中..."
-								_hover={{
-									transform: "translateY(-2px)",
-									boxShadow: "lg",
-								}}
 								bgGradient="linear(to-r, purple.500, blue.500)"
 								_hover={{
 									bgGradient: "linear(to-r, purple.600, blue.600)",
