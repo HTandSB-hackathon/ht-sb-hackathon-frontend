@@ -6,165 +6,6 @@ import type {
 	CharacterRelationship,
 } from "../types/character";
 
-// モックデータ
-// const MOCK_CHARACTERS: Character[] = [
-// 	{
-// 		id: "1",
-// 		name: "佐藤 花子",
-// 		nameKana: "サトウ ハナコ",
-// 		age: 58,
-// 		gender: "female",
-// 		occupation: "農家",
-// 		city: "須賀川市",
-// 		prefecture: "福島県",
-// 		profileImage:
-// 			"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
-// 		coverImage:
-// 			"https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=400&fit=crop",
-// 		introduction:
-// 			"須賀川でキュウリとお米を作っています。毎日畑で汗を流していますが、それが私の生きがいです。新鮮な野菜の美味しさを、もっと多くの人に知ってもらいたいです。",
-// 		personality: ["優しい", "世話好き", "明るい", "頑張り屋"],
-// 		hobbies: ["家庭菜園", "料理", "手芸", "散歩"],
-// 		specialties: ["きゅうりの漬物", "おふくろの味", "野菜作り"],
-// 		isLocked: false,
-// 		createdAt: "2024-01-01T00:00:00Z",
-// 		updatedAt: "2024-01-01T00:00:00Z",
-// 	},
-// 	{
-// 		id: "2",
-// 		name: "田中 一郎",
-// 		nameKana: "タナカ イチロウ",
-// 		age: 65,
-// 		gender: "male",
-// 		occupation: "元教師",
-// 		city: "三春町",
-// 		prefecture: "福島県",
-// 		profileImage:
-// 			"https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=400&h=400&fit=crop",
-// 		coverImage:
-// 			"https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=400&fit=crop",
-// 		introduction:
-// 			"三春町で40年間、小学校の教師をしていました。今は地域の子どもたちに昔の遊びを教えています。三春の滝桜は日本一美しいと思っています。",
-// 		personality: ["温厚", "知識豊富", "子ども好き", "歴史好き"],
-// 		hobbies: ["読書", "将棋", "ガーデニング", "歴史散策"],
-// 		specialties: ["郷土史", "子ども教育", "将棋指導"],
-// 		isLocked: false,
-// 		createdAt: "2024-01-02T00:00:00Z",
-// 		updatedAt: "2024-01-02T00:00:00Z",
-// 	},
-// 	{
-// 		id: "3",
-// 		name: "鈴木 美咲",
-// 		nameKana: "スズキ ミサキ",
-// 		age: 45,
-// 		gender: "female",
-// 		occupation: "カフェ経営",
-// 		city: "中島村",
-// 		prefecture: "福島県",
-// 		profileImage:
-// 			"https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=400&fit=crop",
-// 		coverImage:
-// 			"https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&h=400&fit=crop",
-// 		introduction:
-// 			"中島村で小さなカフェを営んでいます。地元の食材を使った料理と、温かいおもてなしが自慢です。村の魅力を一人でも多くの人に伝えたいです。",
-// 		personality: ["社交的", "創造的", "前向き", "地域愛"],
-// 		hobbies: ["料理研究", "写真撮影", "ヨガ", "読書"],
-// 		specialties: ["地産地消料理", "コーヒー", "接客"],
-// 		isLocked: false,
-// 		createdAt: "2024-01-03T00:00:00Z",
-// 		updatedAt: "2024-01-03T00:00:00Z",
-// 	},
-// 	{
-// 		id: "4",
-// 		name: "高橋 太郎",
-// 		nameKana: "タカハシ タロウ",
-// 		age: 52,
-// 		gender: "male",
-// 		occupation: "果樹園経営",
-// 		city: "須賀川市",
-// 		prefecture: "福島県",
-// 		profileImage:
-// 			"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-// 		coverImage:
-// 			"https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&h=400&fit=crop",
-// 		introduction:
-// 			"須賀川で桃とりんごの果樹園を営んでいます。祖父の代から続く果樹園を守りながら、新しい品種にも挑戦しています。",
-// 		personality: ["真面目", "研究熱心", "伝統重視", "革新的"],
-// 		hobbies: ["果樹研究", "料理", "写真", "ドライブ"],
-// 		specialties: ["果樹栽培", "品種改良", "ジャム作り"],
-// 		isLocked: true,
-// 		unlockCondition: "信頼レベル3以上のキャラクターが2人必要",
-// 		createdAt: "2024-01-04T00:00:00Z",
-// 		updatedAt: "2024-01-04T00:00:00Z",
-// 	},
-// 	{
-// 		id: "5",
-// 		name: "渡辺 京子",
-// 		nameKana: "ワタナベ キョウコ",
-// 		age: 70,
-// 		gender: "female",
-// 		occupation: "民宿経営",
-// 		city: "三春町",
-// 		prefecture: "福島県",
-// 		profileImage:
-// 			"https://images.unsplash.com/photo-1441123100240-f9f3f77ed41b?w=400&h=400&fit=crop",
-// 		coverImage:
-// 			"https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=400&fit=crop",
-// 		introduction:
-// 			"三春町で民宿を営んで30年。全国から来るお客様に、福島の温かさを感じてもらえるよう心を込めておもてなししています。",
-// 		personality: ["温かい", "包容力", "経験豊富", "もてなし上手"],
-// 		hobbies: ["郷土料理", "生け花", "着物", "お茶"],
-// 		specialties: ["おもてなし", "郷土料理", "地域案内"],
-// 		isLocked: true,
-// 		unlockCondition: "田中一郎さんと親友になる",
-// 		createdAt: "2024-01-05T00:00:00Z",
-// 		updatedAt: "2024-01-05T00:00:00Z",
-// 	},
-// ];
-
-// const MOCK_RELATIONSHIPS: Record<string, CharacterRelationship> = {
-// 	"1": {
-// 		characterId: "1",
-// 		trustLevel: 3,
-// 		trustPoints: 75,
-// 		nextLevelPoints: 100,
-// 		totalConversations: 15,
-// 		lastConversationAt: new Date(
-// 			Date.now() - 2 * 24 * 60 * 60 * 1000,
-// 		).toISOString(),
-// 		firstMetAt: "2024-01-01T00:00:00Z",
-// 		favoriteTopics: ["農業", "料理", "地域活動"],
-// 		unlockedStories: ["story1", "story2"],
-// 		receivedGifts: [],
-// 	},
-// 	"2": {
-// 		characterId: "2",
-// 		trustLevel: 2,
-// 		trustPoints: 30,
-// 		nextLevelPoints: 50,
-// 		totalConversations: 8,
-// 		lastConversationAt: new Date(
-// 			Date.now() - 7 * 24 * 60 * 60 * 1000,
-// 		).toISOString(),
-// 		firstMetAt: "2024-01-15T00:00:00Z",
-// 		favoriteTopics: ["歴史", "教育", "三春町"],
-// 		unlockedStories: ["story1"],
-// 		receivedGifts: [],
-// 	},
-// 	"3": {
-// 		characterId: "3",
-// 		trustLevel: 4,
-// 		trustPoints: 45,
-// 		nextLevelPoints: 75,
-// 		totalConversations: 25,
-// 		lastConversationAt: new Date().toISOString(),
-// 		firstMetAt: "2024-01-10T00:00:00Z",
-// 		favoriteTopics: ["カフェ", "地域活性化", "料理"],
-// 		unlockedStories: ["story1", "story2", "story3"],
-// 		receivedGifts: [],
-// 	},
-// };
-
 // 数値のgenderを文字列に変換する関数
 function convertGenderFromNumber(
 	genderNumber: number,
@@ -183,7 +24,7 @@ function convertGenderFromNumber(
 
 export class Character {
 	constructor(
-		public id: string,
+		public id: number,
 		public name: string,
 		public age: number,
 		public gender: "female" | "male" | "other",
@@ -195,6 +36,7 @@ export class Character {
 		public hobbies: string[],
 		public specialties: string[],
 		public isActive: boolean,
+		public unlockCondition: string,
 		public prefectureId: number,
 		public municipalityId: number,
 		public createdDate: string,
@@ -203,8 +45,33 @@ export class Character {
 	) {}
 }
 
+export class Relationship {
+	constructor(
+		public id: number,
+		public characterId: string,
+		public trustLevelId: number,
+		public trustPoints: number,
+		public conversationCount: number,
+		public firstMetAt: Date,
+		public createdDate: Date,
+		public updatedDate: Date,
+	) {}
+}
+
+export class Story {
+	constructor(
+		public id: string,
+		public title: string,
+		public content: string,
+		public requiredTrustLevel: number,
+		public isUnlocked: boolean,
+		public createdDate: Date, // ISO 8601形式の文字列
+		public updatedDate: Date, // ISO 8601形式の文字列
+	) {}
+}
+
 export interface CharacterResponse {
-	id: string;
+	id: number;
 	name: string;
 	age: number;
 	gender: number;
@@ -212,12 +79,34 @@ export interface CharacterResponse {
 	profile_image_url: string;
 	cover_image_url: string;
 	introduction: string;
+	unlock_condition: string;
 	personality: string[];
 	hobbies: string[];
 	specialties: string[];
 	is_active: boolean;
+	is_locked: boolean;
 	prefecture_id: number;
 	municipality_id: number;
+	created_date: string; // ISO 8601形式の文字列
+	updated_date: string; // ISO 8601形式の文字列
+}
+
+export interface RelationshipResponse {
+	id: number;
+	character_id: string;
+	trust_level_id: number;
+	trust_points: number;
+	conversation_count: number;
+	first_met_at: string; // ISO 8601形式の文字列
+	created_date: string; // ISO 8601形式の文字列
+	updated_date: string; // ISO 8601形式の文字列
+}
+
+export interface StoryResponse {
+	id: string;
+	title: string;
+	content: string;
+	required_trust_level: number;
 	created_date: string; // ISO 8601形式の文字列
 	updated_date: string; // ISO 8601形式の文字列
 }
@@ -236,11 +125,37 @@ function createCharacter(res: CharacterResponse): Character {
 		res.hobbies,
 		res.specialties,
 		res.is_active,
+		res.unlock_condition,
 		res.prefecture_id,
 		res.municipality_id,
 		res.created_date,
 		res.updated_date,
+		res.is_locked,
+	);
+}
+
+function createRelationship(res: RelationshipResponse): Relationship {
+	return new Relationship(
+		res.id,
+		res.character_id,
+		res.trust_level_id,
+		res.trust_points,
+		res.conversation_count,
+		new Date(res.first_met_at),
+		new Date(res.created_date),
+		new Date(res.updated_date),
+	);
+}
+
+function createStory(res: StoryResponse): Story {
+	return new Story(
+		res.id,
+		res.title,
+		res.content,
+		res.required_trust_level,
 		false,
+		new Date(res.created_date),
+		new Date(res.updated_date),
 	);
 }
 
@@ -248,6 +163,31 @@ export async function getCharacters(): Promise<Character[]> {
 	const axiosClient = createAxiosClient();
 	const response = await axiosClient.get<CharacterResponse[]>("/characters");
 	return response.data.map(createCharacter);
+}
+
+export async function getLockedCharacters(): Promise<Character[]> {
+	const axiosClient = createAxiosClient();
+	const response =
+		await axiosClient.get<CharacterResponse[]>("/characters/locked");
+	return response.data.map(createCharacter);
+}
+
+export async function getRelationships(
+	characterId: string,
+): Promise<Relationship> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.get<RelationshipResponse>(
+		`/characters/${characterId}`,
+	);
+	return createRelationship(response.data);
+}
+
+export async function getStories(characterId: string): Promise<Story[]> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.get<StoryResponse[]>(
+		`/characters/${characterId}/stories`,
+	);
+	return response.data.map(createStory);
 }
 
 /**

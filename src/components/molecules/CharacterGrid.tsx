@@ -80,7 +80,7 @@ export const CharacterGrid: React.FC<CharacterGridProps> = ({
 						key={character.id}
 						character={character}
 						relationship={relationships[character.id]}
-						isNew={newCharacterIds.has(character.id)}
+						isNew={newCharacterIds.has(String(character.id))}
 						animationDelay={index * 0.1}
 						onFavoriteToggle={onFavoriteToggle}
 					/>

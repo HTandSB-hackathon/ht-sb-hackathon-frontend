@@ -142,7 +142,7 @@ export interface LocalSpecialty {
  * キャラクター一覧のフィルター
  */
 export interface CharacterFilter {
-	city?: string;
+	city?: number;
 	trustLevel?: TrustLevel;
 	isLocked?: boolean;
 	gender?: "male" | "female";
