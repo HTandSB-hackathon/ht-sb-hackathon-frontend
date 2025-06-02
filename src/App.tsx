@@ -3,14 +3,13 @@ import { BrowserRouter, Route, Routes } from "react-router";
 
 import CallbackPage from "@/components/pages/CallbackPage";
 import LoginPage from "@/components/pages/LoginPage";
-import MainPage from "@/components/pages/MainPage";
 import ProfilePage from "@/components/pages/ProfilePage";
 
 function App() {
 	return (
 		<BrowserRouter basename="/ht-sb">
 			<Routes>
-				<Route path="/" element={<MainPage />} />
+				<Route path="/" element={<LoginPage />} />
 
 				{/* ログイン関係のルート */}
 				<Route path="/auth/login" element={<LoginPage />} />
@@ -20,7 +19,7 @@ function App() {
 				{/* ルートが存在しない場合の404ページ */}
 				{/* 認証が必要なルート */}
 				<Route element={<ProtectedRoute />}>
-					<Route path="/main" element={<MainPage />} />
+					<Route path="/main" element={<LoginPage />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

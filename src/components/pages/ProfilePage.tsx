@@ -16,9 +16,9 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { FiEdit2, FiMapPin, FiUser } from "react-icons/fi";
+import { FiEdit2 } from "react-icons/fi";
 
 import Header from "@/components/organisms/Header";
 
@@ -72,13 +72,6 @@ export default function ProfilePage() {
 											<Text color="gray.600">{user?.email}</Text>
 										</Box>
 									</Flex>
-
-									{user?.prefecture && (
-										<Flex align="center">
-											<FiMapPin />
-											<Text ml={2}>{user.prefecture}</Text>
-										</Flex>
-									)}
 
 									<Box>
 										<Text fontSize="sm" color="gray.600" mb={2}>
