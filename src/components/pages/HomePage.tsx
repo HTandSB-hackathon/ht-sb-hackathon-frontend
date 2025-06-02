@@ -1,13 +1,11 @@
 import {
 	Avatar,
-	AvatarGroup,
 	Badge,
 	Box,
 	Button,
 	Card,
 	CardBody,
 	CardHeader,
-	Circle,
 	Container,
 	Flex,
 	Grid,
@@ -16,7 +14,6 @@ import {
 	Heading,
 	Icon,
 	IconButton,
-	Image,
 	Menu,
 	MenuButton,
 	MenuDivider,
@@ -24,13 +21,11 @@ import {
 	MenuList,
 	Progress,
 	SimpleGrid,
-	Spacer,
 	Stat,
 	StatHelpText,
 	StatLabel,
 	StatNumber,
 	Text,
-	Tooltip,
 	VStack,
 	useBreakpointValue,
 	useColorModeValue,
@@ -46,16 +41,14 @@ import {
 	FaHeart,
 	FaLeaf,
 	FaMapMarkerAlt,
-	FaMountain,
 	FaRocket,
 	FaSignOutAlt,
 	FaStar,
-	FaSun,
 	FaUser,
 	FaUserFriends,
 	FaUsers,
 } from "react-icons/fa";
-import { MdChatBubble, MdExplore, MdFavorite, MdLocationOn, MdTrendingUp } from "react-icons/md";
+import { MdChatBubble, MdExplore, MdFavorite, MdTrendingUp } from "react-icons/md";
 import { useNavigate } from "react-router";
 
 import {
@@ -85,9 +78,7 @@ const HomePage: React.FC = () => {
 	const recentCharacterIds = useAtomValue(recentConversationCharacterIdsAtom);
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
 
-	// レスポンシブデザイン
 	// レスポンシブデザイン（スマホ最適化）
-	const isMobile = useBreakpointValue({ base: true, md: false });
 	const heroHeight = useBreakpointValue({ base: "50vh", md: "60vh", lg: "70vh" });
 	const containerPadding = useBreakpointValue({ base: 2, sm: 4, md: 6, lg: 8 });
 	const gridTemplateColumns = useBreakpointValue({
@@ -107,7 +98,6 @@ const HomePage: React.FC = () => {
 		"linear(to-br, gray.900, purple.900, blue.900)",
 	);
 	const cardBg = useColorModeValue("white", "gray.800");
-	const overlayBg = useColorModeValue("rgba(255, 255, 255, 0.9)", "rgba(26, 32, 44, 0.9)");
 
 	// アニメーション設定
 	const fadeInUp = {
@@ -705,7 +695,7 @@ const HomePage: React.FC = () => {
 																			{character?.name}
 																		</Text>
 																		<Text fontSize="xs" color="gray.500">
-																			{character?.city}
+																			福島県
 																		</Text>
 																	</VStack>
 																	<Badge colorScheme="blue" variant="subtle">
