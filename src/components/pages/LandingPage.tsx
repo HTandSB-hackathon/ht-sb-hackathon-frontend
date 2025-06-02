@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import type React from "react";
+import { useEffect, useState } from "react";
 import {
 	FaBolt,
 	FaCheck,
@@ -43,7 +44,6 @@ import {
 	MdSecurity,
 	MdVerifiedUser,
 } from "react-icons/md";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { isLoggedInAtom } from "@/lib/atom/AuthAtom";
