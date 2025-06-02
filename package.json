@@ -50,5 +50,8 @@
     "resolutions": {
         "yaml": "^2.8.0",
         "punycode": "^2.3.1"
+    },
+    "optionalDependencies": {
+        "@biomejs/cli-linux-x64": "1.9.4"
     }
 }
