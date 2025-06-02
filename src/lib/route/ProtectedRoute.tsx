@@ -1,7 +1,4 @@
-import {
-	authTokenAtom,
-	isLoadingAuthAtom,
-} from "@/lib/atom/AuthAtom";
+import { authTokenAtom, isLoadingAuthAtom } from "@/lib/atom/AuthAtom";
 import { Center, Spinner } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import { Navigate, Outlet, useLocation } from "react-router";
