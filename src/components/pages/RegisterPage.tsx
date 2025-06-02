@@ -1,8 +1,4 @@
 import {
-	Alert,
-	AlertDescription,
-	AlertIcon,
-	AlertTitle,
 	Badge,
 	Box,
 	Button,
@@ -10,7 +6,6 @@ import {
 	CardBody,
 	Checkbox,
 	Container,
-	Divider,
 	Flex,
 	FormControl,
 	FormErrorMessage,
@@ -52,15 +47,13 @@ import {
 	FaEyeSlash,
 	FaGithub,
 	FaGoogle,
-	FaHeart,
 	FaLock,
 	FaRocket,
 	FaShieldAlt,
-	FaTimes,
 	FaUser,
 	FaUserPlus,
 } from "react-icons/fa";
-import { MdGroup, MdSecurity, MdSpeed, MdVerifiedUser } from "react-icons/md";
+import { MdGroup, MdSpeed, MdVerifiedUser } from "react-icons/md";
 import { useNavigate } from "react-router";
 
 const MotionBox = motion(Box);
