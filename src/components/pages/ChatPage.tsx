@@ -23,6 +23,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { FaArrowLeft, FaComment } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
+import {
+	selectedCharacterDetailAtom,
+	characterDetailLoadingAtom,
+} from "../../lib/atom/CharacterAtom";
 
 // --- モックAPI ---
 type Message = {
@@ -30,18 +35,6 @@ type Message = {
 	text: string;
 	sender: "user" | "character";
 	timestamp: string;
-};
-
-const mockCharacter = {
-	id: "chr_sato_hanako",
-	name: "佐藤花子",
-	profileImage: "",
-	city: "須賀川市",
-	occupation: "農家",
-	age: 58,
-	trustLevel: 2,
-	trustPoints: 23,
-	nextLevelPoints: 51,
 };
 
 const mockMessages: Message[] = [
@@ -85,6 +78,9 @@ export const ConversationPage: React.FC = () => {
 	const { characterId } = useParams<{ characterId: string }>();
 	const navigate = useNavigate();
 	const toast = useToast();
+
+	const [characterDetail] = useAtom(selectedCharacterDetailAtom);
+	const [isLoading] = useAtom(characterDetailLoadingAtom);
 
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [input, setInput] = useState("");
@@ -140,21 +136,22 @@ export const ConversationPage: React.FC = () => {
 		navigate(`/characters/${characterId}`);
 	};
 
-	const trustProgress =
-		(mockCharacter.trustPoints / mockCharacter.nextLevelPoints) * 100;
+	const trustLevel = characterDetail?.relationship?.trustLevel ?? 1;
+	const trustPoints = characterDetail?.relationship?.trustPoints ?? 0;
+	const nextLevelPoints = characterDetail?.relationship?.nextLevelPoints ?? 1;
+	const trustProgress = (trustPoints / nextLevelPoints) * 100;
 
 	return (
-		<Box minH="100vh" bgGradient={bgGradient} position="relative" w="100vw" h="100vh">
+		<Box minH="100dvh" h="100dvh" bgGradient={bgGradient} position="relative" w="100vw">
 			<Container
 				maxW="100vw"
-				h="100vh"
+				h="100%"
+				minH="100dvh"
 				p={containerPadding}
 				display="flex"
 				flexDirection="column"
-				justifyContent="center"
-				alignItems="center"
 			>
-				<VStack spacing={4} align="stretch" w="100%" maxW="600px" flex={1}>
+				<VStack spacing={4} align="stretch" w="100%" maxW="600px" mx="auto" flex={1} minH="0">
 					{/* ヘッダー */}
 					<MotionCard
 						initial={{ opacity: 0, y: -20 }}
@@ -178,17 +175,17 @@ export const ConversationPage: React.FC = () => {
 								<Spacer />
 								<Avatar
 									size="md"
-									src={mockCharacter.profileImage}
-									name={mockCharacter.name}
+									src={characterDetail?.profileImage}
+									name={characterDetail?.name}
 									mr={2}
 								/>
 								<Box>
 									<Heading size="md" color="gray.800" noOfLines={1}>
-										{mockCharacter.name}
+										{characterDetail?.name}
 									</Heading>
 									<Text fontSize="sm" color="gray.500">
-										{mockCharacter.city}・{mockCharacter.occupation}・
-										{mockCharacter.age}歳
+										{characterDetail?.city}・{characterDetail?.occupation}・
+										{characterDetail?.age}歳
 									</Text>
 								</Box>
 							</Flex>
@@ -207,7 +204,7 @@ export const ConversationPage: React.FC = () => {
 						<CardBody py={3} px={4}>
 							<HStack>
 								<Text fontSize="sm" color="gray.600" minW="80px">
-									信頼レベル: Lv.{mockCharacter.trustLevel}
+									信頼レベル: Lv.{trustLevel}
 								</Text>
 								<Progress
 									value={trustProgress}
@@ -218,7 +215,7 @@ export const ConversationPage: React.FC = () => {
 									mx={2}
 								/>
 								<Text fontSize="xs" color="gray.500">
-									{mockCharacter.trustPoints}/{mockCharacter.nextLevelPoints}
+									{trustPoints}/{nextLevelPoints}
 								</Text>
 							</HStack>
 						</CardBody>
@@ -231,13 +228,13 @@ export const ConversationPage: React.FC = () => {
 						bg={cardBg}
 						borderRadius="2xl"
 						shadow="md"
-						flex="1"
-						minH="50vh"
-						maxH="50vh"
+						flex={1}
+						minH="0"
+						maxH="100%"
 						overflowY="auto"
 					>
-						<CardBody p={4}>
-							<Stack spacing={4}>
+						<CardBody p={4} h="100%" display="flex" flexDirection="column">
+							<Stack spacing={4} flex={1} justify="flex-end">
 								{messages.map((msg) => (
 									<Flex
 										key={msg.id}
