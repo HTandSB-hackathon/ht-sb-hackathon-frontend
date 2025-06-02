@@ -22,6 +22,7 @@ import {
 	FaBolt,
 	FaCheck,
 	FaChevronDown,
+	FaChevronUp,
 	FaComment,
 	FaCrown,
 	FaGift,
@@ -42,6 +43,7 @@ import {
 	MdSecurity,
 	MdVerifiedUser,
 } from "react-icons/md";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { isLoggedInAtom } from "@/lib/atom/AuthAtom";
@@ -113,8 +115,45 @@ const LandingPage: React.FC = () => {
 	const particleKeys = Array.from({ length: 30 }, (_, i) => `particle-${i}`);
 	const starKeys = Array.from({ length: 20 }, (_, i) => `star-${i}`);
 
+	// トップに戻るボタンの表示制御
+	const [showScrollTop, setShowScrollTop] = useState(false);
+	useEffect(() => {
+		const onScroll = () => {
+			setShowScrollTop(window.scrollY > 800);
+		};
+		window.addEventListener("scroll", onScroll);
+		return () => window.removeEventListener("scroll", onScroll);
+	}, []);
+
+	const handleScrollTop = () => {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	};
+
 	return (
 		<Box minH="100vh" bg={bgGradient} position="relative" overflow="hidden">
+			{/* トップに戻るボタン */}
+			{showScrollTop && (
+				<Button
+					position="fixed"
+					bottom={{ base: 6, md: 10 }}
+					right={{ base: 6, md: 10 }}
+					zIndex="popover"
+					colorScheme="purple"
+					borderRadius="full"
+					size="lg"
+					shadow="xl"
+					onClick={handleScrollTop}
+					leftIcon={<FaChevronUp />}
+					bgGradient="linear(to-r, purple.500, blue.500)"
+					_hover={{
+						bgGradient: "linear(to-r, purple.600, blue.600)",
+						transform: "translateY(-2px) scale(1.08)",
+					}}
+					aria-label="トップに戻る"
+				>
+					トップへ
+				</Button>
+			)}
 			{/* 背景装飾エフェクト */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				{/* メイン装飾 */}
