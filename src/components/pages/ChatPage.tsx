@@ -9,6 +9,7 @@ import {
 	HStack,
 	Heading,
 	Input,
+	Progress,
 	Spacer,
 	Stack,
 	Text,
@@ -16,16 +17,13 @@ import {
 	useBreakpointValue,
 	useColorModeValue,
 	useToast,
-	Progress,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import { FaArrowLeft, FaComment } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
-import {
-	selectedCharacterDetailAtom,
-} from "../../lib/atom/CharacterAtom";
+import { useEffect, useRef, useState } from "react";
+import { FaArrowLeft, FaComment } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router";
+import { selectedCharacterDetailAtom } from "../../lib/atom/CharacterAtom";
 
 // --- モックAPI ---
 type Message = {
@@ -49,7 +47,11 @@ const mockApi = {
 		await new Promise((r) => setTimeout(r, 200));
 		return mockMessages;
 	},
-	async sendMessage(characterId: string, text: string, prev: Message[]): Promise<Message[]> {
+	async sendMessage(
+		characterId: string,
+		text: string,
+		prev: Message[],
+	): Promise<Message[]> {
 		await new Promise((r) => setTimeout(r, 400));
 		return [
 			...prev,
@@ -107,7 +109,11 @@ export const ChatPage: React.FC = () => {
 		if (!input.trim() || !characterId) return;
 		setIsSending(true);
 		try {
-			const newMessages = await mockApi.sendMessage(characterId, input, messages);
+			const newMessages = await mockApi.sendMessage(
+				characterId,
+				input,
+				messages,
+			);
 			setMessages(newMessages);
 			setInput("");
 		} catch {
@@ -139,7 +145,13 @@ export const ChatPage: React.FC = () => {
 	const trustProgress = (trustPoints / nextLevelPoints) * 100;
 
 	return (
-		<Box minH="100dvh" h="100dvh" bgGradient={bgGradient} position="relative" w="100vw">
+		<Box
+			minH="100dvh"
+			h="100dvh"
+			bgGradient={bgGradient}
+			position="relative"
+			w="100vw"
+		>
 			<Container
 				maxW="100vw"
 				h="100%"
@@ -148,7 +160,15 @@ export const ChatPage: React.FC = () => {
 				display="flex"
 				flexDirection="column"
 			>
-				<VStack spacing={4} align="stretch" w="100%" maxW="600px" mx="auto" flex={1} minH="0">
+				<VStack
+					spacing={4}
+					align="stretch"
+					w="100%"
+					maxW="600px"
+					mx="auto"
+					flex={1}
+					minH="0"
+				>
 					{/* ヘッダー */}
 					<MotionCard
 						initial={{ opacity: 0, y: -20 }}
@@ -238,16 +258,8 @@ export const ChatPage: React.FC = () => {
 										justify={msg.sender === "user" ? "flex-end" : "flex-start"}
 									>
 										<Box
-											bg={
-												msg.sender === "user"
-													? "blue.400"
-													: "gray.100"
-											}
-											color={
-												msg.sender === "user"
-													? "white"
-													: "gray.800"
-											}
+											bg={msg.sender === "user" ? "blue.400" : "gray.100"}
+											color={msg.sender === "user" ? "white" : "gray.800"}
 											px={4}
 											py={2}
 											borderRadius="2xl"

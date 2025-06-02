@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes } from "react-router";
 
 import CallbackPage from "@/components/pages/CallbackPage";
 import { CharacterDetailPage } from "@/components/pages/CharacterDetailPage";
-import ChatPage from "@/components/pages/ChatPage";
 import { CharactersPage } from "@/components/pages/CharactersPage";
+import ChatPage from "@/components/pages/ChatPage";
 import ChatsPage from "@/components/pages/ChatsPage";
 import HomePage from "@/components/pages/HomePage";
 import LoginPage from "@/components/pages/LoginPage";
