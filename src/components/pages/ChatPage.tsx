@@ -8,7 +8,6 @@ import {
 	Flex,
 	HStack,
 	Heading,
-	Icon,
 	Input,
 	Spacer,
 	Stack,
@@ -26,7 +25,6 @@ import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import {
 	selectedCharacterDetailAtom,
-	characterDetailLoadingAtom,
 } from "../../lib/atom/CharacterAtom";
 
 // --- モックAPI ---
@@ -74,13 +72,12 @@ const mockApi = {
 
 const MotionCard = motion(Card);
 
-export const ConversationPage: React.FC = () => {
+export const ChatPage: React.FC = () => {
 	const { characterId } = useParams<{ characterId: string }>();
 	const navigate = useNavigate();
 	const toast = useToast();
 
 	const [characterDetail] = useAtom(selectedCharacterDetailAtom);
-	const [isLoading] = useAtom(characterDetailLoadingAtom);
 
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [input, setInput] = useState("");
@@ -308,4 +305,4 @@ export const ConversationPage: React.FC = () => {
 	);
 };
 
-export default ConversationPage;
+export default ChatPage;
