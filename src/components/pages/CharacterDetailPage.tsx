@@ -43,6 +43,7 @@ import {
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import React from "react";
+import { useState } from "react";
 import {
 	FaArrowLeft,
 	FaCalendarAlt,
@@ -64,9 +65,14 @@ import {
 } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
 
+import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import type { Relationship, Story } from "@/lib/domain/CharacterQuery";
+import { getRelationships, getStories } from "@/lib/domain/CharacterQuery";
+import type { Municipality } from "@/lib/domain/CityQuery";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	characterDetailLoadingAtom,
-	selectedCharacterDetailAtom,
+	charactersAtomLoadable,
 } from "../../lib/atom/CharacterAtom";
 // import { CharacterQuery } from "../../lib/domain/CharacterQuery";
 import { TRUST_LEVELS } from "../../lib/types/character";
@@ -80,9 +86,9 @@ const MotionCard = motion(Card);
 export const CharacterDetailPage: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
-	const [characterDetail, setCharacterDetail] = useAtom(
-		selectedCharacterDetailAtom,
-	);
+	const characters = useLoadableAtom(charactersAtomLoadable);
+	const [stories, setStories] = useState<Story[]>([]);
+	const [relationship, setRelationship] = useState<Relationship>();
 	const [isLoading, setIsLoading] = useAtom(characterDetailLoadingAtom);
 	const [error, setError] = React.useState<string | null>(null);
 	const [tabIndex, setTabIndex] = React.useState(0);
@@ -108,46 +114,22 @@ export const CharacterDetailPage: React.FC = () => {
 	);
 
 	// 地域テーマ
-	const getCityTheme = (city: string) => {
-		const themes: Record<
-			string,
-			{
-				color: string;
-				emoji: string;
-				gradient: string;
-				specialty: string;
-			}
-		> = {
-			須賀川市: {
-				color: "purple",
-				emoji: "🍇",
-				gradient: "linear(to-r, purple.400, pink.400)",
-				specialty: "ウルトラマンの故郷",
-			},
-			三春町: {
-				color: "pink",
-				emoji: "🌸",
-				gradient: "linear(to-r, pink.400, rose.400)",
-				specialty: "滝桜で有名",
-			},
-			中島村: {
-				color: "green",
-				emoji: "🌾",
-				gradient: "linear(to-r, green.400, teal.400)",
-				specialty: "豊かな田園風景",
-			},
-		};
-		return (
-			themes[city] || {
-				color: "gray",
-				emoji: "🏔️",
-				gradient: "linear(to-r, gray.400, gray.500)",
-				specialty: "自然の恵み",
-			}
+	const municipalities = useLoadableAtom(municipalityAtomLoadable);
+
+	// 都道府県の市区町村データを取得
+	const getMunicipality = () => {
+		if (!municipalities) return null;
+		const municipality = municipalities.find(
+			(m: Municipality) => m.id === getCharacter()?.municipalityId,
 		);
+		return municipality;
 	};
 
-	const cityTheme = characterDetail ? getCityTheme(characterDetail.city) : null;
+	const getCharacter = () => {
+		if (!characters) return null;
+
+		return characters.find((character) => character.id === Number(id));
+	};
 
 	// データ取得
 	React.useEffect(() => {
@@ -160,9 +142,10 @@ export const CharacterDetailPage: React.FC = () => {
 		try {
 			setIsLoading(true);
 			setError(null);
-			console.log("キャラクター詳細読み込み中:", characterId);
-			// const detail = await CharacterQuery.getCharacterDetail(characterId);
-			setCharacterDetail(null);
+			const stories = await getStories(characterId);
+			setStories(stories);
+			const relationship = await getRelationships(characterId);
+			setRelationship(relationship);
 		} catch (err) {
 			console.error("キャラクター詳細読み込みエラー:", err);
 			setError("キャラクター情報の読み込みに失敗しました");
@@ -179,8 +162,8 @@ export const CharacterDetailPage: React.FC = () => {
 	};
 
 	const handleStartConversation = () => {
-		if (characterDetail) {
-			navigate(`/chat/${characterDetail.id}`);
+		if (relationship?.id) {
+			navigate(`/chat/${relationship.id}`);
 		}
 	};
 
@@ -245,7 +228,7 @@ export const CharacterDetailPage: React.FC = () => {
 	}
 
 	// エラー表示
-	if (error || !characterDetail) {
+	if (error || !relationship || !stories) {
 		return (
 			<Box
 				minH="100vh"
@@ -291,13 +274,9 @@ export const CharacterDetailPage: React.FC = () => {
 		);
 	}
 
-	const trustLevel = characterDetail.relationship?.trustLevel || 1;
+	const trustLevel = relationship?.trustLevelId || 1;
 	const trustInfo = TRUST_LEVELS[trustLevel as keyof typeof TRUST_LEVELS];
-	const progress = characterDetail.relationship
-		? (characterDetail.relationship.trustPoints /
-				characterDetail.relationship.nextLevelPoints) *
-			100
-		: 0;
+	const progress = 15;
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
@@ -350,9 +329,9 @@ export const CharacterDetailPage: React.FC = () => {
 
 								<Spacer />
 
-								{cityTheme && (
+								{getMunicipality() && (
 									<Badge
-										colorScheme={cityTheme.color}
+										colorScheme={getMunicipality()?.color}
 										variant="solid"
 										px={4}
 										py={2}
@@ -360,7 +339,7 @@ export const CharacterDetailPage: React.FC = () => {
 										fontSize="sm"
 										fontWeight="bold"
 									>
-										{cityTheme.emoji} {characterDetail.city}
+										{getMunicipality()?.emoji} {getMunicipality()?.name}
 									</Badge>
 								)}
 
@@ -391,13 +370,14 @@ export const CharacterDetailPage: React.FC = () => {
 						<Box
 							height="200px"
 							bgGradient={
-								cityTheme?.gradient || "linear(to-r, gray.400, gray.500)"
+								getMunicipality()?.gradient ||
+								"linear(to-r, gray.400, gray.500)"
 							}
 							position="relative"
 						>
-							{characterDetail.coverImage && (
+							{getCharacter()?.coverImageUrl && (
 								<Image
-									src={characterDetail.coverImage}
+									src={getCharacter()?.coverImageUrl}
 									alt=""
 									w="full"
 									h="full"
@@ -417,8 +397,8 @@ export const CharacterDetailPage: React.FC = () => {
 								<Box position="relative">
 									<Avatar
 										size={avatarSize}
-										src={characterDetail.profileImage}
-										name={characterDetail.name}
+										src={getCharacter()?.profileImageUrl}
+										name={getCharacter()?.name}
 										border="6px solid white"
 										shadow="2xl"
 									/>
@@ -430,26 +410,26 @@ export const CharacterDetailPage: React.FC = () => {
 										borderRadius="full"
 										p="2"
 										border="2px solid"
-										borderColor={`${cityTheme?.color}.400`}
+										borderColor={`${getMunicipality()?.color}.400`}
 										fontSize="lg"
 									>
-										{cityTheme?.emoji}
+										{getMunicipality()?.emoji}
 									</Box>
 								</Box>
 
 								{/* 基本情報 */}
 								<VStack spacing={3} textAlign="center">
 									<Heading size={headerSize} color="gray.800" noOfLines={1}>
-										{characterDetail.name}
+										{getCharacter()?.name}
 									</Heading>
-									<Text
+									{/* <Text
 										fontSize="lg"
 										color="gray.500"
 										fontWeight="medium"
 										noOfLines={1}
 									>
-										{characterDetail.nameKana}
-									</Text>
+										{getCharacter()?.nameKana}
+									</Text> */}
 
 									{/* スマホ表示最適化: 縦並びレイアウト */}
 									<VStack
@@ -460,17 +440,17 @@ export const CharacterDetailPage: React.FC = () => {
 									>
 										<HStack spacing={2}>
 											<Icon as={MdCake} color="purple.500" />
-											<Text fontWeight="medium">{characterDetail.age}歳</Text>
+											<Text fontWeight="medium">{getCharacter()?.age}歳</Text>
 										</HStack>
 										<HStack spacing={2}>
 											<Icon as={MdWork} color="blue.500" />
 											<Text fontWeight="medium" noOfLines={1}>
-												{characterDetail.occupation}
+												{getCharacter()?.occupationId}
 											</Text>
 										</HStack>
 										<HStack spacing={2}>
 											<Icon as={FaMapMarkerAlt} color="green.500" />
-											<Text fontWeight="medium">{characterDetail.city}</Text>
+											<Text fontWeight="medium">{getMunicipality()?.name}</Text>
 										</HStack>
 									</VStack>
 
@@ -485,21 +465,21 @@ export const CharacterDetailPage: React.FC = () => {
 									>
 										<HStack>
 											<Icon as={MdCake} color="purple.500" />
-											<Text>{characterDetail.age}歳</Text>
+											<Text>{getCharacter()?.age}歳</Text>
 										</HStack>
 										<HStack>
 											<Icon as={MdWork} color="blue.500" />
-											<Text>{characterDetail.occupation}</Text>
+											<Text>{getCharacter()?.occupationId}</Text>
 										</HStack>
 										<HStack>
 											<Icon as={FaMapMarkerAlt} color="green.500" />
-											<Text>{characterDetail.city}</Text>
+											<Text>{getMunicipality()?.name}</Text>
 										</HStack>
 									</HStack>
 								</VStack>
 
 								{/* 信頼度 */}
-								{characterDetail.relationship && (
+								{relationship && (
 									<Card bg="gray.50" borderRadius="xl" w="full" maxW="md">
 										<CardBody p={4}>
 											<VStack spacing={3}>
@@ -518,9 +498,8 @@ export const CharacterDetailPage: React.FC = () => {
 														</HStack>
 													</Badge>
 													<Text fontSize="sm" color="gray.600">
-														Lv.{trustLevel} (
-														{characterDetail.relationship.trustPoints}/
-														{characterDetail.relationship.nextLevelPoints})
+														Lv.{trustLevel} ({relationship.trustPoints}/
+														{/* {relationship.nextLevelPoints} */})
 													</Text>
 												</HStack>
 												<Progress
@@ -681,7 +660,7 @@ export const CharacterDetailPage: React.FC = () => {
 												💭 自己紹介
 											</Heading>
 											<Text color="gray.600" lineHeight="tall" fontSize="lg">
-												{characterDetail.introduction}
+												{getCharacter()?.introduction}
 											</Text>
 										</Box>
 
@@ -692,7 +671,7 @@ export const CharacterDetailPage: React.FC = () => {
 													✨ 性格
 												</Heading>
 												<Wrap>
-													{characterDetail.personality.map((trait, index) => (
+													{getCharacter()?.personality.map((trait, index) => (
 														<WrapItem key={index}>
 															<Tag
 																colorScheme="green"
@@ -712,7 +691,7 @@ export const CharacterDetailPage: React.FC = () => {
 													🎯 趣味
 												</Heading>
 												<Wrap>
-													{characterDetail.hobbies.map((hobby, index) => (
+													{getCharacter()?.hobbies.map((hobby, index) => (
 														<WrapItem key={index}>
 															<Tag
 																colorScheme="blue"
@@ -732,7 +711,7 @@ export const CharacterDetailPage: React.FC = () => {
 													🏆 得意なこと
 												</Heading>
 												<Wrap>
-													{characterDetail.specialties.map(
+													{getCharacter()?.specialties.map(
 														(specialty, index) => (
 															<WrapItem key={index}>
 																<Tag
@@ -754,7 +733,7 @@ export const CharacterDetailPage: React.FC = () => {
 													🏞️ 地域の特産品
 												</Heading>
 												<SimpleGrid columns={2} spacing={4}>
-													{characterDetail.localSpecialties.map((specialty) => (
+													{/* {getCharacter()?.localSpecialties.map((specialty) => (
 														<MotionBox
 															key={specialty.id}
 															whileHover={{ scale: 1.05 }}
@@ -791,7 +770,7 @@ export const CharacterDetailPage: React.FC = () => {
 																</CardBody>
 															</Card>
 														</MotionBox>
-													))}
+													))} */}
 												</SimpleGrid>
 											</Box>
 										</SimpleGrid>
@@ -803,10 +782,11 @@ export const CharacterDetailPage: React.FC = () => {
 									<VStack spacing={8}>
 										<Box textAlign="center">
 											<Heading size="lg" mb={4}>
-												{cityTheme?.emoji} {characterDetail.city}の魅力
+												{getMunicipality()?.emoji} {getMunicipality()?.name}
+												の魅力
 											</Heading>
 											<Text color="gray.600" fontSize="lg">
-												{cityTheme?.specialty}
+												{getMunicipality()?.specialty}
 											</Text>
 										</Box>
 
@@ -878,7 +858,7 @@ export const CharacterDetailPage: React.FC = () => {
 												onClick={handleStartConversation}
 												borderRadius="2xl"
 											>
-												{characterDetail.name}さんと地域について語る
+												{getCharacter()?.name}さんと地域について語る
 											</Button>
 										</Center>
 									</VStack>
@@ -888,11 +868,11 @@ export const CharacterDetailPage: React.FC = () => {
 								<TabPanel p={8}>
 									<VStack spacing={6} align="stretch">
 										<Heading size="md" textAlign="center" color="gray.700">
-											📖 {characterDetail.name}さんのストーリー
+											📖 {getCharacter()?.name}さんのストーリー
 										</Heading>
 
 										<VStack spacing={4}>
-											{characterDetail.stories.map((story) => (
+											{stories?.map((story) => (
 												<Card
 													key={story.id}
 													w="full"
@@ -938,10 +918,10 @@ export const CharacterDetailPage: React.FC = () => {
 								<TabPanel p={8}>
 									<VStack spacing={8}>
 										<Heading size="md" textAlign="center" color="gray.700">
-											💕 {characterDetail.name}さんとのつながり
+											💕 {getCharacter()?.name}さんとのつながり
 										</Heading>
 
-										{characterDetail.relationship && (
+										{relationship && (
 											<SimpleGrid
 												columns={{ base: 2, md: 4 }}
 												spacing={6}
@@ -954,7 +934,7 @@ export const CharacterDetailPage: React.FC = () => {
 													</StatLabel>
 													<StatNumber fontSize="md">
 														{new Date(
-															characterDetail.relationship.firstMetAt,
+															relationship.firstMetAt,
 														).toLocaleDateString("ja-JP")}
 													</StatNumber>
 												</Stat>
@@ -965,7 +945,7 @@ export const CharacterDetailPage: React.FC = () => {
 														会話回数
 													</StatLabel>
 													<StatNumber>
-														{characterDetail.relationship.totalConversations}
+														{relationship.conversationCount}
 													</StatNumber>
 													<StatHelpText>回</StatHelpText>
 												</Stat>
@@ -975,9 +955,7 @@ export const CharacterDetailPage: React.FC = () => {
 														<Icon as={FaStar} mr={2} />
 														信頼度
 													</StatLabel>
-													<StatNumber>
-														{characterDetail.relationship.trustPoints}
-													</StatNumber>
+													<StatNumber>{relationship.trustPoints}</StatNumber>
 													<StatHelpText>ポイント</StatHelpText>
 												</Stat>
 
@@ -987,7 +965,8 @@ export const CharacterDetailPage: React.FC = () => {
 														贈り物
 													</StatLabel>
 													<StatNumber>
-														{characterDetail.relationship.receivedGifts.length}
+														{/* {characterDetail.relationship.receivedGifts.length} */}
+														未定
 													</StatNumber>
 													<StatHelpText>個</StatHelpText>
 												</Stat>
