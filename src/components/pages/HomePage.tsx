@@ -7,8 +7,8 @@ import Header from "@/components/organisms/Header";
 const HomePage: React.FC = () => {
 	const navigate = useNavigate();
 
-	const handleChatsRedirect = () => {
-		navigate("/chats");
+	const handleCharactersRedirect = () => {
+		navigate("/characters");
 	};
 
 	return (
@@ -18,8 +18,8 @@ const HomePage: React.FC = () => {
 				<Heading as="h1" size="2xl" mb={4}>
 					ホーム画面
 				</Heading>
-				<Button colorScheme="blue" onClick={handleChatsRedirect}>
-					会話画面一覧へ
+				<Button colorScheme="blue" onClick={handleCharactersRedirect}>
+					キャラクター画面一覧へ
 				</Button>
 			</Box>
 		</Box>

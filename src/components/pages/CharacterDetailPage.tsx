@@ -68,7 +68,7 @@ import {
 	characterDetailLoadingAtom,
 	selectedCharacterDetailAtom,
 } from "../../lib/atom/CharacterAtom";
-import { CharacterQuery } from "../../lib/domain/CharacterQuery";
+// import { CharacterQuery } from "../../lib/domain/CharacterQuery";
 import { TRUST_LEVELS } from "../../lib/types/character";
 
 const MotionBox = motion(Box);
@@ -160,9 +160,9 @@ export const CharacterDetailPage: React.FC = () => {
 		try {
 			setIsLoading(true);
 			setError(null);
-
-			const detail = await CharacterQuery.getCharacterDetail(characterId);
-			setCharacterDetail(detail);
+			console.log("キャラクター詳細読み込み中:", characterId);
+			// const detail = await CharacterQuery.getCharacterDetail(characterId);
+			setCharacterDetail(null);
 		} catch (err) {
 			console.error("キャラクター詳細読み込みエラー:", err);
 			setError("キャラクター情報の読み込みに失敗しました");
