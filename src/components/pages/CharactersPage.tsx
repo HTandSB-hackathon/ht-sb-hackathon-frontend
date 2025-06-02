@@ -61,6 +61,7 @@ import {
 	charactersLoadingAtom,
 	// charactersTotalAtom,
 	favoriteCharacterIdsAtom,
+	lockedCharactersAtomLoadable,
 	newlyUnlockedCharacterIdsAtom,
 	// sortedCharactersAtom,
 } from "../../lib/atom/CharacterAtom";
@@ -80,6 +81,7 @@ const MotionBox = motion(Box);
  */
 export const CharactersPage: React.FC = () => {
 	const characters = useLoadableAtom(charactersAtomLoadable);
+	const lockedCharacters = useLoadableAtom(lockedCharactersAtomLoadable);
 	const [relationships] = useAtom(characterRelationshipsAtom);
 	const [filter, setFilter] = useAtom(characterFilterAtom);
 	const [sortBy, setSortBy] = useAtom(characterSortByAtom);
@@ -504,15 +506,15 @@ export const CharactersPage: React.FC = () => {
 												</Button>
 												{municipalities?.map((city: Municipality) => (
 													<Button
-														key={city.name}
+														key={city.id}
 														onClick={() =>
-															setFilter({ ...filter, city: city.name })
+															setFilter({ ...filter, city: city.id })
 														}
 														colorScheme={
-															filter.city === city.name ? "purple" : "gray"
+															filter.city === city.id ? "purple" : "gray"
 														}
 														variant={
-															filter.city === city.name ? "solid" : "outline"
+															filter.city === city.id ? "solid" : "outline"
 														}
 													>
 														{city.name}
@@ -635,7 +637,27 @@ export const CharactersPage: React.FC = () => {
 											<CharacterCard
 												character={character}
 												relationship={relationships[character.id]}
-												isNew={newCharacterIds.has(character.id)}
+												isNew={newCharacterIds.has(String(character.id))}
+												animationDelay={index * 0.1}
+												onFavoriteToggle={handleFavoriteToggle}
+											/>
+										</MotionBox>
+									))}
+									{lockedCharacters?.map((character, index) => (
+										<MotionBox
+											key={character.id}
+											initial={{ opacity: 0, y: 50 }}
+											animate={{ opacity: 1, y: 0 }}
+											exit={{ opacity: 0, y: -50 }}
+											transition={{
+												duration: 0.5,
+												delay: index * 0.1,
+											}}
+										>
+											<CharacterCard
+												character={character}
+												relationship={relationships[character.id]}
+												isNew={newCharacterIds.has(String(character.id))}
 												animationDelay={index * 0.1}
 												onFavoriteToggle={handleFavoriteToggle}
 											/>

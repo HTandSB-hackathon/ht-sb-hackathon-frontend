@@ -6,14 +6,18 @@ import type {
 	CharacterSortBy,
 } from "../types/character";
 
-import { loadable } from "jotai/utils";
-import { type Character, getCharacters } from "../domain/CharacterQuery";
+import { atomWithRefresh, loadable } from "jotai/utils";
+import {
+	type Character,
+	getCharacters,
+	getLockedCharacters,
+} from "../domain/CharacterQuery";
 
 /**
  * キャラクター一覧の状態
  */
 export const charactersAtom = atom<Character[]>([]);
-export const characterAtomAsync = atom<Promise<Character[]>>(async () => {
+const characterAtomAsync = atomWithRefresh<Promise<Character[]>>(async () => {
 	try {
 		const response = await getCharacters();
 		return response;
@@ -23,7 +27,20 @@ export const characterAtomAsync = atom<Promise<Character[]>>(async () => {
 	}
 });
 
+const lockedCharactersAtomAsync = atomWithRefresh<Promise<Character[]>>(
+	async () => {
+		try {
+			const response = await getLockedCharacters();
+			return response;
+		} catch (error) {
+			console.error("Error fetching municipalities:", error);
+			return [];
+		}
+	},
+);
+
 export const charactersAtomLoadable = loadable(characterAtomAsync);
+export const lockedCharactersAtomLoadable = loadable(lockedCharactersAtomAsync);
 
 /**
  * キャラクターとの関係性マップ
@@ -172,11 +189,11 @@ export const animatingCharacterIdAtom = atom<string | null>(null);
 /**
  * お気に入りキャラクター一覧
  */
-export const favoriteCharactersAtom = atom((get) => {
-	const characters = get(charactersAtom);
-	const favoriteIds = get(favoriteCharacterIdsAtom);
-	return characters.filter((character) => favoriteIds?.has(character.id));
-});
+// export const favoriteCharactersAtom = atom((get) => {
+// 	const characters = get(charactersAtom);
+// 	const favoriteIds = get(favoriteCharacterIdsAtom);
+// 	return characters.filter((character) => favoriteIds?.has(character.id));
+// });
 
 /**
  * 信頼レベル別のキャラクター数

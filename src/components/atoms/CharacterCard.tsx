@@ -1,3 +1,6 @@
+import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import type { Municipality } from "@/lib/domain/CityQuery";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	Avatar,
 	Badge,
@@ -53,6 +56,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	const navigate = useNavigate();
 	const [isFavorite, setIsFavorite] = React.useState(false);
 	const [isHovered, setIsHovered] = React.useState(false);
+	const municipalities = useLoadableAtom(municipalityAtomLoadable);
+
+	// 都道府県の市区町村データを取得
+	const getMunicipalityName = () => {
+		if (!municipalities) return null;
+		const municipality = municipalities.find(
+			(m: Municipality) => m.id === character.municipalityId,
+		);
+		return municipality ? municipality.name : "不明";
+	};
 
 	// レスポンシブデザイン
 	// const cardSize = useBreakpointValue({ base: "sm", md: "md" });
@@ -77,7 +90,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 		e.stopPropagation();
 		if (!character.isLocked && onFavoriteToggle) {
 			setIsFavorite(!isFavorite);
-			onFavoriteToggle(character.id, !isFavorite);
+			onFavoriteToggle(String(character.id), !isFavorite);
 		}
 	};
 
@@ -275,13 +288,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 							<Tag size="sm" colorScheme={cityTheme.color} variant="subtle">
 								<TagLeftIcon as={FaMapMarkerAlt} />
 								<TagLabel>
-									{character.isLocked ? "未解放" : character.occupationId}
+									{character.isLocked ? "未解放" : getMunicipalityName()}
 								</TagLabel>
 							</Tag>
 
 							<HStack spacing="2" fontSize="xs" color="gray.500">
 								<Text>{cityTheme.emoji}</Text>
-								{/* <Text>{character.city}</Text> */}
+								<Text>{getMunicipalityName()}</Text>
 							</HStack>
 						</VStack>
 
@@ -346,7 +359,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 					)}
 
 					{/* ロック条件 */}
-					{/* {character.isLocked && character.unlockCondition && (
+					{character.isLocked && character.unlockCondition && (
 						<Box
 							bg="gray.50"
 							p="3"
@@ -361,7 +374,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 								</Text>
 							</HStack>
 						</Box>
-					)} */}
+					)}
 
 					{/* ステータス情報 */}
 					{!character.isLocked && (
