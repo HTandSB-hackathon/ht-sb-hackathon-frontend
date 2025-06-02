@@ -7,11 +7,7 @@ import type {
 } from "../types/character";
 
 import { atomWithRefresh, loadable } from "jotai/utils";
-import {
-	type Character,
-	getCharacters,
-	getLockedCharacters,
-} from "../domain/CharacterQuery";
+import { type Character, getCharacters, getLockedCharacters } from "../domain/CharacterQuery";
 
 /**
  * キャラクター一覧の状態
@@ -27,17 +23,15 @@ const characterAtomAsync = atomWithRefresh<Promise<Character[]>>(async () => {
 	}
 });
 
-const lockedCharactersAtomAsync = atomWithRefresh<Promise<Character[]>>(
-	async () => {
-		try {
-			const response = await getLockedCharacters();
-			return response;
-		} catch (error) {
-			console.error("Error fetching municipalities:", error);
-			return [];
-		}
-	},
-);
+const lockedCharactersAtomAsync = atomWithRefresh<Promise<Character[]>>(async () => {
+	try {
+		const response = await getLockedCharacters();
+		return response;
+	} catch (error) {
+		console.error("Error fetching municipalities:", error);
+		return [];
+	}
+});
 
 export const charactersAtomLoadable = loadable(characterAtomAsync);
 export const lockedCharactersAtomLoadable = loadable(lockedCharactersAtomAsync);
@@ -45,9 +39,7 @@ export const lockedCharactersAtomLoadable = loadable(lockedCharactersAtomAsync);
 /**
  * キャラクターとの関係性マップ
  */
-export const characterRelationshipsAtom = atom<
-	Record<string, CharacterRelationship>
->({});
+export const characterRelationshipsAtom = atom<Record<string, CharacterRelationship>>({});
 
 /**
  * 選択中のキャラクター詳細
@@ -207,8 +199,7 @@ export const characterCountByTrustLevelAtom = atom((get) => {
 	for (const character of characters) {
 		const relationship = relationships[character.id];
 		if (relationship) {
-			counts[relationship.trustLevel] =
-				(counts[relationship.trustLevel] || 0) + 1;
+			counts[relationship.trustLevel] = (counts[relationship.trustLevel] || 0) + 1;
 		}
 	}
 

@@ -10,9 +10,7 @@ import type { Loadable } from "jotai/vanilla/utils/loadable"; // ShadCN UI „Åß„Å
 import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
 
 import Header from "@/components/organisms/Header";
-const getStatusDisplay = (
-	check: Loadable<Promise<HealthCheckResponse | null>>,
-) => {
+const getStatusDisplay = (check: Loadable<Promise<HealthCheckResponse | null>>) => {
 	if (check.state === "loading") return <Spinner size="sm" />;
 	if (check.state === "hasError") return <Badge colorScheme="red">ERROR</Badge>;
 	if (check.state === "hasData") {

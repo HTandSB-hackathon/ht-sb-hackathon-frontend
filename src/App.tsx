@@ -21,6 +21,7 @@ function App() {
 				<Route path="/register" element={<RegisterPage />} />
 				<Route path="/tutorial" element={<TutorialPage />} />
 				<Route path="/chats" element={<ChatsPage />} />
+				<Route path="/home" element={<HomePage />} />
 
 				{/* ログイン関係のルート */}
 				<Route path="/auth/login" element={<LoginPage />} />
@@ -29,7 +30,6 @@ function App() {
 				{/* ルートが存在しない場合の404ページ */}
 				{/* 認証が必要なルート */}
 				<Route element={<ProtectedRoute />}>
-					<Route path="/home" element={<HomePage />} />
 					<Route path="/characters" element={<CharactersPage />} />
 					<Route path="/characters/:id" element={<CharacterDetailPage />} />
 					<Route path="/chats/:characterId" element={<ChatPage />} />

@@ -48,11 +48,7 @@ const mockApi = {
 		await new Promise((r) => setTimeout(r, 200));
 		return mockMessages;
 	},
-	async sendMessage(
-		characterId: string,
-		text: string,
-		prev: Message[],
-	): Promise<Message[]> {
+	async sendMessage(characterId: string, text: string, prev: Message[]): Promise<Message[]> {
 		console.log("メッセージ送信中:", characterId);
 		await new Promise((r) => setTimeout(r, 400));
 		return [
@@ -111,11 +107,7 @@ export const ChatPage: React.FC = () => {
 		if (!input.trim() || !characterId) return;
 		setIsSending(true);
 		try {
-			const newMessages = await mockApi.sendMessage(
-				characterId,
-				input,
-				messages,
-			);
+			const newMessages = await mockApi.sendMessage(characterId, input, messages);
 			setMessages(newMessages);
 			setInput("");
 		} catch {
@@ -147,13 +139,7 @@ export const ChatPage: React.FC = () => {
 	const trustProgress = (trustPoints / nextLevelPoints) * 100;
 
 	return (
-		<Box
-			minH="100dvh"
-			h="100dvh"
-			bgGradient={bgGradient}
-			position="relative"
-			w="100vw"
-		>
+		<Box minH="100dvh" h="100dvh" bgGradient={bgGradient} position="relative" w="100vw">
 			<Container
 				maxW="100vw"
 				h="100%"
@@ -162,15 +148,7 @@ export const ChatPage: React.FC = () => {
 				display="flex"
 				flexDirection="column"
 			>
-				<VStack
-					spacing={4}
-					align="stretch"
-					w="100%"
-					maxW="600px"
-					mx="auto"
-					flex={1}
-					minH="0"
-				>
+				<VStack spacing={4} align="stretch" w="100%" maxW="600px" mx="auto" flex={1} minH="0">
 					{/* ヘッダー */}
 					<MotionCard
 						initial={{ opacity: 0, y: -20 }}
@@ -203,8 +181,7 @@ export const ChatPage: React.FC = () => {
 										{characterDetail?.name}
 									</Heading>
 									<Text fontSize="sm" color="gray.500">
-										{characterDetail?.city}・{characterDetail?.occupation}・
-										{characterDetail?.age}歳
+										{characterDetail?.city}・{characterDetail?.occupation}・{characterDetail?.age}歳
 									</Text>
 								</Box>
 							</Flex>
@@ -255,10 +232,7 @@ export const ChatPage: React.FC = () => {
 						<CardBody p={4} h="100%" display="flex" flexDirection="column">
 							<Stack spacing={4} flex={1} justify="flex-end">
 								{messages.map((msg) => (
-									<Flex
-										key={msg.id}
-										justify={msg.sender === "user" ? "flex-end" : "flex-start"}
-									>
+									<Flex key={msg.id} justify={msg.sender === "user" ? "flex-end" : "flex-start"}>
 										<Box
 											bg={msg.sender === "user" ? "blue.400" : "gray.100"}
 											color={msg.sender === "user" ? "white" : "gray.800"}

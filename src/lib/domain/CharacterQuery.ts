@@ -7,9 +7,7 @@ import type {
 } from "../types/character";
 
 // 数値のgenderを文字列に変換する関数
-function convertGenderFromNumber(
-	genderNumber: number,
-): "male" | "female" | "other" {
+function convertGenderFromNumber(genderNumber: number): "male" | "female" | "other" {
 	switch (genderNumber) {
 		case 0:
 			return "male";
@@ -167,26 +165,19 @@ export async function getCharacters(): Promise<Character[]> {
 
 export async function getLockedCharacters(): Promise<Character[]> {
 	const axiosClient = createAxiosClient();
-	const response =
-		await axiosClient.get<CharacterResponse[]>("/characters/locked");
+	const response = await axiosClient.get<CharacterResponse[]>("/characters/locked");
 	return response.data.map(createCharacter);
 }
 
-export async function getRelationships(
-	characterId: string,
-): Promise<Relationship> {
+export async function getRelationships(characterId: string): Promise<Relationship> {
 	const axiosClient = createAxiosClient();
-	const response = await axiosClient.get<RelationshipResponse>(
-		`/characters/${characterId}`,
-	);
+	const response = await axiosClient.get<RelationshipResponse>(`/characters/${characterId}`);
 	return createRelationship(response.data);
 }
 
 export async function getStories(characterId: string): Promise<Story[]> {
 	const axiosClient = createAxiosClient();
-	const response = await axiosClient.get<StoryResponse[]>(
-		`/characters/${characterId}/stories`,
-	);
+	const response = await axiosClient.get<StoryResponse[]>(`/characters/${characterId}/stories`);
 	return response.data.map(createStory);
 }
 

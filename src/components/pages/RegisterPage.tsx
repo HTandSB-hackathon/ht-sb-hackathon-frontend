@@ -141,15 +141,13 @@ const RegisterPage: React.FC = () => {
 			if (!formData.password) newErrors.password = "パスワードは必須です";
 			if (formData.password.length < 8)
 				newErrors.password = "パスワードは8文字以上で入力してください";
-			if (!formData.confirmPassword)
-				newErrors.confirmPassword = "パスワード確認は必須です";
+			if (!formData.confirmPassword) newErrors.confirmPassword = "パスワード確認は必須です";
 			if (formData.password !== formData.confirmPassword)
 				newErrors.confirmPassword = "パスワードが一致しません";
 		}
 
 		if (activeStep === 2) {
-			if (!formData.agreeTerms)
-				newErrors.agreeTerms = "利用規約への同意は必須です";
+			if (!formData.agreeTerms) newErrors.agreeTerms = "利用規約への同意は必須です";
 		}
 
 		setErrors(newErrors);
@@ -173,8 +171,7 @@ const RegisterPage: React.FC = () => {
 
 			toast({
 				title: "登録完了！",
-				description:
-					"アカウントが正常に作成されました。ログインページに移動します。",
+				description: "アカウントが正常に作成されました。ログインページに移動します。",
 				status: "success",
 				duration: 3000,
 				isClosable: true,
@@ -284,13 +281,7 @@ const RegisterPage: React.FC = () => {
 								ログインに戻る
 							</Button>
 							<Spacer />
-							<Badge
-								colorScheme="purple"
-								variant="solid"
-								px={3}
-								py={1}
-								borderRadius="full"
-							>
+							<Badge colorScheme="purple" variant="solid" px={3} py={1} borderRadius="full">
 								無料アカウント作成
 							</Badge>
 						</Flex>
@@ -306,13 +297,7 @@ const RegisterPage: React.FC = () => {
 								>
 									福島のこころに参加しよう 🌸
 								</Heading>
-								<Text
-									fontSize="lg"
-									color="gray.600"
-									maxW="2xl"
-									mx="auto"
-									lineHeight="tall"
-								>
+								<Text fontSize="lg" color="gray.600" maxW="2xl" mx="auto" lineHeight="tall">
 									美しい福島で素敵な人々と出会い、特別なつながりを築きませんか
 								</Text>
 							</Box>
@@ -343,16 +328,8 @@ const RegisterPage: React.FC = () => {
 										>
 											<CardBody p={3}>
 												<HStack spacing={2}>
-													<Icon
-														as={feature.icon}
-														color={`${feature.color}.500`}
-														boxSize={4}
-													/>
-													<Text
-														fontSize="sm"
-														fontWeight="medium"
-														color="gray.700"
-													>
+													<Icon as={feature.icon} color={`${feature.color}.500`} boxSize={4} />
+													<Text fontSize="sm" fontWeight="medium" color="gray.700">
 														{feature.text}
 													</Text>
 												</HStack>
@@ -419,9 +396,7 @@ const RegisterPage: React.FC = () => {
 												<Heading size="lg" mb={2}>
 													はじめまして！
 												</Heading>
-												<Text color="gray.600">
-													あなたの基本情報を教えてください
-												</Text>
+												<Text color="gray.600">あなたの基本情報を教えてください</Text>
 											</Box>
 
 											<VStack spacing={4}>
@@ -435,9 +410,7 @@ const RegisterPage: React.FC = () => {
 													<Input
 														placeholder="例: 田中太郎"
 														value={formData.username}
-														onChange={(e) =>
-															handleInputChange("username", e.target.value)
-														}
+														onChange={(e) => handleInputChange("username", e.target.value)}
 														size="lg"
 														borderRadius="xl"
 														bg="gray.50"
@@ -463,9 +436,7 @@ const RegisterPage: React.FC = () => {
 														type="email"
 														placeholder="例: tanaka@example.com"
 														value={formData.email}
-														onChange={(e) =>
-															handleInputChange("email", e.target.value)
-														}
+														onChange={(e) => handleInputChange("email", e.target.value)}
 														size="lg"
 														borderRadius="xl"
 														bg="gray.50"
@@ -519,9 +490,7 @@ const RegisterPage: React.FC = () => {
 															type={showPassword ? "text" : "password"}
 															placeholder="8文字以上の英数字"
 															value={formData.password}
-															onChange={(e) =>
-																handleInputChange("password", e.target.value)
-															}
+															onChange={(e) => handleInputChange("password", e.target.value)}
 															size="lg"
 															borderRadius="xl"
 															bg="gray.50"
@@ -584,12 +553,7 @@ const RegisterPage: React.FC = () => {
 															type={showConfirmPassword ? "text" : "password"}
 															placeholder="上記と同じパスワードを入力"
 															value={formData.confirmPassword}
-															onChange={(e) =>
-																handleInputChange(
-																	"confirmPassword",
-																	e.target.value,
-																)
-															}
+															onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
 															size="lg"
 															borderRadius="xl"
 															bg="gray.50"
@@ -604,24 +568,14 @@ const RegisterPage: React.FC = () => {
 														<InputRightElement height="100%">
 															<IconButton
 																aria-label="toggle confirm password visibility"
-																icon={
-																	showConfirmPassword ? (
-																		<FaEyeSlash />
-																	) : (
-																		<FaEye />
-																	)
-																}
+																icon={showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
 																variant="ghost"
 																size="sm"
-																onClick={() =>
-																	setShowConfirmPassword(!showConfirmPassword)
-																}
+																onClick={() => setShowConfirmPassword(!showConfirmPassword)}
 															/>
 														</InputRightElement>
 													</InputGroup>
-													<FormErrorMessage>
-														{errors.confirmPassword}
-													</FormErrorMessage>
+													<FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
 												</FormControl>
 											</VStack>
 										</VStack>
@@ -645,17 +599,11 @@ const RegisterPage: React.FC = () => {
 												<Heading size="lg" mb={2}>
 													利用規約への同意
 												</Heading>
-												<Text color="gray.600">
-													サービスのご利用前に、利用規約をご確認ください
-												</Text>
+												<Text color="gray.600">サービスのご利用前に、利用規約をご確認ください</Text>
 											</Box>
 
 											<VStack spacing={4} align="stretch">
-												<Card
-													bg="purple.50"
-													border="1px solid"
-													borderColor="purple.200"
-												>
+												<Card bg="purple.50" border="1px solid" borderColor="purple.200">
 													<CardBody p={4}>
 														<VStack spacing={3} align="start">
 															<HStack>
@@ -675,9 +623,7 @@ const RegisterPage: React.FC = () => {
 												<FormControl isInvalid={!!errors.agreeTerms}>
 													<Checkbox
 														isChecked={formData.agreeTerms}
-														onChange={(e) =>
-															handleInputChange("agreeTerms", e.target.checked)
-														}
+														onChange={(e) => handleInputChange("agreeTerms", e.target.checked)}
 														colorScheme="purple"
 														size="lg"
 													>
@@ -703,20 +649,13 @@ const RegisterPage: React.FC = () => {
 															に同意します（必須）
 														</Text>
 													</Checkbox>
-													<FormErrorMessage>
-														{errors.agreeTerms}
-													</FormErrorMessage>
+													<FormErrorMessage>{errors.agreeTerms}</FormErrorMessage>
 												</FormControl>
 
 												<FormControl>
 													<Checkbox
 														isChecked={formData.agreeMarketing}
-														onChange={(e) =>
-															handleInputChange(
-																"agreeMarketing",
-																e.target.checked,
-															)
-														}
+														onChange={(e) => handleInputChange("agreeMarketing", e.target.checked)}
 														colorScheme="blue"
 														size="lg"
 													>
@@ -749,18 +688,10 @@ const RegisterPage: React.FC = () => {
 									colorScheme="purple"
 									onClick={handleSubmit}
 									isLoading={isLoading}
-									loadingText={
-										activeStep < steps.length - 1 ? "処理中..." : "登録中..."
-									}
+									loadingText={activeStep < steps.length - 1 ? "処理中..." : "登録中..."}
 									borderRadius="xl"
 									size="lg"
-									rightIcon={
-										activeStep < steps.length - 1 ? (
-											<FaRocket />
-										) : (
-											<FaUserPlus />
-										)
-									}
+									rightIcon={activeStep < steps.length - 1 ? <FaRocket /> : <FaUserPlus />}
 									_hover={{
 										transform: "translateY(-2px)",
 										boxShadow: "lg",
@@ -832,11 +763,7 @@ const RegisterPage: React.FC = () => {
 					<Box textAlign="center" py={4}>
 						<Text fontSize="sm" color="gray.500">
 							すでにアカウントをお持ちですか？{" "}
-							<Link
-								color="purple.500"
-								fontWeight="bold"
-								onClick={() => navigate("/login")}
-							>
+							<Link color="purple.500" fontWeight="bold" onClick={() => navigate("/login")}>
 								ログインはこちら
 							</Link>
 						</Text>

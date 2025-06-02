@@ -46,12 +46,7 @@ export default function LoginPage() {
 				>
 					<CardBody p={6}>
 						<VStack spacing={4}>
-							<Text
-								textAlign="center"
-								color="gray.500"
-								fontSize="sm"
-								fontWeight="medium"
-							>
+							<Text textAlign="center" color="gray.500" fontSize="sm" fontWeight="medium">
 								または、ソーシャルアカウントでログイン
 							</Text>
 

@@ -37,10 +37,8 @@ export default function RegisterForm() {
 
 		if (!email) newErrors.email = "メールアドレスは必須です";
 		if (!password) newErrors.password = "パスワードは必須です";
-		if (password.length < 8)
-			newErrors.password = "パスワードは8文字以上である必要があります";
-		if (password !== confirmPassword)
-			newErrors.confirmPassword = "パスワードが一致しません";
+		if (password.length < 8) newErrors.password = "パスワードは8文字以上である必要があります";
+		if (password !== confirmPassword) newErrors.confirmPassword = "パスワードが一致しません";
 
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
@@ -66,8 +64,7 @@ export default function RegisterForm() {
 			console.error("Registration failed:", error);
 			toast({
 				title: "登録に失敗しました",
-				description:
-					"このメールアドレスは既に使用されているか、サーバーエラーが発生しました",
+				description: "このメールアドレスは既に使用されているか、サーバーエラーが発生しました",
 				status: "error",
 				duration: 5000,
 			});
@@ -85,21 +82,13 @@ export default function RegisterForm() {
 				<Stack spacing={4}>
 					<FormControl isInvalid={!!errors.email}>
 						<FormLabel>メールアドレス</FormLabel>
-						<Input
-							type="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
+						<Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 						<FormErrorMessage>{errors.email}</FormErrorMessage>
 					</FormControl>
 
 					<FormControl isInvalid={!!errors.password}>
 						<FormLabel>パスワード</FormLabel>
-						<Input
-							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
+						<Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 						<FormErrorMessage>{errors.password}</FormErrorMessage>
 					</FormControl>
 

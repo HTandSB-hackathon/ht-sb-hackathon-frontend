@@ -18,16 +18,12 @@ function createHealthCheck(res: HealthCheckResponse): HealthCheck {
 
 export async function getHealthCheckReadiness(): Promise<HealthCheck> {
 	const axiosClient = createAxiosClient();
-	const response = await axiosClient.get<HealthCheckResponse>(
-		"/healthcheck/readiness",
-	);
+	const response = await axiosClient.get<HealthCheckResponse>("/healthcheck/readiness");
 	return createHealthCheck(response.data);
 }
 
 export async function getHealthCheckLiveness(): Promise<HealthCheck> {
 	const axiosClient = createAxiosClient();
-	const response = await axiosClient.get<HealthCheckResponse>(
-		"/healthcheck/liveness",
-	);
+	const response = await axiosClient.get<HealthCheckResponse>("/healthcheck/liveness");
 	return createHealthCheck(response.data);
 }
