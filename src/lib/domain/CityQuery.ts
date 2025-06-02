@@ -6,6 +6,10 @@ export class Municipality {
 		public name: string,
 		public kana: string,
 		public prefectureId: number,
+		public color: string,
+		public emoji: string,
+		public gradient: string,
+		public specialty: string,
 		public createdDate: Date,
 		public updatedDate: Date | null,
 	) {}
@@ -26,6 +30,10 @@ function createMunicipality(res: MunicipalityResponse): Municipality {
 		res.name,
 		res.kana,
 		res.prefecture_id,
+		"green",
+		"🏙️",
+		"linear(to-r, green.400, teal.400)",
+		"都市の特産品",
 		new Date(res.created_date),
 		res.updated_date ? new Date(res.updated_date) : null,
 	);

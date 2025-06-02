@@ -72,7 +72,7 @@ spec:
               fieldPath: metadata.namespace
       containers:
       - name: frontend
-        image: ghcr.io/teamshackathon/prod/ht-sb-frontend:latest
+        image: ghcr.io/htandsb-hackathon/prod/ht-sb-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
