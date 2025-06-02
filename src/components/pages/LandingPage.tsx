@@ -44,6 +44,9 @@ import {
 } from "react-icons/md";
 import { useNavigate } from "react-router";
 
+import { isLoggedInAtom } from "@/lib/atom/AuthAtom";
+import { useAtomValue } from "jotai";
+
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
 const MotionText = motion(Text);
@@ -55,6 +58,8 @@ const MotionHeading = motion(Heading);
  */
 const LandingPage: React.FC = () => {
 	const navigate = useNavigate();
+
+	const isLoggedIn = useAtomValue(isLoggedInAtom);
 
 	// レスポンシブデザイン
 	const containerMaxW = useBreakpointValue({
@@ -265,7 +270,7 @@ const LandingPage: React.FC = () => {
 										bgGradient="linear(to-r, purple.500, blue.500)"
 										color="white"
 										rightIcon={<FaUserPlus />}
-										onClick={() => navigate("/register")}
+										onClick={() => navigate(isLoggedIn ? "/home" : "/register")}
 										borderRadius="2xl"
 										px={8}
 										py={6}
@@ -1265,7 +1270,7 @@ const LandingPage: React.FC = () => {
 										bgGradient="linear(to-r, purple.500, blue.500, teal.500)"
 										color="white"
 										rightIcon={<FaRocket />}
-										onClick={() => navigate("/register")}
+										onClick={() => navigate(isLoggedIn ? "/home" : "/register")}
 										borderRadius="2xl"
 										px={12}
 										py={8}

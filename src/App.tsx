@@ -26,13 +26,13 @@ function App() {
 				{/* ログイン関係のルート */}
 				<Route path="/auth/login" element={<LoginPage />} />
 				<Route path="/auth/callback" element={<CallbackPage />} />
-				<Route path="/characters" element={<CharactersPage />} />
-				<Route path="/characters/:id" element={<CharacterDetailPage />} />
 
 				{/* ルートが存在しない場合の404ページ */}
 				{/* 認証が必要なルート */}
 				<Route element={<ProtectedRoute />}>
 					<Route path="/home" element={<HomePage />} />
+					<Route path="/characters" element={<CharactersPage />} />
+					<Route path="/characters/:id" element={<CharacterDetailPage />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

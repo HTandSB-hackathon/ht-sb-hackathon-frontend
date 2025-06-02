@@ -1,9 +1,7 @@
+import type { Character } from "@/lib/domain/CharacterQuery";
 import { AnimatePresence, motion } from "framer-motion";
 import type React from "react";
-import type {
-	Character,
-	CharacterRelationship,
-} from "../../lib/types/character";
+import type { CharacterRelationship } from "../../lib/types/character";
 import { CharacterCard } from "../atoms/CharacterCard";
 
 interface CharacterGridProps {

@@ -47,19 +47,22 @@ import {
 } from "react-icons/fa";
 import { MdFavorite, MdLocationCity } from "react-icons/md";
 
+import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import type { Municipality } from "@/lib/domain/CityQuery";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
-	availableCitiesAtom,
 	characterCountByTrustLevelAtom,
 	characterFilterAtom,
 	characterRelationshipsAtom,
 	characterSortByAtom,
-	charactersAtom,
+	// charactersAtom,
+	charactersAtomLoadable,
 	charactersErrorAtom,
 	charactersLoadingAtom,
-	charactersTotalAtom,
+	// charactersTotalAtom,
 	favoriteCharacterIdsAtom,
 	newlyUnlockedCharacterIdsAtom,
-	sortedCharactersAtom,
+	// sortedCharactersAtom,
 } from "../../lib/atom/CharacterAtom";
 import { CharacterQuery } from "../../lib/domain/CharacterQuery";
 import type {
@@ -76,17 +79,17 @@ const MotionBox = motion(Box);
  * 福島の人々との出会いページ - 最高のデザイン
  */
 export const CharactersPage: React.FC = () => {
-	const [characters, setCharacters] = useAtom(charactersAtom);
-	const [relationships, setRelationships] = useAtom(characterRelationshipsAtom);
+	const characters = useLoadableAtom(charactersAtomLoadable);
+	const [relationships] = useAtom(characterRelationshipsAtom);
 	const [filter, setFilter] = useAtom(characterFilterAtom);
 	const [sortBy, setSortBy] = useAtom(characterSortByAtom);
 	const [isLoading, setIsLoading] = useAtom(charactersLoadingAtom);
 	const [error, setError] = useAtom(charactersErrorAtom);
 	const [favoriteIds, setFavoriteIds] = useAtom(favoriteCharacterIdsAtom);
-	const [availableCities, setAvailableCities] = useAtom(availableCitiesAtom);
-	const [, setTotal] = useAtom(charactersTotalAtom);
+	const municipalities = useLoadableAtom(municipalityAtomLoadable);
+	// const [, setTotal] = useAtom(charactersTotalAtom);
 
-	const sortedCharacters = useAtomValue(sortedCharactersAtom);
+	// const sortedCharacters = useAtomValue(sortedCharactersAtom);
 	const newCharacterIds = useAtomValue(newlyUnlockedCharacterIdsAtom);
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
 
@@ -113,7 +116,6 @@ export const CharactersPage: React.FC = () => {
 	// データ取得
 	React.useEffect(() => {
 		loadCharacters();
-		loadCities();
 	}, []);
 
 	React.useEffect(() => {
@@ -124,18 +126,10 @@ export const CharactersPage: React.FC = () => {
 		try {
 			setIsLoading(true);
 			setError(null);
+			// setRelationships(data.relationships);
 
-			const data = await CharacterQuery.getCharacters({
-				filter,
-				sortBy,
-			});
-
-			setCharacters(data.characters);
-			setRelationships(data.relationships);
-			setTotal(data.total);
-
-			const favoriteCharacters = await CharacterQuery.getFavoriteCharacters();
-			setFavoriteIds(new Set(favoriteCharacters.map((c) => c.id)));
+			// const favoriteCharacters = await CharacterQuery.getFavoriteCharacters();
+			// setFavoriteIds(new Set(favoriteCharacters.map((c) => c.id)));
 		} catch (err) {
 			console.error("キャラクター読み込みエラー:", err);
 			setError("キャラクターの読み込みに失敗しました");
@@ -148,15 +142,6 @@ export const CharactersPage: React.FC = () => {
 			});
 		} finally {
 			setIsLoading(false);
-		}
-	};
-
-	const loadCities = async () => {
-		try {
-			const cities = await CharacterQuery.getAvailableCities();
-			setAvailableCities(cities);
-		} catch (err) {
-			console.error("都市情報読み込みエラー:", err);
 		}
 	};
 
@@ -306,7 +291,7 @@ export const CharactersPage: React.FC = () => {
 									bgGradient="linear(to-r, blue.600, purple.600)"
 									bgClip="text"
 								>
-									{characters.length}
+									{characters?.length}
 								</StatNumber>
 								<StatHelpText>人</StatHelpText>
 							</Stat>
@@ -347,13 +332,15 @@ export const CharactersPage: React.FC = () => {
 									<Icon as={MdLocationCity} mr={2} />
 									訪問地域
 								</StatLabel>
-								<StatNumber
-									fontSize="2xl"
-									bgGradient="linear(to-r, green.500, teal.500)"
-									bgClip="text"
-								>
-									{availableCities.length}
-								</StatNumber>
+								{municipalities && (
+									<StatNumber
+										fontSize="2xl"
+										bgGradient="linear(to-r, green.500, teal.500)"
+										bgClip="text"
+									>
+										{municipalities.length}
+									</StatNumber>
+								)}
 								<StatHelpText>箇所</StatHelpText>
 							</Stat>
 
@@ -515,16 +502,20 @@ export const CharactersPage: React.FC = () => {
 												>
 													すべて
 												</Button>
-												{availableCities.map((city) => (
+												{municipalities?.map((city: Municipality) => (
 													<Button
-														key={city}
-														onClick={() => setFilter({ ...filter, city })}
-														colorScheme={
-															filter.city === city ? "purple" : "gray"
+														key={city.name}
+														onClick={() =>
+															setFilter({ ...filter, city: city.name })
 														}
-														variant={filter.city === city ? "solid" : "outline"}
+														colorScheme={
+															filter.city === city.name ? "purple" : "gray"
+														}
+														variant={
+															filter.city === city.name ? "solid" : "outline"
+														}
 													>
-														{city}
+														{city.name}
 													</Button>
 												))}
 											</ButtonGroup>
@@ -602,7 +593,7 @@ export const CharactersPage: React.FC = () => {
 									/>
 								))}
 							</SimpleGrid>
-						) : sortedCharacters.length === 0 ? (
+						) : characters?.length === 0 ? (
 							<Center py={20}>
 								<VStack spacing={6} textAlign="center">
 									<Text fontSize="6xl">🌸</Text>
@@ -630,7 +621,7 @@ export const CharactersPage: React.FC = () => {
 						) : (
 							<SimpleGrid columns={gridColumns} spacing={6}>
 								<AnimatePresence>
-									{sortedCharacters.map((character, index) => (
+									{characters?.map((character, index) => (
 										<MotionBox
 											key={character.id}
 											initial={{ opacity: 0, y: 50 }}

@@ -1,3 +1,4 @@
+import { loginInGithubAtom } from "@/lib/atom/AuthAtom";
 import {
 	Badge,
 	Box,
@@ -37,6 +38,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSetAtom } from "jotai";
 import React from "react";
 import {
 	FaApple,
@@ -218,6 +220,8 @@ const RegisterPage: React.FC = () => {
 			isClosable: true,
 		});
 	};
+
+	const setLoginInGithub = useSetAtom(loginInGithubAtom);
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
@@ -785,16 +789,31 @@ const RegisterPage: React.FC = () => {
 
 								<HStack spacing={4} w="full" justify="center">
 									{[
-										{ icon: FaGithub, name: "GitHub", color: "gray" },
-										{ icon: FaGoogle, name: "Google", color: "red" },
-										{ icon: FaApple, name: "Apple", color: "gray" },
+										{
+											icon: FaGithub,
+											name: "GitHub",
+											color: "gray",
+											onclick: () => setLoginInGithub(),
+										},
+										{
+											icon: FaGoogle,
+											name: "Google",
+											color: "red",
+											onclick: () => handleSocialLogin("Google"),
+										},
+										{
+											icon: FaApple,
+											name: "Apple",
+											color: "gray",
+											onclick: () => handleSocialLogin("Apple"),
+										},
 									].map((social) => (
 										<Button
 											key={social.name}
 											leftIcon={<Icon as={social.icon} />}
 											variant="outline"
 											borderRadius="xl"
-											onClick={() => handleSocialLogin(social.name)}
+											onClick={() => social.onclick()}
 											_hover={{
 												transform: "translateY(-1px)",
 												boxShadow: "md",

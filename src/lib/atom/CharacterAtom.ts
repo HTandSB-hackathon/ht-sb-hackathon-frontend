@@ -1,16 +1,29 @@
 import { atom } from "jotai";
 import type {
-	Character,
 	CharacterDetail,
 	CharacterFilter,
 	CharacterRelationship,
 	CharacterSortBy,
 } from "../types/character";
 
+import { loadable } from "jotai/utils";
+import { type Character, getCharacters } from "../domain/CharacterQuery";
+
 /**
  * キャラクター一覧の状態
  */
 export const charactersAtom = atom<Character[]>([]);
+export const characterAtomAsync = atom<Promise<Character[]>>(async () => {
+	try {
+		const response = await getCharacters();
+		return response;
+	} catch (error) {
+		console.error("Error fetching municipalities:", error);
+		return [];
+	}
+});
+
+export const charactersAtomLoadable = loadable(characterAtomAsync);
 
 /**
  * キャラクターとの関係性マップ
@@ -50,11 +63,6 @@ export const characterSortByAtom = atom<CharacterSortBy>("trustLevel");
 export const favoriteCharacterIdsAtom = atom<Set<string>>(new Set([]));
 
 /**
- * 利用可能な都市一覧
- */
-export const availableCitiesAtom = atom<string[]>([]);
-
-/**
  * ローディング状態
  */
 export const charactersLoadingAtom = atom<boolean>(false);
@@ -89,77 +97,77 @@ export const animatingCharacterIdAtom = atom<string | null>(null);
 /**
  * フィルター済みキャラクター一覧
  */
-export const filteredCharactersAtom = atom((get) => {
-	const characters = get(charactersAtom);
-	const filter = get(characterFilterAtom);
-	const relationships = get(characterRelationshipsAtom);
+// export const filteredCharactersAtom = atom((get) => {
+// 	const characters = get(charactersAtom);
+// 	const filter = get(characterFilterAtom);
+// 	const relationships = get(characterRelationshipsAtom);
 
-	return characters.filter((character) => {
-		// 都市フィルター
-		if (filter.city && character.city !== filter.city) {
-			return false;
-		}
+// 	return characters.filter((character) => {
+// 		// 都市フィルター
+// 		if (filter.city && character.municipalityId !== filter.city) {
+// 			return false;
+// 		}
 
-		// 性別フィルター
-		if (filter.gender && character.gender !== filter.gender) {
-			return false;
-		}
+// 		// 性別フィルター
+// 		if (filter.gender && character.gender !== filter.gender) {
+// 			return false;
+// 		}
 
-		// ロック状態フィルター
-		if (
-			filter.isLocked !== undefined &&
-			character.isLocked !== filter.isLocked
-		) {
-			return false;
-		}
+// 		// ロック状態フィルター
+// 		if (
+// 			filter.isLocked !== undefined &&
+// 			character.isLocked !== filter.isLocked
+// 		) {
+// 			return false;
+// 		}
 
-		// 信頼レベルフィルター
-		if (filter.trustLevel) {
-			const relationship = relationships[character.id];
-			if (!relationship || relationship.trustLevel !== filter.trustLevel) {
-				return false;
-			}
-		}
+// 		// 信頼レベルフィルター
+// 		if (filter.trustLevel) {
+// 			const relationship = relationships[character.id];
+// 			if (!relationship || relationship.trustLevel !== filter.trustLevel) {
+// 				return false;
+// 			}
+// 		}
 
-		return true;
-	});
-});
+// 		return true;
+// 	});
+// });
 
 /**
  * ソート済みキャラクター一覧
  */
-export const sortedCharactersAtom = atom((get) => {
-	const characters = get(filteredCharactersAtom);
-	const sortBy = get(characterSortByAtom);
-	const relationships = get(characterRelationshipsAtom);
+// export const sortedCharactersAtom = atom((get) => {
+// 	const characters = get(filteredCharactersAtom);
+// 	const sortBy = get(characterSortByAtom);
+// 	const relationships = get(characterRelationshipsAtom);
 
-	return [...characters].sort((a, b) => {
-		switch (sortBy) {
-			case "trustLevel": {
-				const relA = relationships[a.id];
-				const relB = relationships[b.id];
-				return (relB?.trustLevel || 0) - (relA?.trustLevel || 0);
-			}
-			case "lastConversation": {
-				const relA = relationships[a.id];
-				const relB = relationships[b.id];
-				const dateA = relA?.lastConversationAt
-					? new Date(relA.lastConversationAt).getTime()
-					: 0;
-				const dateB = relB?.lastConversationAt
-					? new Date(relB.lastConversationAt).getTime()
-					: 0;
-				return dateB - dateA;
-			}
-			case "name":
-				return a.nameKana.localeCompare(b.nameKana, "ja");
-			case "city":
-				return a.city.localeCompare(b.city, "ja");
-			default:
-				return 0;
-		}
-	});
-});
+// 	return [...characters].sort((a, b) => {
+// 		switch (sortBy) {
+// 			case "trustLevel": {
+// 				const relA = relationships[a.id];
+// 				const relB = relationships[b.id];
+// 				return (relB?.trustLevel || 0) - (relA?.trustLevel || 0);
+// 			}
+// 			case "lastConversation": {
+// 				const relA = relationships[a.id];
+// 				const relB = relationships[b.id];
+// 				const dateA = relA?.lastConversationAt
+// 					? new Date(relA.lastConversationAt).getTime()
+// 					: 0;
+// 				const dateB = relB?.lastConversationAt
+// 					? new Date(relB.lastConversationAt).getTime()
+// 					: 0;
+// 				return dateB - dateA;
+// 			}
+// 			case "name":
+// 				return a.nameKana.localeCompare(b.nameKana, "ja");
+// 			case "city":
+// 				return a.city.localeCompare(b.city, "ja");
+// 			default:
+// 				return 0;
+// 		}
+// 	});
+// });
 
 /**
  * お気に入りキャラクター一覧
