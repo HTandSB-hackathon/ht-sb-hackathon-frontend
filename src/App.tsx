@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 
 import CallbackPage from "@/components/pages/CallbackPage";
 import { CharacterDetailPage } from "@/components/pages/CharacterDetailPage";
-import CharacterPage from "@/components/pages/CharacterPage";
+import ChatPage from "@/components/pages/ChatPage";
 import { CharactersPage } from "@/components/pages/CharactersPage";
 import ChatsPage from "@/components/pages/ChatsPage";
 import HomePage from "@/components/pages/HomePage";
@@ -21,7 +21,7 @@ function App() {
 				<Route path="/register" element={<RegisterPage />} />
 				<Route path="/tutorial" element={<TutorialPage />} />
 				<Route path="/chats" element={<ChatsPage />} />
-				<Route path="/chats/:characterId" element={<CharacterPage />} />
+				<Route path="/chats/:characterId" element={<ChatPage />} />
 
 				{/* ログイン関係のルート */}
 				<Route path="/auth/login" element={<LoginPage />} />

@@ -180,7 +180,7 @@ export const CharacterDetailPage: React.FC = () => {
 
 	const handleStartConversation = () => {
 		if (characterDetail) {
-			navigate(`/chat/${characterDetail.id}`);
+			navigate(`/chats/${characterDetail.id}`);
 		}
 	};
 
