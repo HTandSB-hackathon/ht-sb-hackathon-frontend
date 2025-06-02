@@ -93,7 +93,7 @@ const RegisterPage: React.FC = () => {
 	});
 
 	// レスポンシブデザイン
-	const isMobile = useBreakpointValue({ base: true, md: false });
+	// const isMobile = useBreakpointValue({ base: true, md: false });
 	const containerMaxW = useBreakpointValue({
 		base: "full",
 		sm: "md",
