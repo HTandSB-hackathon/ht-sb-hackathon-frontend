@@ -44,6 +44,7 @@ const mockMessages: Message[] = [
 
 const mockApi = {
 	async fetchMessages(characterId: string): Promise<Message[]> {
+		console.log("メッセージ読み込み中:", characterId);
 		await new Promise((r) => setTimeout(r, 200));
 		return mockMessages;
 	},
@@ -52,6 +53,7 @@ const mockApi = {
 		text: string,
 		prev: Message[],
 	): Promise<Message[]> {
+		console.log("メッセージ送信中:", characterId);
 		await new Promise((r) => setTimeout(r, 400));
 		return [
 			...prev,
