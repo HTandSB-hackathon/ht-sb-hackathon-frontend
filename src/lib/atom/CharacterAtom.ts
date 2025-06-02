@@ -1,10 +1,10 @@
 import { atom } from "jotai";
-import type { 
-  Character, 
-  CharacterDetail, 
-  CharacterRelationship,
-  CharacterFilter,
-  CharacterSortBy 
+import type {
+	Character,
+	CharacterDetail,
+	CharacterFilter,
+	CharacterRelationship,
+	CharacterSortBy,
 } from "../types/character";
 
 /**
@@ -15,7 +15,9 @@ export const charactersAtom = atom<Character[]>([]);
 /**
  * キャラクターとの関係性マップ
  */
-export const characterRelationshipsAtom = atom<Record<string, CharacterRelationship>>({});
+export const characterRelationshipsAtom = atom<
+	Record<string, CharacterRelationship>
+>({});
 
 /**
  * 選択中のキャラクター詳細
@@ -40,12 +42,12 @@ export const characterFilterAtom = atom<CharacterFilter>({});
 /**
  * ソート設定
  */
-export const characterSortByAtom = atom<CharacterSortBy>('trustLevel');
+export const characterSortByAtom = atom<CharacterSortBy>("trustLevel");
 
 /**
  * お気に入りキャラクターのIDセット
  */
-export const favoriteCharacterIdsAtom = atom<Set<string>>(new Set());
+export const favoriteCharacterIdsAtom = atom<Set<string>>(new Set([]));
 
 /**
  * 利用可能な都市一覧
@@ -75,7 +77,7 @@ export const recentConversationCharacterIdsAtom = atom<string[]>([]);
 /**
  * 新しく解放されたキャラクターのID
  */
-export const newlyUnlockedCharacterIdsAtom = atom<Set<string>>(new Set());
+export const newlyUnlockedCharacterIdsAtom = atom<Set<string>>(new Set([]));
 
 /**
  * アニメーション中のキャラクターID
@@ -88,94 +90,102 @@ export const animatingCharacterIdAtom = atom<string | null>(null);
  * フィルター済みキャラクター一覧
  */
 export const filteredCharactersAtom = atom((get) => {
-  const characters = get(charactersAtom);
-  const filter = get(characterFilterAtom);
-  const relationships = get(characterRelationshipsAtom);
+	const characters = get(charactersAtom);
+	const filter = get(characterFilterAtom);
+	const relationships = get(characterRelationshipsAtom);
 
-  return characters.filter(character => {
-    // 都市フィルター
-    if (filter.city && character.city !== filter.city) {
-      return false;
-    }
+	return characters.filter((character) => {
+		// 都市フィルター
+		if (filter.city && character.city !== filter.city) {
+			return false;
+		}
 
-    // 性別フィルター
-    if (filter.gender && character.gender !== filter.gender) {
-      return false;
-    }
+		// 性別フィルター
+		if (filter.gender && character.gender !== filter.gender) {
+			return false;
+		}
 
-    // ロック状態フィルター
-    if (filter.isLocked !== undefined && character.isLocked !== filter.isLocked) {
-      return false;
-    }
+		// ロック状態フィルター
+		if (
+			filter.isLocked !== undefined &&
+			character.isLocked !== filter.isLocked
+		) {
+			return false;
+		}
 
-    // 信頼レベルフィルター
-    if (filter.trustLevel) {
-      const relationship = relationships[character.id];
-      if (!relationship || relationship.trustLevel !== filter.trustLevel) {
-        return false;
-      }
-    }
+		// 信頼レベルフィルター
+		if (filter.trustLevel) {
+			const relationship = relationships[character.id];
+			if (!relationship || relationship.trustLevel !== filter.trustLevel) {
+				return false;
+			}
+		}
 
-    return true;
-  });
+		return true;
+	});
 });
 
 /**
  * ソート済みキャラクター一覧
  */
 export const sortedCharactersAtom = atom((get) => {
-  const characters = get(filteredCharactersAtom);
-  const sortBy = get(characterSortByAtom);
-  const relationships = get(characterRelationshipsAtom);
+	const characters = get(filteredCharactersAtom);
+	const sortBy = get(characterSortByAtom);
+	const relationships = get(characterRelationshipsAtom);
 
-  return [...characters].sort((a, b) => {
-    switch (sortBy) {
-      case 'trustLevel': {
-        const relA = relationships[a.id];
-        const relB = relationships[b.id];
-        return (relB?.trustLevel || 0) - (relA?.trustLevel || 0);
-      }
-      case 'lastConversation': {
-        const relA = relationships[a.id];
-        const relB = relationships[b.id];
-        const dateA = relA?.lastConversationAt ? new Date(relA.lastConversationAt).getTime() : 0;
-        const dateB = relB?.lastConversationAt ? new Date(relB.lastConversationAt).getTime() : 0;
-        return dateB - dateA;
-      }
-      case 'name':
-        return a.nameKana.localeCompare(b.nameKana, 'ja');
-      case 'city':
-        return a.city.localeCompare(b.city, 'ja');
-      default:
-        return 0;
-    }
-  });
+	return [...characters].sort((a, b) => {
+		switch (sortBy) {
+			case "trustLevel": {
+				const relA = relationships[a.id];
+				const relB = relationships[b.id];
+				return (relB?.trustLevel || 0) - (relA?.trustLevel || 0);
+			}
+			case "lastConversation": {
+				const relA = relationships[a.id];
+				const relB = relationships[b.id];
+				const dateA = relA?.lastConversationAt
+					? new Date(relA.lastConversationAt).getTime()
+					: 0;
+				const dateB = relB?.lastConversationAt
+					? new Date(relB.lastConversationAt).getTime()
+					: 0;
+				return dateB - dateA;
+			}
+			case "name":
+				return a.nameKana.localeCompare(b.nameKana, "ja");
+			case "city":
+				return a.city.localeCompare(b.city, "ja");
+			default:
+				return 0;
+		}
+	});
 });
 
 /**
  * お気に入りキャラクター一覧
  */
 export const favoriteCharactersAtom = atom((get) => {
-  const characters = get(charactersAtom);
-  const favoriteIds = get(favoriteCharacterIdsAtom);
-  return characters.filter(character => favoriteIds.has(character.id));
+	const characters = get(charactersAtom);
+	const favoriteIds = get(favoriteCharacterIdsAtom);
+	return characters.filter((character) => favoriteIds?.has(character.id));
 });
 
 /**
  * 信頼レベル別のキャラクター数
  */
 export const characterCountByTrustLevelAtom = atom((get) => {
-  const characters = get(charactersAtom);
-  const relationships = get(characterRelationshipsAtom);
+	const characters = get(charactersAtom);
+	const relationships = get(characterRelationshipsAtom);
 
-  const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+	const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 
-  characters.forEach(character => {
-    const relationship = relationships[character.id];
-    if (relationship) {
-      counts[relationship.trustLevel] = (counts[relationship.trustLevel] || 0) + 1;
-    }
-  });
+	for (const character of characters) {
+		const relationship = relationships[character.id];
+		if (relationship) {
+			counts[relationship.trustLevel] =
+				(counts[relationship.trustLevel] || 0) + 1;
+		}
+	}
 
-  return counts;
+	return counts;
 });
