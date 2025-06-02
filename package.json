@@ -41,9 +41,14 @@
         "npm": "11.4.0"
     },
     "engines": {
-        "node": ">=18.0.0"
+        "node": ">=18.0.0 || ^20.0.0 || ^21.0.0 || >=22.0.0"
     },
     "overrides": {
-        "punycode": "npm:punycode@^2.3.1"
+        "punycode": "npm:punycode@^2.3.1",
+        "yaml": "^2.8.0"
+    },
+    "resolutions": {
+        "yaml": "^2.8.0",
+        "punycode": "^2.3.1"
     }
 }
