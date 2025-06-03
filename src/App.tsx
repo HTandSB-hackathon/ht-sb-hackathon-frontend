@@ -8,6 +8,7 @@ import ChatPage from "@/components/pages/ChatPage";
 import ChatsPage from "@/components/pages/ChatsPage";
 import HomePage from "@/components/pages/HomePage";
 import LoginPage from "@/components/pages/LoginPage";
+import ProfilePage from "@/components/pages/ProfilePage";
 import RegisterPage from "@/components/pages/RegisterPage";
 import TutorialPage from "@/components/pages/TutorialPage";
 import LandingPage from "./components/pages/LandingPage";
@@ -29,6 +30,7 @@ function App() {
 				{/* 認証が必要なルート */}
 				<Route element={<ProtectedRoute />}>
 					<Route path="/home" element={<HomePage />} />
+					<Route path="/profile" element={<ProfilePage />} />
 					<Route path="/characters" element={<CharactersPage />} />
 					<Route path="/characters/:id" element={<CharacterDetailPage />} />
 					<Route path="/chats" element={<ChatsPage />} />

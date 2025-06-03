@@ -1,3 +1,12 @@
+import { chatAtom, fetchChatAtom, sendChatAtom } from "@/lib/atom/ChatAtom";
+import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import {
+	type Relationship,
+	getRelationships,
+} from "@/lib/domain/CharacterQuery";
+import type { Chat } from "@/lib/domain/ChatQuery";
+import type { Municipality } from "@/lib/domain/CityQuery";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	Avatar,
 	Box,
@@ -19,60 +28,11 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaComment } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
-import { selectedCharacterDetailAtom } from "../../lib/atom/CharacterAtom";
-
-// --- モックAPI ---
-type Message = {
-	id: string;
-	text: string;
-	sender: "user" | "character";
-	timestamp: string;
-};
-
-const mockMessages: Message[] = [
-	{
-		id: "1",
-		text: "あらまあ、こんにちは！よく来てくれましたね",
-		sender: "character",
-		timestamp: new Date().toISOString(),
-	},
-];
-
-const mockApi = {
-	async fetchMessages(characterId: string): Promise<Message[]> {
-		console.log("メッセージ読み込み中:", characterId);
-		await new Promise((r) => setTimeout(r, 200));
-		return mockMessages;
-	},
-	async sendMessage(
-		characterId: string,
-		text: string,
-		prev: Message[],
-	): Promise<Message[]> {
-		console.log("メッセージ送信中:", characterId);
-		await new Promise((r) => setTimeout(r, 400));
-		return [
-			...prev,
-			{
-				id: Date.now().toString(),
-				text,
-				sender: "user",
-				timestamp: new Date().toISOString(),
-			},
-			{
-				id: (Date.now() + 1).toString(),
-				text: "今日はいい天気ですね！",
-				sender: "character",
-				timestamp: new Date().toISOString(),
-			},
-		];
-	},
-};
-// --- モックAPIここまで ---
+import { charactersAtomLoadable } from "../../lib/atom/CharacterAtom";
 
 const MotionCard = motion(Card);
 
@@ -81,9 +41,27 @@ export const ChatPage: React.FC = () => {
 	const navigate = useNavigate();
 	const toast = useToast();
 
-	const [characterDetail] = useAtom(selectedCharacterDetailAtom);
+	const characters = useLoadableAtom(charactersAtomLoadable);
+	const [relationship, setRelationship] = useState<Relationship>();
+	const municipalities = useLoadableAtom(municipalityAtomLoadable);
 
-	const [messages, setMessages] = useState<Message[]>([]);
+	const getMunicipality = () => {
+		if (!municipalities) return null;
+		const municipality = municipalities.find(
+			(m: Municipality) => m.id === getCharacter()?.municipalityId,
+		);
+		return municipality;
+	};
+
+	const getCharacter = () => {
+		if (!characters) return null;
+
+		return characters.find((character) => character.id === Number(characterId));
+	};
+
+	const [messages, setMessages] = useAtom<Chat[]>(chatAtom);
+	const send = useSetAtom(sendChatAtom);
+	const fetchChat = useSetAtom(fetchChatAtom);
 	const [input, setInput] = useState("");
 	const [isSending, setIsSending] = useState(false);
 
@@ -99,7 +77,7 @@ export const ChatPage: React.FC = () => {
 
 	useEffect(() => {
 		if (characterId) {
-			mockApi.fetchMessages(characterId).then(setMessages);
+			fetchChat(characterId);
 		}
 	}, [characterId]);
 
@@ -107,16 +85,34 @@ export const ChatPage: React.FC = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);
 
+	useEffect(() => {
+		if (characterId) {
+			loadCharacterDetail(characterId);
+		}
+	}, [characterId]);
+
+	const loadCharacterDetail = async (characterId: string) => {
+		try {
+			const relationship = await getRelationships(characterId);
+			setRelationship(relationship);
+		} catch (err) {
+			console.error("キャラクター詳細読み込みエラー:", err);
+			toast({
+				title: "エラー",
+				description: "データの読み込みに失敗しました",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
+		}
+	};
+
 	const handleSend = async () => {
 		if (!input.trim() || !characterId) return;
 		setIsSending(true);
+		setMessages((prev) => [...prev, { role: "user", content: input }]);
 		try {
-			const newMessages = await mockApi.sendMessage(
-				characterId,
-				input,
-				messages,
-			);
-			setMessages(newMessages);
+			send({ characterId, message: { role: "user", content: input } });
 			setInput("");
 		} catch {
 			toast({
@@ -141,9 +137,9 @@ export const ChatPage: React.FC = () => {
 		navigate(`/characters/${characterId}`);
 	};
 
-	const trustLevel = characterDetail?.relationship?.trustLevel ?? 1;
-	const trustPoints = characterDetail?.relationship?.trustPoints ?? 0;
-	const nextLevelPoints = characterDetail?.relationship?.nextLevelPoints ?? 1;
+	const trustLevel = relationship?.trustLevelId ?? 1;
+	const trustPoints = relationship?.trustPoints ?? 0;
+	const nextLevelPoints = 1;
 	const trustProgress = (trustPoints / nextLevelPoints) * 100;
 
 	return (
@@ -194,17 +190,17 @@ export const ChatPage: React.FC = () => {
 								<Spacer />
 								<Avatar
 									size="md"
-									src={characterDetail?.profileImage}
-									name={characterDetail?.name}
+									src={getCharacter()?.profileImageUrl}
+									name={getCharacter()?.name}
 									mr={2}
 								/>
 								<Box>
 									<Heading size="md" color="gray.800" noOfLines={1}>
-										{characterDetail?.name}
+										{getCharacter()?.name}
 									</Heading>
 									<Text fontSize="sm" color="gray.500">
-										{characterDetail?.city}・{characterDetail?.occupation}・
-										{characterDetail?.age}歳
+										{getMunicipality()?.name}・{getCharacter()?.occupationId}・
+										{getCharacter()?.age}歳
 									</Text>
 								</Box>
 							</Flex>
@@ -256,19 +252,19 @@ export const ChatPage: React.FC = () => {
 							<Stack spacing={4} flex={1} justify="flex-end">
 								{messages.map((msg) => (
 									<Flex
-										key={msg.id}
-										justify={msg.sender === "user" ? "flex-end" : "flex-start"}
+										key={msg.content}
+										justify={msg.role === "user" ? "flex-end" : "flex-start"}
 									>
 										<Box
-											bg={msg.sender === "user" ? "blue.400" : "gray.100"}
-											color={msg.sender === "user" ? "white" : "gray.800"}
+											bg={msg.role === "user" ? "blue.400" : "gray.100"}
+											color={msg.role === "user" ? "white" : "gray.800"}
 											px={4}
 											py={2}
 											borderRadius="2xl"
 											maxW="70%"
 											boxShadow="sm"
 										>
-											{msg.text}
+											{msg.content}
 										</Box>
 									</Flex>
 								))}
