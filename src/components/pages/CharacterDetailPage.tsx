@@ -162,8 +162,9 @@ export const CharacterDetailPage: React.FC = () => {
 	};
 
 	const handleStartConversation = () => {
-		if (relationship?.id) {
-			navigate(`/chats/${relationship.id}`);
+		const characterId = getCharacter()?.id;
+		if (characterId) {
+			navigate(`/chats/${characterId}`);
 		}
 	};
 
