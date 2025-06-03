@@ -54,9 +54,9 @@ import {
 	charactersErrorAtom,
 	charactersLoadingAtom,
 	favoriteCharacterIdsAtom,
-	lockedCharactersAtomLoadable,
 	newlyUnlockedCharacterIdsAtom,
 	relationshipsAtomLoadable,
+	sortedCharactersAtom,
 	updateRelationshipAtom,
 	// sortedCharactersAtom,
 } from "@/lib/atom/CharacterAtom";
@@ -79,7 +79,7 @@ const MotionBox = motion(Box);
  */
 export const CharactersPage: React.FC = () => {
 	const characters = useLoadableAtom(charactersAtomLoadable);
-	const lockedCharacters = useLoadableAtom(lockedCharactersAtomLoadable);
+	const sortedCharacters = useAtomValue(sortedCharactersAtom);
 	const relationships = useLoadableAtom(relationshipsAtomLoadable);
 	const chatCountByCharacterIds = useLoadableAtom(
 		chatCountByCharacterIdAtomLoadable,
@@ -131,6 +131,14 @@ export const CharactersPage: React.FC = () => {
 	};
 
 	const activeFilterCount = Object.keys(filter).length;
+
+	const getMunicipalityName = (municipalityId: number) => {
+		if (!municipalities) return null;
+		const municipality = municipalities.find(
+			(m: Municipality) => m.id === municipalityId,
+		);
+		return municipality?.name;
+	};
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
@@ -387,10 +395,14 @@ export const CharactersPage: React.FC = () => {
 							{activeFilterCount > 0 && (
 								<Box px={4} pb={2}>
 									<HStack spacing={2} wrap="wrap">
-										{filter.city && (
+										{filter.municipalityId && (
 											<Tag size="md" colorScheme="blue" borderRadius="full">
-												<TagLabel>🏘️ {filter.city}</TagLabel>
-												<TagCloseButton onClick={() => removeFilter("city")} />
+												<TagLabel>
+													🏘️ {getMunicipalityName(filter.municipalityId)}
+												</TagLabel>
+												<TagCloseButton
+													onClick={() => removeFilter("municipalityId")}
+												/>
 											</Tag>
 										)}
 										{filter.trustLevel && (
@@ -442,9 +454,11 @@ export const CharactersPage: React.FC = () => {
 												flexWrap="wrap"
 											>
 												<Button
-													onClick={() => removeFilter("city")}
-													colorScheme={!filter.city ? "purple" : "gray"}
-													variant={!filter.city ? "solid" : "outline"}
+													onClick={() => removeFilter("municipalityId")}
+													colorScheme={
+														!filter.municipalityId ? "purple" : "gray"
+													}
+													variant={!filter.municipalityId ? "solid" : "outline"}
 												>
 													すべて
 												</Button>
@@ -452,13 +466,17 @@ export const CharactersPage: React.FC = () => {
 													<Button
 														key={city.id}
 														onClick={() =>
-															setFilter({ ...filter, city: city.id })
+															setFilter({ ...filter, municipalityId: city.id })
 														}
 														colorScheme={
-															filter.city === city.id ? "purple" : "gray"
+															filter.municipalityId === city.id
+																? "purple"
+																: "gray"
 														}
 														variant={
-															filter.city === city.id ? "solid" : "outline"
+															filter.municipalityId === city.id
+																? "solid"
+																: "outline"
 														}
 													>
 														{city.name}
@@ -539,7 +557,7 @@ export const CharactersPage: React.FC = () => {
 									/>
 								))}
 							</SimpleGrid>
-						) : characters?.length === 0 ? (
+						) : sortedCharacters?.length === 0 ? (
 							<Center py={20}>
 								<VStack spacing={6} textAlign="center">
 									<Text fontSize="6xl">🌸</Text>
@@ -567,7 +585,7 @@ export const CharactersPage: React.FC = () => {
 						) : (
 							<SimpleGrid columns={gridColumns} spacing={6}>
 								<AnimatePresence>
-									{characters?.map((character, index) => (
+									{sortedCharacters?.map((character, index) => (
 										<MotionBox
 											key={character.id}
 											initial={{ opacity: 0, y: 50 }}
@@ -586,26 +604,6 @@ export const CharactersPage: React.FC = () => {
 												chatCount={chatCountByCharacterIds?.find(
 													(c) => c.characterId === character.id,
 												)}
-												isNew={newCharacterIds.has(String(character.id))}
-												animationDelay={index * 0.1}
-												isFavorite={favoriteIds.has(character.id)}
-												onFavoriteToggle={handleFavoriteToggle}
-											/>
-										</MotionBox>
-									))}
-									{lockedCharacters?.map((character, index) => (
-										<MotionBox
-											key={character.id}
-											initial={{ opacity: 0, y: 50 }}
-											animate={{ opacity: 1, y: 0 }}
-											exit={{ opacity: 0, y: -50 }}
-											transition={{
-												duration: 0.5,
-												delay: index * 0.1,
-											}}
-										>
-											<CharacterCard
-												character={character}
 												isNew={newCharacterIds.has(String(character.id))}
 												animationDelay={index * 0.1}
 												isFavorite={favoriteIds.has(character.id)}

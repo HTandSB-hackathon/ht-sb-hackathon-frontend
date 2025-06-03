@@ -44,7 +44,7 @@ export async function getMunicipalities({
 }: { prefecture_id: number }): Promise<Municipality[]> {
 	const axiosClient = createAxiosClient();
 	const response = await axiosClient.get<MunicipalityResponse[]>(
-		`/cities/prefectures/${prefecture_id}`,
+		`/cities/prefectures/${prefecture_id}/relationships`,
 	);
 	return response.data.map(createMunicipality);
 }
