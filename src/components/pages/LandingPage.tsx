@@ -36,7 +36,12 @@ import {
 	FaUserPlus,
 	FaUsers,
 } from "react-icons/fa";
-import { MdGroup, MdLocationOn, MdSecurity, MdVerifiedUser } from "react-icons/md";
+import {
+	MdGroup,
+	MdLocationOn,
+	MdSecurity,
+	MdVerifiedUser,
+} from "react-icons/md";
 import { useNavigate } from "react-router";
 
 import { isLoggedInAtom } from "@/lib/atom/AuthAtom";
@@ -256,7 +261,10 @@ const LandingPage: React.FC = () => {
 						{/* CTAボタン */}
 						<MotionBox variants={fadeInUp}>
 							<Stack direction={heroButtonDirection} spacing={6} pt={4}>
-								<MotionBox whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+								<MotionBox
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
+								>
 									<Button
 										size={heroButtonSize}
 										bgGradient="linear(to-r, purple.500, blue.500)"
@@ -278,7 +286,10 @@ const LandingPage: React.FC = () => {
 									</Button>
 								</MotionBox>
 
-								<MotionBox whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+								<MotionBox
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
+								>
 									<Button
 										size={heroButtonSize}
 										variant="outline"
@@ -386,7 +397,11 @@ const LandingPage: React.FC = () => {
 									benefit: "季節ごとの福島の美しさと暮らし",
 									description:
 										"桜前線の北上、夏祭りの熱気、紅葉の絶景、雪国の厳しさと温かさ。福島の四季をキャラクターと一緒に体感できます。",
-									features: ["季節連動の会話内容", "地域の風物詩の紹介", "旬の食材・料理の話題"],
+									features: [
+										"季節連動の会話内容",
+										"地域の風物詩の紹介",
+										"旬の食材・料理の話題",
+									],
 									color: "green",
 									gradient: "linear(to-br, green.400, teal.400)",
 								},
@@ -396,7 +411,11 @@ const LandingPage: React.FC = () => {
 									benefit: "地元の人だけが知る特別な福島",
 									description:
 										"観光ガイドには載らない隠れスポット、代々受け継がれる家庭料理のレシピ、地元民の暮らしの知恵を教わります。",
-									features: ["秘密のスポット情報", "家庭料理のレシピ", "地元民の生活の知恵"],
+									features: [
+										"秘密のスポット情報",
+										"家庭料理のレシピ",
+										"地元民の生活の知恵",
+									],
 									color: "orange",
 									gradient: "linear(to-br, orange.400, yellow.400)",
 								},
@@ -415,14 +434,23 @@ const LandingPage: React.FC = () => {
 								>
 									<VStack spacing={6} align="start">
 										<HStack spacing={4}>
-											<Circle size="60px" bgGradient={product.gradient} color="white" shadow="lg">
+											<Circle
+												size="60px"
+												bgGradient={product.gradient}
+												color="white"
+												shadow="lg"
+											>
 												<Icon as={product.icon} boxSize={6} />
 											</Circle>
 											<VStack align="start" spacing={1}>
 												<Heading size="lg" color="gray.800">
 													{product.title}
 												</Heading>
-												<Text color={`${product.color}.600`} fontWeight="bold" fontSize="md">
+												<Text
+													color={`${product.color}.600`}
+													fontWeight="bold"
+													fontSize="md"
+												>
 													✨ {product.benefit}
 												</Text>
 											</VStack>
@@ -438,7 +466,12 @@ const LandingPage: React.FC = () => {
 											</Text>
 											{product.features.map((feature) => (
 												<HStack key={feature} spacing={2} align="start">
-													<Icon as={FaCheck} color={`${product.color}.500`} mt={0.5} boxSize={3} />
+													<Icon
+														as={FaCheck}
+														color={`${product.color}.500`}
+														mt={0.5}
+														boxSize={3}
+													/>
 													<Text fontSize="sm" color="gray.600">
 														{feature}
 													</Text>
@@ -476,7 +509,8 @@ const LandingPage: React.FC = () => {
 								{
 									step: "1",
 									title: "キャラクターを選ぶ",
-									description: "福島の各地域から、興味のある人物・時代・職業のAIキャラクターを選択",
+									description:
+										"福島の各地域から、興味のある人物・時代・職業のAIキャラクターを選択",
 									icon: FaUsers,
 									color: "blue",
 									details: [
@@ -488,18 +522,28 @@ const LandingPage: React.FC = () => {
 								{
 									step: "2",
 									title: "会話で親密度を深める",
-									description: "日常会話から深い話まで、AIキャラクターとの対話を通じて関係性を築く",
+									description:
+										"日常会話から深い話まで、AIキャラクターとの対話を通じて関係性を築く",
 									icon: FaComment,
 									color: "purple",
-									details: ["自然な会話システム", "親密度レベルの向上", "個人的な体験談の共有"],
+									details: [
+										"自然な会話システム",
+										"親密度レベルの向上",
+										"個人的な体験談の共有",
+									],
 								},
 								{
 									step: "3",
 									title: "福島の魅力を発見",
-									description: "親密度が上がるほど、より深い福島の文化や隠れた魅力を教えてもらえる",
+									description:
+										"親密度が上がるほど、より深い福島の文化や隠れた魅力を教えてもらえる",
 									icon: FaGift,
 									color: "red",
-									details: ["段階的な情報開放", "特別なエピソード", "福島の深い魅力発見"],
+									details: [
+										"段階的な情報開放",
+										"特別なエピソード",
+										"福島の深い魅力発見",
+									],
 								},
 							].map((step) => (
 								<MotionCard
@@ -537,7 +581,11 @@ const LandingPage: React.FC = () => {
 
 									<CardBody p={8} pt={12}>
 										<VStack spacing={4} textAlign="center">
-											<Circle size="80px" bg={`${step.color}.100`} color={`${step.color}.600`}>
+											<Circle
+												size="80px"
+												bg={`${step.color}.100`}
+												color={`${step.color}.600`}
+											>
 												<Icon as={step.icon} boxSize={8} />
 											</Circle>
 											<Heading size="lg" color="gray.800">
@@ -549,7 +597,11 @@ const LandingPage: React.FC = () => {
 											<VStack spacing={2} mt={4}>
 												{step.details.map((detail) => (
 													<HStack key={detail} spacing={2}>
-														<Icon as={FaCheck} color={`${step.color}.500`} boxSize={3} />
+														<Icon
+															as={FaCheck}
+															color={`${step.color}.500`}
+															boxSize={3}
+														/>
 														<Text fontSize="sm" color="gray.500">
 															{detail}
 														</Text>
@@ -597,35 +649,40 @@ const LandingPage: React.FC = () => {
 								{
 									icon: FaMapMarkerAlt,
 									title: "地域密着型",
-									description: "福島県内に特化することで、地元愛溢れる素敵な方々と確実に出会える",
+									description:
+										"福島県内に特化することで、地元愛溢れる素敵な方々と確実に出会える",
 									color: "blue",
 									gradient: "linear(to-br, blue.400, teal.400)",
 								},
 								{
 									icon: FaShieldAlt,
 									title: "安心・安全",
-									description: "24時間監視体制と本人確認システムで、安心してご利用いただける環境",
+									description:
+										"24時間監視体制と本人確認システムで、安心してご利用いただける環境",
 									color: "green",
 									gradient: "linear(to-br, green.400, teal.400)",
 								},
 								{
 									icon: FaUsers,
 									title: "温かいコミュニティ",
-									description: "福島の人柄の良さを活かした、温かく支え合うコミュニティ文化",
+									description:
+										"福島の人柄の良さを活かした、温かく支え合うコミュニティ文化",
 									color: "orange",
 									gradient: "linear(to-br, orange.400, yellow.400)",
 								},
 								{
 									icon: FaMountain,
 									title: "自然豊かな福島",
-									description: "美しい自然に囲まれた福島で、季節を感じながらの素敵なデート",
+									description:
+										"美しい自然に囲まれた福島で、季節を感じながらの素敵なデート",
 									color: "purple",
 									gradient: "linear(to-br, purple.400, blue.400)",
 								},
 								{
 									icon: FaGift,
 									title: "特別な体験",
-									description: "福島ならではのイベントや体験を通じて、特別な思い出を一緒に作る",
+									description:
+										"福島ならではのイベントや体験を通じて、特別な思い出を一緒に作る",
 									color: "pink",
 									gradient: "linear(to-br, pink.400, purple.400)",
 								},
@@ -644,7 +701,12 @@ const LandingPage: React.FC = () => {
 								>
 									<CardBody p={8}>
 										<VStack spacing={4} textAlign="center">
-											<Circle size="80px" bgGradient={feature.gradient} color="white" shadow="lg">
+											<Circle
+												size="80px"
+												bgGradient={feature.gradient}
+												color="white"
+												shadow="lg"
+											>
 												<Icon as={feature.icon} boxSize={8} />
 											</Circle>
 											<Heading size="lg" color="gray.800">
@@ -832,7 +894,11 @@ const LandingPage: React.FC = () => {
 													>
 														{stat.number}
 													</Text>
-													<Text color="gray.100" fontWeight="bold" fontSize="lg">
+													<Text
+														color="gray.100"
+														fontWeight="bold"
+														fontSize="lg"
+													>
 														{stat.label}
 													</Text>
 													<Text color="gray.300" fontSize="sm">
@@ -859,7 +925,11 @@ const LandingPage: React.FC = () => {
 											<Heading size="lg" color="gray.100" textAlign="center">
 												🎯 詳細パフォーマンス指標
 											</Heading>
-											<SimpleGrid columns={{ base: 1, md: 3 }} spacing={8} w="full">
+											<SimpleGrid
+												columns={{ base: 1, md: 3 }}
+												spacing={8}
+												w="full"
+											>
 												{[
 													{
 														metric: "平均対話継続時間",
@@ -881,10 +951,18 @@ const LandingPage: React.FC = () => {
 														<Text color="gray.300" fontSize="sm">
 															{metric.metric}
 														</Text>
-														<Text fontSize="2xl" fontWeight="bold" color="gray.100">
+														<Text
+															fontSize="2xl"
+															fontWeight="bold"
+															color="gray.100"
+														>
 															{metric.value}
 														</Text>
-														<Badge colorScheme="green" variant="solid" borderRadius="full">
+														<Badge
+															colorScheme="green"
+															variant="solid"
+															borderRadius="full"
+														>
 															📈 {metric.change}
 														</Badge>
 													</VStack>
@@ -1064,14 +1142,17 @@ const LandingPage: React.FC = () => {
 															対話相手: {testimonial.character}
 														</Badge>
 														<HStack spacing={1}>
-															{Array.from({ length: testimonial.rating }, (_, i) => (
-																<Icon
-																	key={`${testimonial.name}-star-${i}`}
-																	as={FaStar}
-																	color="yellow.300"
-																	boxSize={4}
-																/>
-															))}
+															{Array.from(
+																{ length: testimonial.rating },
+																(_, i) => (
+																	<Icon
+																		key={`${testimonial.name}-star-${i}`}
+																		as={FaStar}
+																		color="yellow.300"
+																		boxSize={4}
+																	/>
+																),
+															)}
 														</HStack>
 													</VStack>
 												</HStack>
@@ -1085,14 +1166,23 @@ const LandingPage: React.FC = () => {
 													border="1px solid"
 													borderColor="whiteAlpha.300"
 												>
-													<Text color="black" lineHeight="tall" fontSize="md" fontWeight="medium">
+													<Text
+														color="black"
+														lineHeight="tall"
+														fontSize="md"
+														fontWeight="medium"
+													>
 														"{testimonial.content}"
 													</Text>
 												</Box>
 
 												<HStack spacing={2}>
 													<Icon as={FaCrown} color="yellow.300" boxSize={4} />
-													<Text fontSize="sm" color="yellow.200" fontWeight="bold">
+													<Text
+														fontSize="sm"
+														color="yellow.200"
+														fontWeight="bold"
+													>
 														🏆 {testimonial.achievement}
 													</Text>
 												</HStack>
@@ -1104,7 +1194,11 @@ const LandingPage: React.FC = () => {
 
 							{/* 統計情報バー */}
 							<MotionBox variants={fadeInUp} w="full">
-								<Card bg="whiteAlpha.100" backdropFilter="blur(10px)" borderRadius="2xl">
+								<Card
+									bg="whiteAlpha.100"
+									backdropFilter="blur(10px)"
+									borderRadius="2xl"
+								>
 									<CardBody p={6}>
 										<SimpleGrid columns={{ base: 2, md: 4 }} spacing={6}>
 											{[
@@ -1119,10 +1213,18 @@ const LandingPage: React.FC = () => {
 											].map((stat) => (
 												<VStack key={stat.label} spacing={2}>
 													<Icon as={stat.icon} color="blue.600" boxSize={6} />
-													<Text fontSize="2xl" fontWeight="bold" color="gray.800">
+													<Text
+														fontSize="2xl"
+														fontWeight="bold"
+														color="gray.800"
+													>
 														{stat.value}
 													</Text>
-													<Text fontSize="sm" color="gray.600" textAlign="center">
+													<Text
+														fontSize="sm"
+														color="gray.600"
+														textAlign="center"
+													>
 														{stat.label}
 													</Text>
 												</VStack>
@@ -1159,7 +1261,10 @@ const LandingPage: React.FC = () => {
 
 						<MotionBox variants={fadeInUp}>
 							<Stack direction={heroButtonDirection} spacing={6} pt={4}>
-								<MotionBox whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+								<MotionBox
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
+								>
 									<Button
 										size="xl"
 										bgGradient="linear(to-r, purple.500, blue.500, teal.500)"
@@ -1173,7 +1278,8 @@ const LandingPage: React.FC = () => {
 										fontWeight="bold"
 										shadow="2xl"
 										_hover={{
-											bgGradient: "linear(to-r, purple.600, blue.600, teal.600)",
+											bgGradient:
+												"linear(to-r, purple.600, blue.600, teal.600)",
 											shadow: "3xl",
 											transform: "translateY(-2px)",
 										}}
@@ -1195,7 +1301,12 @@ const LandingPage: React.FC = () => {
 				{/* フッター */}
 				<Box py={12} textAlign="center" borderTop="1px" borderColor="gray.200">
 					<VStack spacing={4}>
-						<Text fontSize="2xl" fontWeight="bold" bgGradient={heroGradient} bgClip="text">
+						<Text
+							fontSize="2xl"
+							fontWeight="bold"
+							bgGradient={heroGradient}
+							bgClip="text"
+						>
 							福島のこころ 🌸
 						</Text>
 						<Text color="gray.500">福島で出会い、福島で愛を育む</Text>

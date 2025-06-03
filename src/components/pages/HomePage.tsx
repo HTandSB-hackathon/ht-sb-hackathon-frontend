@@ -48,7 +48,12 @@ import {
 	FaUserFriends,
 	FaUsers,
 } from "react-icons/fa";
-import { MdChatBubble, MdExplore, MdFavorite, MdTrendingUp } from "react-icons/md";
+import {
+	MdChatBubble,
+	MdExplore,
+	MdFavorite,
+	MdTrendingUp,
+} from "react-icons/md";
 import { useNavigate } from "react-router";
 
 import {
@@ -79,7 +84,11 @@ const HomePage: React.FC = () => {
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
 
 	// レスポンシブデザイン（スマホ最適化）
-	const heroHeight = useBreakpointValue({ base: "50vh", md: "60vh", lg: "70vh" });
+	const heroHeight = useBreakpointValue({
+		base: "50vh",
+		md: "60vh",
+		lg: "70vh",
+	});
 	const containerPadding = useBreakpointValue({ base: 2, sm: 4, md: 6, lg: 8 });
 	const gridTemplateColumns = useBreakpointValue({
 		base: "1fr",
@@ -87,8 +96,16 @@ const HomePage: React.FC = () => {
 		lg: "2fr 1fr",
 		xl: "3fr 2fr",
 	});
-	const heroTitleSize = useBreakpointValue({ base: "xl", sm: "2xl", md: "3xl" });
-	const heroSubtitleSize = useBreakpointValue({ base: "lg", sm: "xl", md: "2xl" });
+	const heroTitleSize = useBreakpointValue({
+		base: "xl",
+		sm: "2xl",
+		md: "3xl",
+	});
+	const heroSubtitleSize = useBreakpointValue({
+		base: "lg",
+		sm: "xl",
+		md: "2xl",
+	});
 	const cardSpacing = useBreakpointValue({ base: 4, md: 6, lg: 8 });
 	const statsColumns = useBreakpointValue({ base: 2, sm: 2, md: 4 });
 
@@ -350,7 +367,11 @@ const HomePage: React.FC = () => {
 			</Box>
 
 			<Container maxW="8xl" p={containerPadding} position="relative" zIndex="1">
-				<MotionBox initial="initial" animate="animate" variants={staggerContainer}>
+				<MotionBox
+					initial="initial"
+					animate="animate"
+					variants={staggerContainer}
+				>
 					{/* ヒーローセクション */}
 					<MotionBox
 						variants={fadeInUp}
@@ -455,7 +476,10 @@ const HomePage: React.FC = () => {
 										</HStack>
 									</CardHeader>
 									<CardBody p={6}>
-										<SimpleGrid columns={statsColumns} spacing={{ base: 3, md: 6 }}>
+										<SimpleGrid
+											columns={statsColumns}
+											spacing={{ base: 3, md: 6 }}
+										>
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
 													<Icon as={FaUsers} mr={1} />
@@ -541,7 +565,9 @@ const HomePage: React.FC = () => {
 														<Progress
 															value={
 																totalCharacters > 0
-																	? (countByTrustLevel[level] / totalCharacters) * 100
+																	? (countByTrustLevel[level] /
+																			totalCharacters) *
+																		100
 																	: 0
 															}
 															colorScheme={color}
@@ -591,7 +617,10 @@ const HomePage: React.FC = () => {
 											>
 												<HStack mb={2}>
 													<Text fontSize="2xl">{seasonInfo.emoji}</Text>
-													<Text fontWeight="bold" color={`${seasonInfo.color}.700`}>
+													<Text
+														fontWeight="bold"
+														color={`${seasonInfo.color}.700`}
+													>
 														福島の{seasonInfo.season}
 													</Text>
 												</HStack>
@@ -682,7 +711,9 @@ const HomePage: React.FC = () => {
 																	borderColor: "blue.300",
 																	bg: "blue.50",
 																}}
-																onClick={() => navigate(`/characters/${character?.id}`)}
+																onClick={() =>
+																	navigate(`/characters/${character?.id}`)
+																}
 															>
 																<HStack>
 																	<Avatar
@@ -844,7 +875,11 @@ const HomePage: React.FC = () => {
 									borderColor="gray.200"
 									overflow="hidden"
 								>
-									<CardHeader bgGradient="linear(to-r, pink.400, purple.500)" color="white" py={4}>
+									<CardHeader
+										bgGradient="linear(to-r, pink.400, purple.500)"
+										color="white"
+										py={4}
+									>
 										<HStack>
 											<Icon as={MdTrendingUp} />
 											<Heading size="lg">今週のハイライト</Heading>
@@ -866,7 +901,8 @@ const HomePage: React.FC = () => {
 													</Text>
 												</HStack>
 												<Text fontSize="sm" color="gray.700">
-													この週に{trustLevel5Count}人の方との関係が深まりました。
+													この週に{trustLevel5Count}
+													人の方との関係が深まりました。
 												</Text>
 											</Box>
 
@@ -933,7 +969,9 @@ const HomePage: React.FC = () => {
 							<Heading size={{ base: "md", md: "lg" }} color="gray.800">
 								今日も福島のこころとつながろう 🌸
 							</Heading>
-							<Text color="gray.600">新しい出会いが、あなたを待っています。</Text>
+							<Text color="gray.600">
+								新しい出会いが、あなたを待っています。
+							</Text>
 						</VStack>
 						<VStack spacing={4} w={{ base: "full", md: "auto" }}>
 							<Button

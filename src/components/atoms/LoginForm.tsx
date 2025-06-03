@@ -24,7 +24,13 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useSetAtom } from "jotai";
 import { useState } from "react";
-import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaSignInAlt } from "react-icons/fa";
+import {
+	FaEnvelope,
+	FaEye,
+	FaEyeSlash,
+	FaLock,
+	FaSignInAlt,
+} from "react-icons/fa";
 import { useNavigate } from "react-router";
 
 const MotionCard = motion(Card);
@@ -33,7 +39,9 @@ export default function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
-	const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+	const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+		{},
+	);
 
 	const login = useSetAtom(loginInPasswordAtom);
 	const setIsLoading = useSetAtom(isLoadingAuthAtom);
@@ -47,7 +55,8 @@ export default function LoginForm() {
 	const validateForm = () => {
 		const newErrors: { email?: string; password?: string } = {};
 		if (!email) newErrors.email = "メールアドレスは必須です";
-		if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "有効なメールアドレスを入力してください";
+		if (!/\S+@\S+\.\S+/.test(email))
+			newErrors.email = "有効なメールアドレスを入力してください";
 		if (!password) newErrors.password = "パスワードは必須です";
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
@@ -170,7 +179,9 @@ export default function LoginForm() {
 										type={showPassword ? "text" : "password"}
 										placeholder="パスワードを入力"
 										value={password}
-										onChange={(e) => handleInputChange("password", e.target.value)}
+										onChange={(e) =>
+											handleInputChange("password", e.target.value)
+										}
 										size="lg"
 										borderRadius="xl"
 										bg="gray.50"

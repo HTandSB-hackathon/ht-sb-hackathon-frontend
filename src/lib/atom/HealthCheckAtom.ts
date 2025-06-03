@@ -2,7 +2,10 @@ import { atom } from "jotai";
 
 import { loadable } from "jotai/utils";
 
-import { getHealthCheckLiveness, getHealthCheckReadiness } from "@/lib/domain/HealthCheckQuery";
+import {
+	getHealthCheckLiveness,
+	getHealthCheckReadiness,
+} from "@/lib/domain/HealthCheckQuery";
 
 const healthCheckLivenessAtomAsync = atom(async () => {
 	try {
@@ -14,7 +17,9 @@ const healthCheckLivenessAtomAsync = atom(async () => {
 	}
 });
 
-export const healthCheckLivenessAtomLoadable = loadable(healthCheckLivenessAtomAsync);
+export const healthCheckLivenessAtomLoadable = loadable(
+	healthCheckLivenessAtomAsync,
+);
 
 const healthCheckReadinessAtomAsync = atom(async () => {
 	try {
@@ -26,4 +31,6 @@ const healthCheckReadinessAtomAsync = atom(async () => {
 	}
 });
 
-export const healthCheckReadinessAtomLoadable = loadable(healthCheckReadinessAtomAsync);
+export const healthCheckReadinessAtomLoadable = loadable(
+	healthCheckReadinessAtomAsync,
+);

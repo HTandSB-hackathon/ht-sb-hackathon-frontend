@@ -1,5 +1,12 @@
 import { authTokenAtom } from "@/lib/atom/AuthAtom";
-import { Alert, AlertIcon, Center, Spinner, Text, VStack } from "@chakra-ui/react";
+import {
+	Alert,
+	AlertIcon,
+	Center,
+	Spinner,
+	Text,
+	VStack,
+} from "@chakra-ui/react";
 import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";

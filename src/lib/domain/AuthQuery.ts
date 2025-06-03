@@ -22,7 +22,12 @@ export interface AuthInPasswordResponse {
 }
 
 function createAuthInPassword(res: AuthInPasswordResponse): AuthInPassword {
-	return new AuthInPassword(res.access_token, res.token_type, res.expires_in, res.refresh_token);
+	return new AuthInPassword(
+		res.access_token,
+		res.token_type,
+		res.expires_in,
+		res.refresh_token,
+	);
 }
 
 export async function postAuthInPassword(
@@ -30,12 +35,12 @@ export async function postAuthInPassword(
 	password: string,
 ): Promise<AuthInPassword> {
 	const axiosClient = createAxiosClient();
-	const response = await axiosClient.login<AuthInPasswordRequest, AuthInPasswordResponse>(
-		"/auth/login/password",
-		{
-			username,
-			password,
-		},
-	);
+	const response = await axiosClient.login<
+		AuthInPasswordRequest,
+		AuthInPasswordResponse
+	>("/auth/login/password", {
+		username,
+		password,
+	});
 	return createAuthInPassword(response.data);
 }

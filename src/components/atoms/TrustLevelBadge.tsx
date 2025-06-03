@@ -78,8 +78,12 @@ export const TrustLevelBadge: React.FC<TrustLevelBadgeProps> = ({
 				>
 					{getLevelIcon()}
 				</motion.span>
-				<span className={`text-${trustLevel.color}-700 font-bold`}>Lv.{level}</span>
-				<span className={`text-${trustLevel.color}-600`}>{trustLevel.name}</span>
+				<span className={`text-${trustLevel.color}-700 font-bold`}>
+					Lv.{level}
+				</span>
+				<span className={`text-${trustLevel.color}-600`}>
+					{trustLevel.name}
+				</span>
 			</motion.div>
 
 			{showProgress && level < 5 && (

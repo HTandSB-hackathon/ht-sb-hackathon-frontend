@@ -66,7 +66,11 @@ import {
 	// sortedCharactersAtom,
 } from "../../lib/atom/CharacterAtom";
 import { CharacterQuery } from "../../lib/domain/CharacterQuery";
-import type { CharacterFilter, CharacterSortBy, TrustLevel } from "../../lib/types/character";
+import type {
+	CharacterFilter,
+	CharacterSortBy,
+	TrustLevel,
+} from "../../lib/types/character";
 import { CharacterCard } from "../atoms/CharacterCard";
 
 const MotionBox = motion(Box);
@@ -106,7 +110,10 @@ export const CharactersPage: React.FC = () => {
 		"linear(to-br, gray.900, purple.900, blue.900)",
 	);
 	const cardBg = useColorModeValue("white", "gray.800");
-	const headerBg = useColorModeValue("rgba(255, 255, 255, 0.8)", "rgba(26, 32, 44, 0.8)");
+	const headerBg = useColorModeValue(
+		"rgba(255, 255, 255, 0.8)",
+		"rgba(26, 32, 44, 0.8)",
+	);
 
 	// データ取得
 	React.useEffect(() => {
@@ -140,7 +147,10 @@ export const CharactersPage: React.FC = () => {
 		}
 	};
 
-	const handleFavoriteToggle = async (characterId: string, isFavorite: boolean) => {
+	const handleFavoriteToggle = async (
+		characterId: string,
+		isFavorite: boolean,
+	) => {
 		try {
 			await CharacterQuery.toggleFavorite(characterId, isFavorite);
 
@@ -386,7 +396,12 @@ export const CharactersPage: React.FC = () => {
 								>
 									フィルター
 									{activeFilterCount > 0 && (
-										<Badge ml={2} colorScheme="red" variant="solid" borderRadius="full">
+										<Badge
+											ml={2}
+											colorScheme="red"
+											variant="solid"
+											borderRadius="full"
+										>
 											{activeFilterCount}
 										</Badge>
 									)}
@@ -396,7 +411,9 @@ export const CharactersPage: React.FC = () => {
 									<Icon as={FaSort} color="gray.500" />
 									<Select
 										value={sortBy}
-										onChange={(e) => setSortBy(e.target.value as CharacterSortBy)}
+										onChange={(e) =>
+											setSortBy(e.target.value as CharacterSortBy)
+										}
 										bg="white"
 										borderColor="gray.300"
 										size={isMobile ? "sm" : "md"}
@@ -435,7 +452,9 @@ export const CharactersPage: React.FC = () => {
 										{filter.trustLevel && (
 											<Tag size="md" colorScheme="purple" borderRadius="full">
 												<TagLabel>💕 Lv.{filter.trustLevel}</TagLabel>
-												<TagCloseButton onClick={() => removeFilter("trustLevel")} />
+												<TagCloseButton
+													onClick={() => removeFilter("trustLevel")}
+												/>
 											</Tag>
 										)}
 										{filter.gender && (
@@ -444,7 +463,9 @@ export const CharactersPage: React.FC = () => {
 													{filter.gender === "male" ? "👨" : "👩"}{" "}
 													{filter.gender === "male" ? "男性" : "女性"}
 												</TagLabel>
-												<TagCloseButton onClick={() => removeFilter("gender")} />
+												<TagCloseButton
+													onClick={() => removeFilter("gender")}
+												/>
 											</Tag>
 										)}
 									</HStack>
@@ -453,14 +474,29 @@ export const CharactersPage: React.FC = () => {
 
 							{/* フィルターパネル */}
 							<Collapse in={isFilterOpen}>
-								<Box p={4} borderTop="1px solid" borderColor="gray.200" bg="gray.50">
+								<Box
+									p={4}
+									borderTop="1px solid"
+									borderColor="gray.200"
+									bg="gray.50"
+								>
 									<VStack spacing={4} align="stretch">
 										{/* 地域フィルター */}
 										<Box>
-											<Text fontSize="sm" fontWeight="bold" mb={2} color="gray.700">
+											<Text
+												fontSize="sm"
+												fontWeight="bold"
+												mb={2}
+												color="gray.700"
+											>
 												🏘️ 地域
 											</Text>
-											<ButtonGroup size="sm" variant="outline" spacing={2} flexWrap="wrap">
+											<ButtonGroup
+												size="sm"
+												variant="outline"
+												spacing={2}
+												flexWrap="wrap"
+											>
 												<Button
 													onClick={() => removeFilter("city")}
 													colorScheme={!filter.city ? "purple" : "gray"}
@@ -471,9 +507,15 @@ export const CharactersPage: React.FC = () => {
 												{municipalities?.map((city: Municipality) => (
 													<Button
 														key={city.id}
-														onClick={() => setFilter({ ...filter, city: city.id })}
-														colorScheme={filter.city === city.id ? "purple" : "gray"}
-														variant={filter.city === city.id ? "solid" : "outline"}
+														onClick={() =>
+															setFilter({ ...filter, city: city.id })
+														}
+														colorScheme={
+															filter.city === city.id ? "purple" : "gray"
+														}
+														variant={
+															filter.city === city.id ? "solid" : "outline"
+														}
 													>
 														{city.name}
 													</Button>
@@ -483,7 +525,12 @@ export const CharactersPage: React.FC = () => {
 
 										{/* 信頼レベルフィルター */}
 										<Box>
-											<Text fontSize="sm" fontWeight="bold" mb={2} color="gray.700">
+											<Text
+												fontSize="sm"
+												fontWeight="bold"
+												mb={2}
+												color="gray.700"
+											>
 												💕 信頼レベル
 											</Text>
 											<ButtonGroup size="sm" variant="outline" spacing={2}>
@@ -496,8 +543,12 @@ export const CharactersPage: React.FC = () => {
 																trustLevel: level as TrustLevel,
 															})
 														}
-														colorScheme={filter.trustLevel === level ? "purple" : "gray"}
-														variant={filter.trustLevel === level ? "solid" : "outline"}
+														colorScheme={
+															filter.trustLevel === level ? "purple" : "gray"
+														}
+														variant={
+															filter.trustLevel === level ? "solid" : "outline"
+														}
 													>
 														{"⭐".repeat(level)} Lv.{level}
 													</Button>
@@ -512,7 +563,10 @@ export const CharactersPage: React.FC = () => {
 
 					{/* エラー表示 */}
 					{error && (
-						<MotionBox initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+						<MotionBox
+							initial={{ opacity: 0, scale: 0.9 }}
+							animate={{ opacity: 1, scale: 1 }}
+						>
 							<Alert status="error" borderRadius="xl">
 								<AlertIcon />
 								<Box>

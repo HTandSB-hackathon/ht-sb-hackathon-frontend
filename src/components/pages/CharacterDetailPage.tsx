@@ -56,7 +56,13 @@ import {
 	FaStar,
 	FaUnlock,
 } from "react-icons/fa";
-import { MdBook, MdCake, MdLocationCity, MdPerson, MdWork } from "react-icons/md";
+import {
+	MdBook,
+	MdCake,
+	MdLocationCity,
+	MdPerson,
+	MdWork,
+} from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
 
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
@@ -64,7 +70,10 @@ import type { Relationship, Story } from "@/lib/domain/CharacterQuery";
 import { getRelationships, getStories } from "@/lib/domain/CharacterQuery";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
-import { characterDetailLoadingAtom, charactersAtomLoadable } from "../../lib/atom/CharacterAtom";
+import {
+	characterDetailLoadingAtom,
+	charactersAtomLoadable,
+} from "../../lib/atom/CharacterAtom";
 // import { CharacterQuery } from "../../lib/domain/CharacterQuery";
 import { TRUST_LEVELS } from "../../lib/types/character";
 
@@ -99,7 +108,10 @@ export const CharacterDetailPage: React.FC = () => {
 		"linear(to-br, gray.900, purple.900, blue.900)",
 	);
 	const cardBg = useColorModeValue("white", "gray.800");
-	const headerBg = useColorModeValue("rgba(255, 255, 255, 0.9)", "rgba(26, 32, 44, 0.9)");
+	const headerBg = useColorModeValue(
+		"rgba(255, 255, 255, 0.9)",
+		"rgba(26, 32, 44, 0.9)",
+	);
 
 	// 地域テーマ
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
@@ -240,7 +252,9 @@ export const CharacterDetailPage: React.FC = () => {
 							<Heading size="lg" color="gray.600">
 								読み込みエラー
 							</Heading>
-							<Text color="gray.500">{error || "キャラクター情報が見つかりませんでした"}</Text>
+							<Text color="gray.500">
+								{error || "キャラクター情報が見つかりませんでした"}
+							</Text>
 							<HStack spacing={4}>
 								<Button
 									colorScheme="purple"
@@ -355,7 +369,10 @@ export const CharacterDetailPage: React.FC = () => {
 						{/* カバー画像 */}
 						<Box
 							height="200px"
-							bgGradient={getMunicipality()?.gradient || "linear(to-r, gray.400, gray.500)"}
+							bgGradient={
+								getMunicipality()?.gradient ||
+								"linear(to-r, gray.400, gray.500)"
+							}
 							position="relative"
 						>
 							{getCharacter()?.coverImageUrl && (
@@ -547,8 +564,18 @@ export const CharacterDetailPage: React.FC = () => {
 						borderRadius="2xl"
 						shadow="xl"
 					>
-						<Tabs index={tabIndex} onChange={setTabIndex} variant="enclosed" isLazy>
-							<TabList borderBottom="none" bg="gray.50" borderTopRadius="2xl" overflowX="auto">
+						<Tabs
+							index={tabIndex}
+							onChange={setTabIndex}
+							variant="enclosed"
+							isLazy
+						>
+							<TabList
+								borderBottom="none"
+								bg="gray.50"
+								borderTopRadius="2xl"
+								overflowX="auto"
+							>
 								<Tab
 									flex="1"
 									_selected={{ bg: cardBg, borderColor: "gray.200" }}
@@ -646,7 +673,11 @@ export const CharacterDetailPage: React.FC = () => {
 												<Wrap>
 													{getCharacter()?.personality.map((trait, index) => (
 														<WrapItem key={index}>
-															<Tag colorScheme="green" size="lg" borderRadius="full">
+															<Tag
+																colorScheme="green"
+																size="lg"
+																borderRadius="full"
+															>
 																<TagLabel>{trait}</TagLabel>
 															</Tag>
 														</WrapItem>
@@ -662,7 +693,11 @@ export const CharacterDetailPage: React.FC = () => {
 												<Wrap>
 													{getCharacter()?.hobbies.map((hobby, index) => (
 														<WrapItem key={index}>
-															<Tag colorScheme="blue" size="lg" borderRadius="full">
+															<Tag
+																colorScheme="blue"
+																size="lg"
+																borderRadius="full"
+															>
 																<TagLabel>{hobby}</TagLabel>
 															</Tag>
 														</WrapItem>
@@ -676,13 +711,19 @@ export const CharacterDetailPage: React.FC = () => {
 													🏆 得意なこと
 												</Heading>
 												<Wrap>
-													{getCharacter()?.specialties.map((specialty, index) => (
-														<WrapItem key={index}>
-															<Tag colorScheme="purple" size="lg" borderRadius="full">
-																<TagLabel>{specialty}</TagLabel>
-															</Tag>
-														</WrapItem>
-													))}
+													{getCharacter()?.specialties.map(
+														(specialty, index) => (
+															<WrapItem key={index}>
+																<Tag
+																	colorScheme="purple"
+																	size="lg"
+																	borderRadius="full"
+																>
+																	<TagLabel>{specialty}</TagLabel>
+																</Tag>
+															</WrapItem>
+														),
+													)}
 												</Wrap>
 											</Box>
 
@@ -749,7 +790,11 @@ export const CharacterDetailPage: React.FC = () => {
 											</Text>
 										</Box>
 
-										<SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} w="full">
+										<SimpleGrid
+											columns={{ base: 1, md: 3 }}
+											spacing={6}
+											w="full"
+										>
 											<MotionCard
 												whileHover={{ y: -5 }}
 												bg="blue.50"
@@ -763,7 +808,9 @@ export const CharacterDetailPage: React.FC = () => {
 												<Heading size="md" mb={2}>
 													観光スポット
 												</Heading>
-												<Text color="gray.600">美しい自然と歴史的建造物が織りなす絶景</Text>
+												<Text color="gray.600">
+													美しい自然と歴史的建造物が織りなす絶景
+												</Text>
 											</MotionCard>
 
 											<MotionCard
@@ -779,7 +826,9 @@ export const CharacterDetailPage: React.FC = () => {
 												<Heading size="md" mb={2}>
 													ご当地グルメ
 												</Heading>
-												<Text color="gray.600">地元食材を使った心温まる絶品料理</Text>
+												<Text color="gray.600">
+													地元食材を使った心温まる絶品料理
+												</Text>
 											</MotionCard>
 
 											<MotionCard
@@ -795,7 +844,9 @@ export const CharacterDetailPage: React.FC = () => {
 												<Heading size="md" mb={2}>
 													伝統文化
 												</Heading>
-												<Text color="gray.600">受け継がれる伝統と現代の融合</Text>
+												<Text color="gray.600">
+													受け継がれる伝統と現代の融合
+												</Text>
 											</MotionCard>
 										</SimpleGrid>
 
@@ -832,13 +883,21 @@ export const CharacterDetailPage: React.FC = () => {
 												>
 													<CardBody p={6}>
 														<HStack justify="space-between" mb={3}>
-															<Heading size="sm">{story.isUnlocked ? story.title : "???"}</Heading>
+															<Heading size="sm">
+																{story.isUnlocked ? story.title : "???"}
+															</Heading>
 															<HStack>
 																<Icon
 																	as={story.isUnlocked ? FaUnlock : FaLock}
-																	color={story.isUnlocked ? "green.500" : "gray.400"}
+																	color={
+																		story.isUnlocked ? "green.500" : "gray.400"
+																	}
 																/>
-																<Badge colorScheme={story.isUnlocked ? "green" : "gray"}>
+																<Badge
+																	colorScheme={
+																		story.isUnlocked ? "green" : "gray"
+																	}
+																>
 																	Lv.{story.requiredTrustLevel}必要
 																</Badge>
 															</HStack>
@@ -863,14 +922,20 @@ export const CharacterDetailPage: React.FC = () => {
 										</Heading>
 
 										{relationship && (
-											<SimpleGrid columns={{ base: 2, md: 4 }} spacing={6} w="full">
+											<SimpleGrid
+												columns={{ base: 2, md: 4 }}
+												spacing={6}
+												w="full"
+											>
 												<Stat textAlign="center">
 													<StatLabel>
 														<Icon as={FaCalendarAlt} mr={2} />
 														初回出会い
 													</StatLabel>
 													<StatNumber fontSize="md">
-														{new Date(relationship.firstMetAt).toLocaleDateString("ja-JP")}
+														{new Date(
+															relationship.firstMetAt,
+														).toLocaleDateString("ja-JP")}
 													</StatNumber>
 												</Stat>
 
@@ -879,7 +944,9 @@ export const CharacterDetailPage: React.FC = () => {
 														<Icon as={FaComment} mr={2} />
 														会話回数
 													</StatLabel>
-													<StatNumber>{relationship.conversationCount}</StatNumber>
+													<StatNumber>
+														{relationship.conversationCount}
+													</StatNumber>
 													<StatHelpText>回</StatHelpText>
 												</Stat>
 

@@ -1,5 +1,10 @@
 import LoginBox from "@/components/organisms/LoginBox";
-import { Box, Container, useBreakpointValue, useColorModeValue } from "@chakra-ui/react";
+import {
+	Box,
+	Container,
+	useBreakpointValue,
+	useColorModeValue,
+} from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
 const MotionBox = motion(Box);
@@ -80,7 +85,12 @@ export default function LoginPage() {
 			</Box>
 
 			<Container maxW={containerMaxW} py={8} position="relative" zIndex="1">
-				<Box display="flex" alignItems="center" justifyContent="center" minH="100vh">
+				<Box
+					display="flex"
+					alignItems="center"
+					justifyContent="center"
+					minH="100vh"
+				>
 					<MotionBox
 						initial={{ opacity: 0, y: 30 }}
 						animate={{ opacity: 1, y: 0 }}

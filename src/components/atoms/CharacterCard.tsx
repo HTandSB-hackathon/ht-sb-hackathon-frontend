@@ -22,7 +22,13 @@ import {
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
-import { FaClock, FaComments, FaHeart, FaMapMarkerAlt, FaRegHeart } from "react-icons/fa";
+import {
+	FaClock,
+	FaComments,
+	FaHeart,
+	FaMapMarkerAlt,
+	FaRegHeart,
+} from "react-icons/fa";
 import { MdLock, MdStar } from "react-icons/md";
 import { useNavigate } from "react-router";
 import type { Character } from "../../lib/domain/CharacterQuery";
@@ -68,7 +74,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 	// カラーテーマ
 	const cardBg = useColorModeValue("white", "gray.800");
-	const shadowColor = useColorModeValue("rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 0.3)");
+	const shadowColor = useColorModeValue(
+		"rgba(0, 0, 0, 0.1)",
+		"rgba(0, 0, 0, 0.3)",
+	);
 	const borderColor = useColorModeValue("gray.200", "gray.600");
 
 	const handleClick = () => {
@@ -94,7 +103,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 	// 地域テーマ
 	const getCityTheme = (city: string) => {
-		const themes: Record<string, { color: string; emoji: string; gradient: string }> = {
+		const themes: Record<
+			string,
+			{ color: string; emoji: string; gradient: string }
+		> = {
 			須賀川市: {
 				color: "purple",
 				emoji: "🍇",
@@ -275,7 +287,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 							<Tag size="sm" colorScheme={cityTheme.color} variant="subtle">
 								<TagLeftIcon as={FaMapMarkerAlt} />
-								<TagLabel>{character.isLocked ? "未解放" : getMunicipalityName()}</TagLabel>
+								<TagLabel>
+									{character.isLocked ? "未解放" : getMunicipalityName()}
+								</TagLabel>
 							</Tag>
 
 							<HStack spacing="2" fontSize="xs" color="gray.500">
@@ -288,7 +302,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 						{/* お気に入りボタン */}
 						{!character.isLocked && (
-							<Tooltip label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}>
+							<Tooltip
+								label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}
+							>
 								<IconButton
 									aria-label="favorite"
 									icon={isFavorite ? <FaHeart /> : <FaRegHeart />}
@@ -325,7 +341,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 								</Badge>
 
 								<Text fontSize="xs" color="gray.500" fontWeight="medium">
-									Lv.{trustLevel} ({relationship.trustPoints}/{relationship.nextLevelPoints})
+									Lv.{trustLevel} ({relationship.trustPoints}/
+									{relationship.nextLevelPoints})
 								</Text>
 							</HStack>
 
@@ -343,7 +360,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 					{/* ロック条件 */}
 					{character.isLocked && character.unlockCondition && (
-						<Box bg="gray.50" p="3" borderRadius="lg" border="1px solid" borderColor="gray.200">
+						<Box
+							bg="gray.50"
+							p="3"
+							borderRadius="lg"
+							border="1px solid"
+							borderColor="gray.200"
+						>
 							<HStack spacing="2">
 								<MdLock size="16" color="gray.500" />
 								<Text fontSize="xs" color="gray.600">
@@ -391,7 +414,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 									{character.hobbies && character.hobbies.length > 0 && (
 										<HStack spacing="1" wrap="wrap">
 											{character.hobbies.slice(0, 3).map((hobby, index) => (
-												<Tag key={index} size="sm" colorScheme={cityTheme.color} variant="outline">
+												<Tag
+													key={index}
+													size="sm"
+													colorScheme={cityTheme.color}
+													variant="outline"
+												>
 													{hobby}
 												</Tag>
 											))}

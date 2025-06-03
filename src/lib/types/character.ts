@@ -151,7 +151,11 @@ export interface CharacterFilter {
 /**
  * キャラクター一覧のソート
  */
-export type CharacterSortBy = "trustLevel" | "lastConversation" | "name" | "city";
+export type CharacterSortBy =
+	| "trustLevel"
+	| "lastConversation"
+	| "name"
+	| "city";
 
 export interface CharacterListParams {
 	filter?: CharacterFilter;

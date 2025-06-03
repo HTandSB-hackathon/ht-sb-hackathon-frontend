@@ -1,6 +1,9 @@
 import { atom } from "jotai";
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
-import { type AuthInPasswordRequest, postAuthInPassword } from "../domain/AuthQuery";
+import {
+	type AuthInPasswordRequest,
+	postAuthInPassword,
+} from "../domain/AuthQuery";
 import { userAtom } from "./UserAtom";
 
 export const authTokenAtom = atomWithStorage<string | null>(

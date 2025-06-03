@@ -17,7 +17,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 	character,
 	onStartConversation,
 }) => {
-	const [activeTab, setActiveTab] = React.useState<"profile" | "stories" | "gifts">("profile");
+	const [activeTab, setActiveTab] = React.useState<
+		"profile" | "stories" | "gifts"
+	>("profile");
 
 	// 贈り物のカテゴリー別集計
 	const giftsByCategory = React.useMemo(() => {
@@ -35,7 +37,11 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 				{/* カバー画像 */}
 				<div className="h-48 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600">
 					{character.coverImage && (
-						<img src={character.coverImage} alt="" className="w-full h-full object-cover" />
+						<img
+							src={character.coverImage}
+							alt=""
+							className="w-full h-full object-cover"
+						/>
 					)}
 				</div>
 
@@ -51,7 +57,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 						/>
 
 						<div className="flex-1 text-center sm:text-left">
-							<h1 className="text-2xl font-bold text-gray-800">{character.name}</h1>
+							<h1 className="text-2xl font-bold text-gray-800">
+								{character.name}
+							</h1>
 							<p className="text-gray-600">{character.nameKana}</p>
 							<p className="text-sm text-gray-500 mt-1">
 								{character.age}歳 • {character.occupation} • {character.city}
@@ -77,7 +85,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 						<h3 className="text-sm font-medium text-gray-700">信頼関係</h3>
 						<p className="text-xs text-gray-500 mt-1">
 							初めて会った日:{" "}
-							{new Date(character.relationship.firstMetAt).toLocaleDateString("ja-JP")}
+							{new Date(character.relationship.firstMetAt).toLocaleDateString(
+								"ja-JP",
+							)}
 						</p>
 					</div>
 					<TrustLevelBadge
@@ -126,7 +136,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 					>
 						<div>
 							<h3 className="text-lg font-bold text-gray-800 mb-2">自己紹介</h3>
-							<p className="text-gray-600 leading-relaxed">{character.introduction}</p>
+							<p className="text-gray-600 leading-relaxed">
+								{character.introduction}
+							</p>
 						</div>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -160,7 +172,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 						</div>
 
 						<div>
-							<h4 className="text-sm font-medium text-gray-700 mb-2">得意なこと</h4>
+							<h4 className="text-sm font-medium text-gray-700 mb-2">
+								得意なこと
+							</h4>
 							<div className="flex flex-wrap gap-2">
 								{character.specialties.map((specialty, index) => (
 									<span
@@ -174,7 +188,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 						</div>
 
 						<div>
-							<h4 className="text-sm font-medium text-gray-700 mb-2">地域の特産品</h4>
+							<h4 className="text-sm font-medium text-gray-700 mb-2">
+								地域の特産品
+							</h4>
 							<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 								{character.localSpecialties.map((specialty) => (
 									<motion.div
@@ -189,9 +205,13 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 												className="w-full h-full object-cover"
 											/>
 										</div>
-										<p className="text-sm font-medium text-gray-700">{specialty.name}</p>
+										<p className="text-sm font-medium text-gray-700">
+											{specialty.name}
+										</p>
 										{specialty.season && (
-											<p className="text-xs text-gray-500">旬: {specialty.season}</p>
+											<p className="text-xs text-gray-500">
+												旬: {specialty.season}
+											</p>
 										)}
 									</motion.div>
 								))}
@@ -223,7 +243,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 									<h4 className="font-bold text-gray-800">
 										{story.isUnlocked ? story.title : "???"}
 									</h4>
-									<span className="text-sm text-gray-500">Lv.{story.requiredTrustLevel}必要</span>
+									<span className="text-sm text-gray-500">
+										Lv.{story.requiredTrustLevel}必要
+									</span>
 								</div>
 								{story.isUnlocked ? (
 									<p className="text-gray-600">{story.content}</p>
@@ -249,17 +271,23 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 						<div className="grid grid-cols-3 gap-4 mb-6">
 							<div className="text-center p-4 bg-orange-50 rounded-lg">
 								<span className="text-2xl">🍽️</span>
-								<p className="text-2xl font-bold text-orange-600">{giftsByCategory.food}</p>
+								<p className="text-2xl font-bold text-orange-600">
+									{giftsByCategory.food}
+								</p>
 								<p className="text-sm text-gray-600">食べ物</p>
 							</div>
 							<div className="text-center p-4 bg-purple-50 rounded-lg">
 								<span className="text-2xl">🎨</span>
-								<p className="text-2xl font-bold text-purple-600">{giftsByCategory.craft}</p>
+								<p className="text-2xl font-bold text-purple-600">
+									{giftsByCategory.craft}
+								</p>
 								<p className="text-sm text-gray-600">工芸品</p>
 							</div>
 							<div className="text-center p-4 bg-blue-50 rounded-lg">
 								<span className="text-2xl">🎁</span>
-								<p className="text-2xl font-bold text-blue-600">{giftsByCategory.souvenir}</p>
+								<p className="text-2xl font-bold text-blue-600">
+									{giftsByCategory.souvenir}
+								</p>
 								<p className="text-sm text-gray-600">お土産</p>
 							</div>
 						</div>
@@ -280,7 +308,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 										/>
 										<div className="flex-1">
 											<h5 className="font-medium text-gray-800">{gift.name}</h5>
-											<p className="text-sm text-gray-600">{gift.description}</p>
+											<p className="text-sm text-gray-600">
+												{gift.description}
+											</p>
 											<p className="text-xs text-gray-500 mt-1">
 												{new Date(gift.receivedAt).toLocaleDateString("ja-JP")}
 												に受け取りました
@@ -291,7 +321,9 @@ export const CharacterProfile: React.FC<CharacterProfileProps> = ({
 							) : (
 								<div className="text-center py-8 text-gray-500">
 									<p className="text-lg mb-2">まだ贈り物を受け取っていません</p>
-									<p className="text-sm">信頼レベル5になると特別な贈り物がもらえます！</p>
+									<p className="text-sm">
+										信頼レベル5になると特別な贈り物がもらえます！
+									</p>
 								</div>
 							)}
 						</div>

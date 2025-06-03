@@ -1,4 +1,8 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
+import axios, {
+	type AxiosInstance,
+	type AxiosRequestConfig,
+	type AxiosResponse,
+} from "axios";
 
 export class AxiosClient {
 	private axiosInstance: AxiosInstance;
@@ -22,26 +26,42 @@ export class AxiosClient {
 	}
 
 	async post<T, U>(url: string, data: T): Promise<AxiosResponse<U>> {
-		const response = await this.axiosInstance.post<U>(url, data, this.recequestConfig);
+		const response = await this.axiosInstance.post<U>(
+			url,
+			data,
+			this.recequestConfig,
+		);
 		return response;
 	}
 
 	async put<T, U>(url: string, data: T): Promise<AxiosResponse<U>> {
-		const response = await this.axiosInstance.put<U>(url, data, this.recequestConfig);
+		const response = await this.axiosInstance.put<U>(
+			url,
+			data,
+			this.recequestConfig,
+		);
 		return response;
 	}
 
 	async delete<T>(url: string): Promise<AxiosResponse<T>> {
-		const response = await this.axiosInstance.delete<T>(url, this.recequestConfig);
+		const response = await this.axiosInstance.delete<T>(
+			url,
+			this.recequestConfig,
+		);
 		return response;
 	}
 
 	async login<T, U>(url: string, data: T): Promise<AxiosResponse<U>> {
-		const response = await this.axiosInstance.post<U>(url, data, this.loginRequestConfig);
+		const response = await this.axiosInstance.post<U>(
+			url,
+			data,
+			this.loginRequestConfig,
+		);
 		return response;
 	}
 
-	private baseURL: string = import.meta.env.VITE_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+	private baseURL: string =
+		import.meta.env.VITE_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 	private get recequestConfig(): AxiosRequestConfig {
 		return {
