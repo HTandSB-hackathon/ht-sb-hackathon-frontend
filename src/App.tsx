@@ -5,7 +5,6 @@ import CallbackPage from "@/components/pages/CallbackPage";
 import { CharacterDetailPage } from "@/components/pages/CharacterDetailPage";
 import { CharactersPage } from "@/components/pages/CharactersPage";
 import ChatPage from "@/components/pages/ChatPage";
-import ChatsPage from "@/components/pages/ChatsPage";
 import HomePage from "@/components/pages/HomePage";
 import LoginPage from "@/components/pages/LoginPage";
 import ProfilePage from "@/components/pages/ProfilePage";
@@ -33,7 +32,6 @@ function App() {
 					<Route path="/profile" element={<ProfilePage />} />
 					<Route path="/characters" element={<CharactersPage />} />
 					<Route path="/characters/:id" element={<CharacterDetailPage />} />
-					<Route path="/chats" element={<ChatsPage />} />
 					<Route path="/chats/:characterId" element={<ChatPage />} />
 				</Route>
 			</Routes>
