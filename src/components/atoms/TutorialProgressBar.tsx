@@ -6,6 +6,7 @@ import {
 	VStack,
 	useBreakpointValue,
 	useColorModeValue,
+	keyframes,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import type React from "react";
@@ -23,9 +24,25 @@ interface TutorialProgressBarProps {
 	animated?: boolean;
 }
 
+// 高度なキーフレームアニメーション
+const shimmer = keyframes`
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+`;
+
+const pulse = keyframes`
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+`;
+
+const glow = keyframes`
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
+`;
+
 /**
- * 洗練されたチュートリアル専用プログレスバー
- * アニメーション付きのステップインジケーター
+ * 最高級の洗練されたチュートリアル専用プログレスバー
+ * 高度なアニメーション・エフェクト付きステップインジケーター
  */
 export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 	currentStep,
@@ -44,69 +61,117 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 	});
 	const isResponsiveVertical = responsiveOrientation === "vertical";
 
-	// カラーテーマ
+	// 高級カラーテーマ
 	const bgGradient = useColorModeValue(
-		"linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)",
-		"linear(135deg, purple.400 0%, blue.400 50%, teal.400 100%)",
+		"linear(135deg, #667eea 0%, #764ba2 25%, #667eea 50%, #f093fb 75%, #f5576c 100%)",
+		"linear(135deg, #667eea 0%, #764ba2 25%, #667eea 50%, #f093fb 75%, #f5576c 100%)",
 	);
 	const completedGradient = useColorModeValue(
-		"linear(135deg, green.400 0%, emerald.500 100%)",
-		"linear(135deg, green.300 0%, emerald.400 100%)",
+		"linear(135deg, #11998e 0%, #38ef7d 50%, #11998e 100%)",
+		"linear(135deg, #11998e 0%, #38ef7d 50%, #11998e 100%)",
 	);
-	const pendingColor = useColorModeValue("gray.200", "gray.600");
+	const pendingGradient = useColorModeValue(
+		"linear(135deg, #e0e7ff 0%, #c7d2fe 100%)",
+		"linear(135deg, #4c5e77 0%, #5a6c84 100%)",
+	);
 	const activeGlow = useColorModeValue(
-		"0 0 30px rgba(139, 92, 246, 0.6)",
-		"0 0 30px rgba(139, 92, 246, 0.8)",
+		"0 0 40px rgba(139, 92, 246, 0.8), 0 0 80px rgba(139, 92, 246, 0.4)",
+		"0 0 40px rgba(139, 92, 246, 0.8), 0 0 80px rgba(139, 92, 246, 0.4)",
 	);
 
-	// サイズ設定
+	// プレミアムサイズ設定
 	const sizeConfig = {
 		sm: {
-			circleSize: "40px",
+			circleSize: "48px",
 			fontSize: "sm",
-			lineThickness: "3px",
-			spacing: 4,
+			lineThickness: "4px",
+			spacing: 5,
+			glowSize: "6px",
 		},
 		md: {
-			circleSize: "50px",
+			circleSize: "64px",
 			fontSize: "md",
-			lineThickness: "4px",
-			spacing: 6,
+			lineThickness: "6px",
+			spacing: 8,
+			glowSize: "8px",
 		},
 		lg: {
-			circleSize: "60px",
+			circleSize: "80px",
 			fontSize: "lg",
-			lineThickness: "5px",
-			spacing: 8,
+			lineThickness: "8px",
+			spacing: 10,
+			glowSize: "10px",
 		},
 	};
 
 	const config = sizeConfig[size];
 
-	// アニメーション設定
+	// 高度なアニメーション設定
 	const circleVariants = {
 		inactive: {
 			scale: 1,
 			boxShadow: "0 0 0px rgba(139, 92, 246, 0)",
+			filter: "brightness(0.8)",
 		},
 		active: {
-			scale: 1.1,
-			boxShadow: activeGlow,
+			scale: [1, 1.15, 1],
+			boxShadow: [
+				"0 0 20px rgba(139, 92, 246, 0.6)",
+				"0 0 60px rgba(139, 92, 246, 0.9), 0 0 100px rgba(139, 92, 246, 0.4)",
+				"0 0 20px rgba(139, 92, 246, 0.6)",
+			],
+			filter: "brightness(1.2)",
 			transition: {
-				duration: 0.3,
+				duration: 2,
 				repeat: Number.POSITIVE_INFINITY,
-				repeatType: "reverse" as const,
+				ease: "easeInOut",
 			},
 		},
 		completed: {
 			scale: 1,
-			boxShadow: "0 0 15px rgba(34, 197, 94, 0.4)",
+			boxShadow: [
+				"0 0 25px rgba(17, 153, 142, 0.6)",
+				"0 0 35px rgba(17, 153, 142, 0.8)",
+				"0 0 25px rgba(17, 153, 142, 0.6)",
+			],
+			filter: "brightness(1.1)",
+			transition: {
+				duration: 1.5,
+				repeat: Number.POSITIVE_INFINITY,
+				ease: "easeInOut",
+			},
 		},
 	};
 
 	const lineVariants = {
-		inactive: { scaleX: 0, opacity: 0.3 },
-		completed: { scaleX: 1, opacity: 1 },
+		inactive: { 
+			scaleX: 0, 
+			opacity: 0.4,
+			background: pendingGradient,
+		},
+		completed: { 
+			scaleX: 1, 
+			opacity: 1,
+			background: completedGradient,
+			transition: {
+				scaleX: { duration: 1.2, ease: "easeOut" },
+				opacity: { duration: 0.8 },
+			},
+		},
+	};
+
+	const sparkleVariants = {
+		animate: {
+			scale: [0, 1.5, 0],
+			opacity: [0, 1, 0],
+			rotate: [0, 180, 360],
+			transition: {
+				duration: 2,
+				repeat: Number.POSITIVE_INFINITY,
+				ease: "easeInOut",
+				delay: Math.random() * 2,
+			},
+		},
 	};
 
 	// ステップの状態を判定
@@ -121,7 +186,7 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 		const status = getStepStatus(stepIndex);
 		if (status === "completed") return completedGradient;
 		if (status === "active") return bgGradient;
-		return pendingColor;
+		return pendingGradient;
 	};
 
 	// プログレス計算
