@@ -58,11 +58,12 @@ import { useNavigate } from "react-router";
 
 import {
 	characterCountByTrustLevelAtom,
-	characterRelationshipsAtom,
 	charactersAtomLoadable,
 	favoriteCharacterIdsAtom,
 	recentConversationCharacterIdsAtom,
 } from "@/lib/atom/CharacterAtom";
+import { chatCountAllAtomLoadable } from "@/lib/atom/ChatAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 
 const MotionBox = motion(Box);
@@ -78,10 +79,11 @@ const HomePage: React.FC = () => {
 
 	// 状態管理
 	const characters = useLoadableAtom(charactersAtomLoadable);
-	const relationships = useAtomValue(characterRelationshipsAtom);
 	const favoriteIds = useAtomValue(favoriteCharacterIdsAtom);
 	const recentCharacterIds = useAtomValue(recentConversationCharacterIdsAtom);
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
+	const user = useAtomValue(userAtom);
+	const chatCountAll = useLoadableAtom(chatCountAllAtomLoadable);
 
 	// レスポンシブデザイン（スマホ最適化）
 	const heroHeight = useBreakpointValue({
@@ -135,10 +137,6 @@ const HomePage: React.FC = () => {
 	const totalCharacters = characters?.length || 0;
 	const trustLevel5Count = countByTrustLevel[5] || 0;
 	const totalFavorites = favoriteIds.size;
-	const totalConversations = Object.values(relationships).reduce(
-		(sum, rel) => sum + (rel?.totalConversations || 0),
-		0,
-	);
 
 	// 最近会話したキャラクター（最大3人）
 	const recentCharacters = recentCharacterIds
@@ -225,8 +223,8 @@ const HomePage: React.FC = () => {
 						as={IconButton}
 						icon={
 							<Avatar
-								size="md"
-								name="ユーザー"
+								size="lg"
+								name={user?.name || "ユーザー"}
 								bg="purple.500"
 								color="white"
 								shadow="lg"
@@ -238,6 +236,7 @@ const HomePage: React.FC = () => {
 									shadow: "xl",
 								}}
 								transition="all 0.2s"
+								src={user?.avatarUrl || undefined}
 							/>
 						}
 						variant="ghost"
@@ -510,7 +509,7 @@ const HomePage: React.FC = () => {
 													bgClip="text"
 													fontWeight="bold"
 												>
-													{totalConversations}
+													{chatCountAll}
 												</StatNumber>
 												<StatHelpText>回</StatHelpText>
 											</Stat>

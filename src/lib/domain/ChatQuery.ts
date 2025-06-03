@@ -7,6 +7,13 @@ export class Chat {
 	) {}
 }
 
+export class ChatCount {
+	constructor(
+		public characterId: number,
+		public count: number,
+	) {}
+}
+
 interface ChatMessage {
 	role: string;
 	content: string;
@@ -23,8 +30,16 @@ interface ChatResponse {
 	response: string;
 }
 
+interface ChatCountResponse {
+	character_id: number;
+	count: number;
+}
+
 function createChat(res: ChatResponse): Chat {
 	return new Chat(res.role, res.response);
+}
+function createChatCount(res: ChatCountResponse): ChatCount {
+	return new ChatCount(res.character_id, res.count);
 }
 
 function fetchChat(res: ChatMessage): Chat {
@@ -56,4 +71,30 @@ export async function sendChatMessage(
 	);
 
 	return createChat(response.data);
+}
+
+export async function getChatAllCount(): Promise<number> {
+	const client = createAxiosClient();
+	const response = await client.get<number>("/tasuki/chat/count/all");
+	return response.data;
+}
+
+export async function getChatCountByCharacterId(
+	characterId: string,
+): Promise<number> {
+	const client = createAxiosClient();
+	const response = await client.get<number>(
+		`/tasuki/chat/count/character/${characterId}`,
+	);
+	return response.data;
+}
+
+export async function getChatCountByCharacterIdWithResponse(): Promise<
+	ChatCount[]
+> {
+	const client = createAxiosClient();
+	const response = await client.get<ChatCountResponse[]>(
+		"/tasuki/chat/count/all_by_characters",
+	);
+	return response.data.map(createChatCount);
 }

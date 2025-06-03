@@ -1,4 +1,6 @@
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import type { Relationship } from "@/lib/domain/CharacterQuery";
+import type { ChatCount } from "@/lib/domain/ChatQuery";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
@@ -32,7 +34,6 @@ import {
 import { MdLock, MdStar } from "react-icons/md";
 import { useNavigate } from "react-router";
 import type { Character } from "../../lib/domain/CharacterQuery";
-import type { CharacterRelationship } from "../../lib/types/character";
 import { TRUST_LEVELS } from "../../lib/types/character";
 
 const MotionCard = motion(Card);
@@ -40,24 +41,26 @@ const MotionBox = motion(Box);
 
 interface CharacterCardProps {
 	character: Character;
-	relationship?: CharacterRelationship;
+	relationship?: Relationship;
+	chatCount?: ChatCount;
 	isNew?: boolean;
 	animationDelay?: number;
-	onFavoriteToggle?: (characterId: string, isFavorite: boolean) => void;
+	isFavorite?: boolean;
+	onFavoriteToggle?: (characterId: number, isFavorite: boolean) => void;
 }
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
 	character,
 	relationship,
+	chatCount,
 	isNew = false,
 	animationDelay = 0,
+	isFavorite = false,
 	onFavoriteToggle,
 }) => {
 	const navigate = useNavigate();
-	const [isFavorite, setIsFavorite] = React.useState(false);
 	const [isHovered, setIsHovered] = React.useState(false);
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
-
 	// 都道府県の市区町村データを取得
 	const getMunicipalityName = () => {
 		if (!municipalities) return null;
@@ -88,14 +91,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 	const handleFavoriteClick = (e: React.MouseEvent) => {
 		e.stopPropagation();
+		console.log("handleFavoriteClick called", character.id, isFavorite);
 		if (!character.isLocked && onFavoriteToggle) {
-			setIsFavorite(!isFavorite);
-			onFavoriteToggle(String(character.id), !isFavorite);
+			onFavoriteToggle(character.id, !isFavorite);
 		}
 	};
 
 	// 信頼度情報
-	const trustLevel = relationship?.trustLevel || 1;
+	const trustLevel = relationship?.trustLevelId || 1;
 	const trustInfo = TRUST_LEVELS[trustLevel as keyof typeof TRUST_LEVELS];
 	const progress = relationship
 		? (relationship.trustPoints / relationship.nextLevelPoints) * 100
@@ -136,9 +139,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 	// 最後の会話
 	const getLastConversationText = () => {
-		if (!relationship?.lastConversationAt) return "まだ会話なし";
+		if (chatCount?.count === 0) return "まだ会話なし";
 
-		const lastDate = new Date(relationship.lastConversationAt);
+		const lastDate = new Date();
 		const now = new Date();
 		const diffTime = Math.abs(now.getTime() - lastDate.getTime());
 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -381,7 +384,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 						<HStack justify="space-between" fontSize="xs" color="gray.500">
 							<HStack spacing="1">
 								<FaComments />
-								<Text>{relationship?.totalConversations || 0}回会話</Text>
+								<Text>{chatCount?.count || 0}回会話</Text>
 							</HStack>
 							<HStack spacing="1">
 								<FaClock />
