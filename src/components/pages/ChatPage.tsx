@@ -34,6 +34,7 @@ import { FaArrowLeft, FaComment } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
 import { charactersAtomLoadable } from "../../lib/atom/CharacterAtom";
 
+import { LevelUpModal } from "../organisms/LevelUpModal";
 const MotionCard = motion(Card);
 
 export const ChatPage: React.FC = () => {
@@ -64,6 +65,7 @@ export const ChatPage: React.FC = () => {
 	const fetchChat = useSetAtom(fetchChatAtom);
 	const [input, setInput] = useState("");
 	const [isSending, setIsSending] = useState(false);
+	const [showLevelUp, setShowLevelUp] = useState(false);
 
 	const containerPadding = useBreakpointValue({ base: 4, md: 6, lg: 8 });
 	const cardBg = useColorModeValue("white", "gray.800");
@@ -141,6 +143,13 @@ export const ChatPage: React.FC = () => {
 	const trustPoints = relationship?.trustPoints ?? 0;
 	const nextLevelPoints = 1;
 	const trustProgress = (trustPoints / nextLevelPoints) * 100;
+
+	// --- ダミー: メッセージ送信3回目でレベルアップモーダル表示 ---
+	useEffect(() => {
+		if (messages.length === 3) {
+			setTimeout(() => setShowLevelUp(true), 600);
+		}
+	}, [messages]);
 
 	return (
 		<Box
@@ -311,6 +320,16 @@ export const ChatPage: React.FC = () => {
 					</MotionCard>
 				</VStack>
 			</Container>
+			{/* レベルアップモーダル（ダミーデータ） */}
+			<LevelUpModal
+				isOpen={showLevelUp}
+				onClose={() => setShowLevelUp(false)}
+				level={2}
+				levelName={"顔見知り"}
+				characterName={getCharacter()?.name ?? "キャラクター"}
+				characterImage={getCharacter()?.profileImageUrl}
+				unlockedDesc={"パーソナルな話題が解放されました"}
+			/>
 		</Box>
 	);
 };
