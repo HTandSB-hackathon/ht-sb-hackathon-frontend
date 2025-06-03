@@ -20,15 +20,15 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-            "suspicious": {
-                "noArrayIndexKey": "off"
-            },
-            "correctness": {
-                "useExhaustiveDependencies": "off"
-            },
-            "complexity": {
-                "noStaticOnlyClass": "off"
-            }
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off"
+			},
+			"complexity": {
+				"noStaticOnlyClass": "off"
+			}
 		}
 	},
 	"javascript": {
