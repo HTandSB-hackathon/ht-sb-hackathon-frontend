@@ -2,7 +2,7 @@ import { chatAtom, fetchChatAtom, sendChatAtom } from "@/lib/atom/ChatAtom";
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
 import {
 	type Relationship,
-	getRelationships,
+	getRelationship,
 } from "@/lib/domain/CharacterQuery";
 import type { Chat } from "@/lib/domain/ChatQuery";
 import type { Municipality } from "@/lib/domain/CityQuery";
@@ -95,7 +95,7 @@ export const ChatPage: React.FC = () => {
 
 	const loadCharacterDetail = async (characterId: string) => {
 		try {
-			const relationship = await getRelationships(characterId);
+			const relationship = await getRelationship(characterId);
 			setRelationship(relationship);
 		} catch (err) {
 			console.error("キャラクター詳細読み込みエラー:", err);
@@ -141,7 +141,7 @@ export const ChatPage: React.FC = () => {
 
 	const trustLevel = relationship?.trustLevelId ?? 1;
 	const trustPoints = relationship?.trustPoints ?? 0;
-	const nextLevelPoints = 1;
+	const nextLevelPoints = relationship?.nextLevelPoints ?? 0;
 	const trustProgress = (trustPoints / nextLevelPoints) * 100;
 
 	// --- ダミー: メッセージ送信3回目でレベルアップモーダル表示 ---

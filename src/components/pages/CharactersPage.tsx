@@ -31,11 +31,10 @@ import {
 	useBreakpointValue,
 	useColorModeValue,
 	useDisclosure,
-	useToast,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useAtom, useAtomValue } from "jotai";
-import React from "react";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import type React from "react";
 import {
 	FaChevronDown,
 	FaChevronUp,
@@ -47,25 +46,24 @@ import {
 } from "react-icons/fa";
 import { MdFavorite, MdLocationCity } from "react-icons/md";
 
-import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
-import type { Municipality } from "@/lib/domain/CityQuery";
-import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	characterCountByTrustLevelAtom,
 	characterFilterAtom,
-	characterRelationshipsAtom,
 	characterSortByAtom,
-	// charactersAtom,
 	charactersAtomLoadable,
 	charactersErrorAtom,
 	charactersLoadingAtom,
-	// charactersTotalAtom,
 	favoriteCharacterIdsAtom,
 	lockedCharactersAtomLoadable,
 	newlyUnlockedCharacterIdsAtom,
+	relationshipsAtomLoadable,
+	updateRelationshipAtom,
 	// sortedCharactersAtom,
-} from "../../lib/atom/CharacterAtom";
-import { CharacterQuery } from "../../lib/domain/CharacterQuery";
+} from "@/lib/atom/CharacterAtom";
+import { chatCountByCharacterIdAtomLoadable } from "@/lib/atom/ChatAtom";
+import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import type { Municipality } from "@/lib/domain/CityQuery";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import type {
 	CharacterFilter,
 	CharacterSortBy,
@@ -82,21 +80,21 @@ const MotionBox = motion(Box);
 export const CharactersPage: React.FC = () => {
 	const characters = useLoadableAtom(charactersAtomLoadable);
 	const lockedCharacters = useLoadableAtom(lockedCharactersAtomLoadable);
-	const [relationships] = useAtom(characterRelationshipsAtom);
+	const relationships = useLoadableAtom(relationshipsAtomLoadable);
+	const chatCountByCharacterIds = useLoadableAtom(
+		chatCountByCharacterIdAtomLoadable,
+	);
 	const [filter, setFilter] = useAtom(characterFilterAtom);
 	const [sortBy, setSortBy] = useAtom(characterSortByAtom);
-	const [isLoading, setIsLoading] = useAtom(charactersLoadingAtom);
-	const [error, setError] = useAtom(charactersErrorAtom);
-	const [favoriteIds, setFavoriteIds] = useAtom(favoriteCharacterIdsAtom);
+	const [isLoading] = useAtom(charactersLoadingAtom);
+	const [error] = useAtom(charactersErrorAtom);
+	const favoriteIds = useAtomValue(favoriteCharacterIdsAtom);
+	const putFavoriteIds = useSetAtom(updateRelationshipAtom);
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
-	// const [, setTotal] = useAtom(charactersTotalAtom);
-
-	// const sortedCharacters = useAtomValue(sortedCharactersAtom);
 	const newCharacterIds = useAtomValue(newlyUnlockedCharacterIdsAtom);
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
 
 	const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
-	const toast = useToast();
 
 	// レスポンシブデザイン
 	const isMobile = useBreakpointValue({ base: true, md: false });
@@ -115,68 +113,14 @@ export const CharactersPage: React.FC = () => {
 		"rgba(26, 32, 44, 0.8)",
 	);
 
-	// データ取得
-	React.useEffect(() => {
-		loadCharacters();
-	}, []);
-
-	React.useEffect(() => {
-		loadCharacters();
-	}, [sortBy, filter]);
-
-	const loadCharacters = async () => {
-		try {
-			setIsLoading(true);
-			setError(null);
-			// setRelationships(data.relationships);
-
-			// const favoriteCharacters = await CharacterQuery.getFavoriteCharacters();
-			// setFavoriteIds(new Set(favoriteCharacters.map((c) => c.id)));
-		} catch (err) {
-			console.error("キャラクター読み込みエラー:", err);
-			setError("キャラクターの読み込みに失敗しました");
-			toast({
-				title: "エラー",
-				description: "データの読み込みに失敗しました",
-				status: "error",
-				duration: 3000,
-				isClosable: true,
-			});
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
 	const handleFavoriteToggle = async (
-		characterId: string,
+		characterId: number,
 		isFavorite: boolean,
 	) => {
 		try {
-			await CharacterQuery.toggleFavorite(characterId, isFavorite);
-
-			if (isFavorite) {
-				setFavoriteIds(new Set([...favoriteIds, characterId]));
-			} else {
-				const newIds = new Set(favoriteIds);
-				newIds.delete(characterId);
-				setFavoriteIds(newIds);
-			}
-
-			toast({
-				title: isFavorite ? "お気に入りに追加" : "お気に入りから削除",
-				status: "success",
-				duration: 2000,
-				isClosable: true,
-			});
+			putFavoriteIds({ characterId, isFavorite: isFavorite });
 		} catch (err) {
 			console.error("お気に入り更新エラー:", err);
-			toast({
-				title: "エラー",
-				description: "お気に入りの更新に失敗しました",
-				status: "error",
-				duration: 3000,
-				isClosable: true,
-			});
 		}
 	};
 
@@ -431,7 +375,7 @@ export const CharactersPage: React.FC = () => {
 								<IconButton
 									aria-label="refresh"
 									icon={<FaRedo />}
-									onClick={loadCharacters}
+									onClick={() => {}}
 									isLoading={isLoading}
 									colorScheme="blue"
 									variant="ghost"
@@ -636,9 +580,15 @@ export const CharactersPage: React.FC = () => {
 										>
 											<CharacterCard
 												character={character}
-												relationship={relationships[character.id]}
+												relationship={relationships?.find(
+													(r) => r.characterId === character.id,
+												)}
+												chatCount={chatCountByCharacterIds?.find(
+													(c) => c.characterId === character.id,
+												)}
 												isNew={newCharacterIds.has(String(character.id))}
 												animationDelay={index * 0.1}
+												isFavorite={favoriteIds.has(character.id)}
 												onFavoriteToggle={handleFavoriteToggle}
 											/>
 										</MotionBox>
@@ -656,9 +606,9 @@ export const CharactersPage: React.FC = () => {
 										>
 											<CharacterCard
 												character={character}
-												relationship={relationships[character.id]}
 												isNew={newCharacterIds.has(String(character.id))}
 												animationDelay={index * 0.1}
+												isFavorite={favoriteIds.has(character.id)}
 												onFavoriteToggle={handleFavoriteToggle}
 											/>
 										</MotionBox>
