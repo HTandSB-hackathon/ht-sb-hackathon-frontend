@@ -9,8 +9,12 @@ import type {
 import { atomWithRefresh, loadable } from "jotai/utils";
 import {
 	type Character,
+	type RelationShipRequest,
+	type Relationship,
 	getCharacters,
 	getLockedCharacters,
+	getRelationships,
+	updateRelationship,
 } from "../domain/CharacterQuery";
 
 /**
@@ -39,8 +43,65 @@ const lockedCharactersAtomAsync = atomWithRefresh<Promise<Character[]>>(
 	},
 );
 
+const relationshipsAtomAsync = atomWithRefresh<Promise<Relationship[]>>(
+	async () => {
+		try {
+			const response = await getRelationships();
+			return response;
+		} catch (error) {
+			console.error("Error fetching relationships:", error);
+			return [];
+		}
+	},
+);
+
+export const favoriteCharacterIdsAtom = atom(async (get) => {
+	const relationships = await get(relationshipsAtomAsync);
+	console.log("favoriteCharacterIdsAtom relationships:", relationships);
+	return new Set(
+		relationships
+			.filter((relationship) => relationship.isFavorite)
+			.map((relationship) => relationship.characterId),
+	);
+});
+
 export const charactersAtomLoadable = loadable(characterAtomAsync);
 export const lockedCharactersAtomLoadable = loadable(lockedCharactersAtomAsync);
+export const relationshipsAtomLoadable = loadable(relationshipsAtomAsync);
+
+export const updateRelationshipAtom = atom(
+	null,
+	async (
+		_,
+		set,
+		{
+			characterId,
+			isFavorite = null,
+			trustPoints = null,
+			trustLevelId = null,
+		}: {
+			characterId: number;
+			isFavorite?: boolean | null;
+			trustPoints?: number | null;
+			trustLevelId?: number | null;
+		},
+	) => {
+		try {
+			const relationship: RelationShipRequest = {
+				is_favorite: isFavorite,
+				total_points: trustPoints,
+				trust_level_id: trustLevelId,
+			};
+			const response = await updateRelationship(characterId, relationship);
+			// 更新後の関係性を取得して更新
+			set(relationshipsAtomAsync);
+			return response;
+		} catch (error) {
+			console.error("Error updating relationship:", error);
+			throw error;
+		}
+	},
+);
 
 /**
  * キャラクターとの関係性マップ
@@ -73,11 +134,6 @@ export const characterFilterAtom = atom<CharacterFilter>({});
  * ソート設定
  */
 export const characterSortByAtom = atom<CharacterSortBy>("trustLevel");
-
-/**
- * お気に入りキャラクターのIDセット
- */
-export const favoriteCharacterIdsAtom = atom<Set<string>>(new Set([]));
 
 /**
  * ローディング状態

@@ -41,7 +41,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import React from "react";
 import { useState } from "react";
 import {
@@ -67,14 +67,16 @@ import { useNavigate, useParams } from "react-router";
 
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
 import type { Relationship, Story } from "@/lib/domain/CharacterQuery";
-import { getRelationships, getStories } from "@/lib/domain/CharacterQuery";
+import { getRelationship, getStories } from "@/lib/domain/CharacterQuery";
+import { getChatCountByCharacterId } from "@/lib/domain/ChatQuery";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	characterDetailLoadingAtom,
 	charactersAtomLoadable,
+	favoriteCharacterIdsAtom,
+	updateRelationshipAtom,
 } from "../../lib/atom/CharacterAtom";
-// import { CharacterQuery } from "../../lib/domain/CharacterQuery";
 import { TRUST_LEVELS } from "../../lib/types/character";
 
 const MotionBox = motion(Box);
@@ -87,12 +89,15 @@ export const CharacterDetailPage: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 	const characters = useLoadableAtom(charactersAtomLoadable);
+	const favoriteCharacterIds = useAtomValue(favoriteCharacterIdsAtom);
+	const isFavorite = favoriteCharacterIds.has(Number(id));
+	const putFavoriteIds = useSetAtom(updateRelationshipAtom);
 	const [stories, setStories] = useState<Story[]>([]);
 	const [relationship, setRelationship] = useState<Relationship>();
+	const [conversationCount, setConversationCount] = useState<number>(0);
 	const [isLoading, setIsLoading] = useAtom(characterDetailLoadingAtom);
 	const [error, setError] = React.useState<string | null>(null);
 	const [tabIndex, setTabIndex] = React.useState(0);
-	const [isFavorite, setIsFavorite] = React.useState(false);
 
 	const toast = useToast();
 
@@ -144,8 +149,10 @@ export const CharacterDetailPage: React.FC = () => {
 			setError(null);
 			const stories = await getStories(characterId);
 			setStories(stories);
-			const relationship = await getRelationships(characterId);
+			const relationship = await getRelationship(characterId);
 			setRelationship(relationship);
+			const count = await getChatCountByCharacterId(characterId);
+			setConversationCount(count);
 		} catch (err) {
 			console.error("キャラクター詳細読み込みエラー:", err);
 			setError("キャラクター情報の読み込みに失敗しました");
@@ -171,14 +178,15 @@ export const CharacterDetailPage: React.FC = () => {
 		navigate("/characters");
 	};
 
-	const handleFavoriteToggle = () => {
-		setIsFavorite(!isFavorite);
-		toast({
-			title: isFavorite ? "お気に入りから削除" : "お気に入りに追加",
-			status: "success",
-			duration: 2000,
-			isClosable: true,
-		});
+	const handleFavoriteToggle = async (
+		characterId: number,
+		isFavorite: boolean,
+	) => {
+		try {
+			putFavoriteIds({ characterId, isFavorite: isFavorite });
+		} catch (err) {
+			console.error("お気に入り更新エラー:", err);
+		}
 	};
 
 	// ローディング表示
@@ -276,7 +284,9 @@ export const CharacterDetailPage: React.FC = () => {
 
 	const trustLevel = relationship?.trustLevelId || 1;
 	const trustInfo = TRUST_LEVELS[trustLevel as keyof typeof TRUST_LEVELS];
-	const progress = 15;
+	const progress = relationship
+		? (relationship.trustPoints / relationship.nextLevelPoints) * 100
+		: 0;
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
@@ -499,7 +509,7 @@ export const CharacterDetailPage: React.FC = () => {
 													</Badge>
 													<Text fontSize="sm" color="gray.600">
 														Lv.{trustLevel} ({relationship.trustPoints}/
-														{/* {relationship.nextLevelPoints} */})
+														{relationship.nextLevelPoints})
 													</Text>
 												</HStack>
 												<Progress
@@ -545,7 +555,9 @@ export const CharacterDetailPage: React.FC = () => {
 										variant={isFavorite ? "solid" : "outline"}
 										size={{ base: "md", md: "lg" }}
 										borderRadius="2xl"
-										onClick={handleFavoriteToggle}
+										onClick={() =>
+											handleFavoriteToggle(Number(id), !isFavorite)
+										}
 										_hover={{
 											transform: "scale(1.1)",
 										}}
@@ -726,53 +738,6 @@ export const CharacterDetailPage: React.FC = () => {
 													)}
 												</Wrap>
 											</Box>
-
-											{/* 地域の特産品 */}
-											<Box>
-												<Heading size="sm" mb={4} color="gray.700">
-													🏞️ 地域の特産品
-												</Heading>
-												<SimpleGrid columns={2} spacing={4}>
-													{/* {getCharacter()?.localSpecialties.map((specialty) => (
-														<MotionBox
-															key={specialty.id}
-															whileHover={{ scale: 1.05 }}
-															cursor="pointer"
-														>
-															<Card
-																size="sm"
-																borderRadius="xl"
-																overflow="hidden"
-															>
-																<Image
-																	src={specialty.imageUrl}
-																	alt={specialty.name}
-																	height="100px"
-																	objectFit="cover"
-																/>
-																<CardBody p={3}>
-																	<Text
-																		fontWeight="bold"
-																		fontSize="sm"
-																		textAlign="center"
-																	>
-																		{specialty.name}
-																	</Text>
-																	{specialty.season && (
-																		<Text
-																			fontSize="xs"
-																			color="gray.500"
-																			textAlign="center"
-																		>
-																			旬: {specialty.season}
-																		</Text>
-																	)}
-																</CardBody>
-															</Card>
-														</MotionBox>
-													))} */}
-												</SimpleGrid>
-											</Box>
 										</SimpleGrid>
 									</VStack>
 								</TabPanel>
@@ -877,25 +842,54 @@ export const CharacterDetailPage: React.FC = () => {
 													key={story.id}
 													w="full"
 													borderRadius="xl"
-													shadow={story.isUnlocked ? "md" : "sm"}
-													opacity={story.isUnlocked ? 1 : 0.6}
-													bg={story.isUnlocked ? "white" : "gray.50"}
+													shadow={
+														relationship.trustLevelId >=
+														story.requiredTrustLevel
+															? "md"
+															: "sm"
+													}
+													opacity={
+														relationship.trustLevelId >=
+														story.requiredTrustLevel
+															? 1
+															: 0.6
+													}
+													bg={
+														relationship.trustLevelId >=
+														story.requiredTrustLevel
+															? "white"
+															: "gray.50"
+													}
 												>
 													<CardBody p={6}>
 														<HStack justify="space-between" mb={3}>
 															<Heading size="sm">
-																{story.isUnlocked ? story.title : "???"}
+																{relationship.trustLevelId >=
+																story.requiredTrustLevel
+																	? story.title
+																	: "???"}
 															</Heading>
 															<HStack>
 																<Icon
-																	as={story.isUnlocked ? FaUnlock : FaLock}
+																	as={
+																		relationship.trustLevelId >=
+																		story.requiredTrustLevel
+																			? FaUnlock
+																			: FaLock
+																	}
 																	color={
-																		story.isUnlocked ? "green.500" : "gray.400"
+																		relationship.trustLevelId >=
+																		story.requiredTrustLevel
+																			? "green.500"
+																			: "gray.400"
 																	}
 																/>
 																<Badge
 																	colorScheme={
-																		story.isUnlocked ? "green" : "gray"
+																		relationship.trustLevelId >=
+																		story.requiredTrustLevel
+																			? "green"
+																			: "gray"
 																	}
 																>
 																	Lv.{story.requiredTrustLevel}必要
@@ -903,7 +897,8 @@ export const CharacterDetailPage: React.FC = () => {
 															</HStack>
 														</HStack>
 														<Text color="gray.600">
-															{story.isUnlocked
+															{relationship.trustLevelId >=
+															story.requiredTrustLevel
 																? story.content
 																: `信頼レベルを${story.requiredTrustLevel}まで上げると解放されます`}
 														</Text>
@@ -944,9 +939,7 @@ export const CharacterDetailPage: React.FC = () => {
 														<Icon as={FaComment} mr={2} />
 														会話回数
 													</StatLabel>
-													<StatNumber>
-														{relationship.conversationCount}
-													</StatNumber>
+													<StatNumber>{conversationCount}</StatNumber>
 													<StatHelpText>回</StatHelpText>
 												</Stat>
 
