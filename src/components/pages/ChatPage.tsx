@@ -114,8 +114,10 @@ export const ChatPage: React.FC = () => {
 		setIsSending(true);
 		setMessages((prev) => [...prev, { role: "user", content: input }]);
 		try {
-			send({ characterId, message: { role: "user", content: input } });
+			await send({ characterId, message: { role: "user", content: input } });
 			setInput("");
+			const relationship = await getRelationship(characterId);
+			setRelationship(relationship);
 		} catch {
 			toast({
 				title: "送信エラー",

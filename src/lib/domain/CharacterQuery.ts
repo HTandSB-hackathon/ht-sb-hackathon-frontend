@@ -200,6 +200,17 @@ export async function getStories(characterId: string): Promise<Story[]> {
 	return response.data.map(createStory);
 }
 
+export async function insertRelationship(
+	characterId: number,
+): Promise<Relationship> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.post<
+		Record<string, never>,
+		RelationshipResponse
+	>(`/characters/${characterId}/insert`, {});
+	return createRelationship(response.data);
+}
+
 export async function updateRelationship(
 	characterId: number,
 	relationship: RelationShipRequest,
