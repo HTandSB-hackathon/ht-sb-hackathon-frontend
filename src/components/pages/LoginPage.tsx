@@ -25,7 +25,12 @@ export default function LoginPage() {
 	});
 
 	return (
-		<Box minH="100vh" bgGradient={bgGradient} position="relative">
+		<Box
+			minH="100vh"
+			bgGradient={bgGradient}
+			position="relative"
+			overflow={{ base: "auto", md: "hidden" }} // md以上でスクロールバー非表示
+		>
 			{/* 背景装飾 */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				<MotionBox
@@ -84,22 +89,26 @@ export default function LoginPage() {
 				/>
 			</Box>
 
-			<Container maxW={containerMaxW} py={8} position="relative" zIndex="1">
-				<Box
-					display="flex"
-					alignItems="center"
-					justifyContent="center"
-					minH="100vh"
+			<Container
+				maxW={containerMaxW}
+				position="relative"
+				zIndex="1"
+				display="flex"
+				alignItems="center"
+				justifyContent="center"
+				minH={{ base: "auto", md: "100vh" }} // md以上で中央寄せ
+				px={{ base: 4, sm: 6 }} // モバイルで余白
+				pt={{ base: 16, md: 0 }} // スマホ時は上に余白
+			>
+				<MotionBox
+					initial={{ opacity: 0, y: 30 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.6 }}
+					w="full"
+					maxW="md"
 				>
-					<MotionBox
-						initial={{ opacity: 0, y: 30 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6 }}
-						w="full"
-					>
-						<LoginBox />
-					</MotionBox>
-				</Box>
+					<LoginBox />
+				</MotionBox>
 			</Container>
 		</Box>
 	);
