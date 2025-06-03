@@ -285,20 +285,6 @@ const HomePage: React.FC = () => {
 								</Text>
 							</VStack>
 						</MenuItem>
-						<MenuItem
-							icon={<MdChatBubble />}
-							borderRadius="lg"
-							p={3}
-							_hover={{ bg: "green.50" }}
-							onClick={() => navigate("/chats")}
-						>
-							<VStack align="start" spacing={0}>
-								<Text fontWeight="bold">チャット履歴</Text>
-								<Text fontSize="sm" color="gray.500">
-									過去の会話を振り返る
-								</Text>
-							</VStack>
-						</MenuItem>
 						<MenuDivider />
 						<MenuItem
 							icon={<FaCog />}
@@ -434,21 +420,6 @@ const HomePage: React.FC = () => {
 									backdropFilter="blur(10px)"
 								>
 									今日も会話を楽しもう
-								</Button>
-								<Button
-									size={{ base: "md", sm: "lg" }}
-									w="full"
-									maxW="300px"
-									variant="ghost"
-									color="white"
-									rightIcon={<MdChatBubble />}
-									onClick={() => navigate("/chats")}
-									_hover={{
-										bg: "whiteAlpha.200",
-										transform: "translateY(-2px)",
-									}}
-								>
-									最近のチャット
 								</Button>
 							</VStack>
 						</VStack>
@@ -736,16 +707,6 @@ const HomePage: React.FC = () => {
 															</Box>
 														))}
 													</VStack>
-													<Button
-														variant="ghost"
-														colorScheme="blue"
-														size="sm"
-														w="full"
-														mt={2}
-														onClick={() => navigate("/chats")}
-													>
-														すべてのチャットを見る
-													</Button>
 												</Box>
 											)}
 
@@ -807,23 +768,6 @@ const HomePage: React.FC = () => {
 													<Text fontWeight="bold">キャラクター一覧</Text>
 													<Text fontSize="sm" opacity="0.8">
 														福島の人々と出会う
-													</Text>
-												</VStack>
-											</Button>
-
-											<Button
-												leftIcon={<MdChatBubble />}
-												colorScheme="blue"
-												variant="outline"
-												justifyContent="start"
-												h="auto"
-												p={4}
-												onClick={() => navigate("/chats")}
-											>
-												<VStack align="start" spacing={1}>
-													<Text fontWeight="bold">チャット履歴</Text>
-													<Text fontSize="sm" opacity="0.8">
-														過去の会話を振り返る
 													</Text>
 												</VStack>
 											</Button>
@@ -982,15 +926,6 @@ const HomePage: React.FC = () => {
 								onClick={() => navigate("/characters")}
 							>
 								新しい出会いを始める
-							</Button>
-							<Button
-								variant="outline"
-								colorScheme="purple"
-								size={{ base: "md", sm: "lg" }}
-								w={{ base: "full", sm: "auto" }}
-								onClick={() => navigate("/chats")}
-							>
-								続きの会話をする
 							</Button>
 						</VStack>
 					</MotionFlex>
