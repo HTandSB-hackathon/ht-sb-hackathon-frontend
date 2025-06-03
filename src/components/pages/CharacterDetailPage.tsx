@@ -163,7 +163,7 @@ export const CharacterDetailPage: React.FC = () => {
 
 	const handleStartConversation = () => {
 		if (relationship?.id) {
-			navigate(`/chat/${relationship.id}`);
+			navigate(`/chats/${relationship.id}`);
 		}
 	};
 
