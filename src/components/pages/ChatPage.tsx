@@ -325,8 +325,10 @@ export const ChatPage: React.FC = () => {
 				isOpen={showLevelUp}
 				onClose={() => setShowLevelUp(false)}
 				level={2}
+				levelName={"顔見知り"}
 				characterName={getCharacter()?.name ?? "キャラクター"}
 				characterImage={getCharacter()?.profileImageUrl}
+				unlockedDesc={"パーソナルな話題が解放されました"}
 			/>
 		</Box>
 	);

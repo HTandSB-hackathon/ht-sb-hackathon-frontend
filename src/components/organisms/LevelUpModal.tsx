@@ -20,20 +20,11 @@ interface LevelUpModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	level: number;
+	levelName: string;
 	characterName: string;
 	characterImage?: string;
 	unlockedDesc?: string;
 }
-
-const levelNamesMock = ["初対面", "顔見知り", "友達", "親友", "家族同然"];
-
-const unlockDescriptionsMock = [
-	"",
-	"パーソナルな話題が解放されました",
-	"冗談やアドバイスがもらえるようになりました",
-	"新しいキャラクターが紹介されます",
-	"特別な贈り物がもらえるようになりました",
-];
 
 // 星のきらめきエフェクト
 const Sparkle = ({
@@ -75,6 +66,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 	isOpen,
 	onClose,
 	level,
+	levelName,
 	characterName,
 	characterImage,
 	unlockedDesc,
@@ -88,7 +80,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 			isOpen={isOpen}
 			onClose={onClose}
 			isCentered
-			size="md"
+			size="xl" // 横幅のみ広げる
 			closeOnOverlayClick={false}
 		>
 			<ModalOverlay bg="blackAlpha.700" />
@@ -96,8 +88,10 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 				bg={cardBg}
 				borderRadius="2xl"
 				shadow="2xl"
-				px={6}
-				py={4}
+				px={8}
+				py={6}
+				maxW="700px" // 横幅を広げる
+				minW="480px"
 				as={motion.div}
 				initial={{ scale: 0.8, opacity: 0 }}
 				animate={{ scale: 1, opacity: 1 }}
@@ -187,11 +181,25 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 						>
 							<FaStar />
 						</motion.div>
-						<Heading size="lg" color={accent}>
+						<Heading
+							size="lg"
+							color={accent}
+							whiteSpace="nowrap"
+							overflow="hidden"
+							textOverflow="ellipsis"
+							maxW="90%" // 横幅に合わせて調整
+						>
 							レベルアップ！
 						</Heading>
-						<Text fontWeight="bold" fontSize="lg">
-							{characterName}さんとの信頼度が
+						<Text
+							fontWeight="bold"
+							fontSize="lg"
+							whiteSpace="nowrap"
+							overflow="hidden"
+							textOverflow="ellipsis"
+							maxW="90%"
+						>
+							{characterName}さんとの信頼度が上がりました！
 						</Text>
 						<motion.div
 							initial={{ scale: 0.7 }}
@@ -203,10 +211,10 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 							}}
 						>
 							<Text fontSize="2xl" color={accent} fontWeight="extrabold">
-								Lv.{level} {levelNamesMock[level - 1] ?? ""}
+								Lv.{level} {levelName}
 							</Text>
 						</motion.div>
-						{(unlockedDesc ?? unlockDescriptionsMock[level - 1]) && (
+						{(unlockedDesc ?? "") && (
 							<Box
 								bg={useColorModeValue("purple.50", "purple.900")}
 								color={accent}
@@ -221,7 +229,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
 							>
-								{unlockedDesc ?? unlockDescriptionsMock[level - 1]}
+								{unlockedDesc ?? ""}
 							</Box>
 						)}
 					</Stack>
