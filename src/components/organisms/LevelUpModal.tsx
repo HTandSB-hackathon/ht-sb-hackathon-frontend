@@ -25,24 +25,22 @@ interface LevelUpModalProps {
 	unlockedDesc?: string;
 }
 
-const levelNamesMock = [
-	"初対面",
-	"顔見知り",
-	"友達",
-	"親友",
-	"家族同然"
-];
+const levelNamesMock = ["初対面", "顔見知り", "友達", "親友", "家族同然"];
 
 const unlockDescriptionsMock = [
 	"",
 	"パーソナルな話題が解放されました",
 	"冗談やアドバイスがもらえるようになりました",
 	"新しいキャラクターが紹介されます",
-	"特別な贈り物がもらえるようになりました"
+	"特別な贈り物がもらえるようになりました",
 ];
 
 // 星のきらめきエフェクト
-const Sparkle = ({ size = 18, color = "yellow.300", style = {} }: { size?: number; color?: string; style?: React.CSSProperties }) => (
+const Sparkle = ({
+	size = 18,
+	color = "yellow.300",
+	style = {},
+}: { size?: number; color?: string; style?: React.CSSProperties }) => (
 	<motion.div
 		initial={{ opacity: 0, scale: 0.7, rotate: 0 }}
 		animate={{
@@ -52,7 +50,7 @@ const Sparkle = ({ size = 18, color = "yellow.300", style = {} }: { size?: numbe
 		}}
 		transition={{
 			duration: 1.6 + Math.random(),
-			repeat: Infinity,
+			repeat: Number.POSITIVE_INFINITY,
 			ease: "easeInOut",
 			delay: Math.random(),
 		}}
@@ -79,14 +77,20 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 	level,
 	characterName,
 	characterImage,
-	unlockedDesc
+	unlockedDesc,
 }) => {
 	const cardBg = useColorModeValue("white", "gray.800");
 	const accent = useColorModeValue("purple.400", "purple.300");
 	const starColor = "yellow.400";
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} isCentered size="md" closeOnOverlayClick={false}>
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			isCentered
+			size="md"
+			closeOnOverlayClick={false}
+		>
 			<ModalOverlay bg="blackAlpha.700" />
 			<ModalContent
 				bg={cardBg}
@@ -104,13 +108,28 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 				{isOpen && (
 					<>
 						<Sparkle size={22} style={{ top: "10%", left: "18%", zIndex: 1 }} />
-						<Sparkle size={16} style={{ top: "18%", right: "20%", zIndex: 1 }} />
+						<Sparkle
+							size={16}
+							style={{ top: "18%", right: "20%", zIndex: 1 }}
+						/>
 						<Sparkle size={14} style={{ top: "38%", left: "8%", zIndex: 1 }} />
-						<Sparkle size={20} style={{ top: "60%", right: "12%", zIndex: 1 }} />
-						<Sparkle size={18} style={{ bottom: "18%", left: "22%", zIndex: 1 }} />
-						<Sparkle size={14} style={{ bottom: "12%", right: "18%", zIndex: 1 }} />
+						<Sparkle
+							size={20}
+							style={{ top: "60%", right: "12%", zIndex: 1 }}
+						/>
+						<Sparkle
+							size={18}
+							style={{ bottom: "18%", left: "22%", zIndex: 1 }}
+						/>
+						<Sparkle
+							size={14}
+							style={{ bottom: "12%", right: "18%", zIndex: 1 }}
+						/>
 						<Sparkle size={12} style={{ top: "7%", right: "40%", zIndex: 1 }} />
-						<Sparkle size={12} style={{ bottom: "8%", left: "40%", zIndex: 1 }} />
+						<Sparkle
+							size={12}
+							style={{ bottom: "8%", left: "40%", zIndex: 1 }}
+						/>
 					</>
 				)}
 				<ModalBody>
@@ -123,7 +142,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 							}}
 							transition={{
 								duration: 2.5,
-								repeat: Infinity,
+								repeat: Number.POSITIVE_INFINITY,
 								ease: "easeInOut",
 							}}
 							style={{
@@ -161,7 +180,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 							}}
 							transition={{
 								duration: 1.5,
-								repeat: Infinity,
+								repeat: Number.POSITIVE_INFINITY,
 								ease: "easeInOut",
 							}}
 							style={{ color: starColor, fontSize: "2.5rem", zIndex: 1 }}
@@ -177,7 +196,11 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 						<motion.div
 							initial={{ scale: 0.7 }}
 							animate={{ scale: [1.2, 1, 1.2] }}
-							transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+							transition={{
+								duration: 1.2,
+								repeat: Number.POSITIVE_INFINITY,
+								ease: "easeInOut",
+							}}
 						>
 							<Text fontSize="2xl" color={accent} fontWeight="extrabold">
 								Lv.{level} {levelNamesMock[level - 1] ?? ""}
@@ -197,7 +220,6 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 								as={motion.div}
 								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
-								transition={{ delay: 0.4 }}
 							>
 								{unlockedDesc ?? unlockDescriptionsMock[level - 1]}
 							</Box>
