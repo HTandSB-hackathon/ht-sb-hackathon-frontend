@@ -36,6 +36,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
 import {
+	FaArrowRight,
 	FaChevronDown,
 	FaChevronUp,
 	FaFilter,
@@ -45,6 +46,7 @@ import {
 	FaUsers,
 } from "react-icons/fa";
 import { MdFavorite, MdLocationCity } from "react-icons/md";
+import { useNavigate } from "react-router";
 
 import {
 	characterCountByTrustLevelAtom,
@@ -95,6 +97,7 @@ export const CharactersPage: React.FC = () => {
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
 
 	const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
+	const navigate = useNavigate();
 
 	// レスポンシブデザイン
 	const isMobile = useBreakpointValue({ base: true, md: false });
@@ -198,7 +201,27 @@ export const CharactersPage: React.FC = () => {
 							border="1px solid"
 							borderColor="whiteAlpha.200"
 							shadow="xl"
+							position="relative"
 						>
+							{/* Homeへ戻るボタン*/}
+							<Box
+								position="absolute"
+								left="6"
+								top="50%"
+								transform="translateY(-50%)"
+								zIndex={2}
+							>
+								<Button
+									leftIcon={<FaArrowRight style={{ transform: "scaleX(-1)" }} />}
+									variant="ghost"
+									onClick={() => navigate("/home")}
+									borderRadius="xl"
+									_hover={{ bg: "whiteAlpha.200" }}
+									size="sm"
+								>
+									ホームへ戻る
+								</Button>
+							</Box>
 							<VStack spacing={4} textAlign="center">
 								<Heading
 									size={headerSize}
