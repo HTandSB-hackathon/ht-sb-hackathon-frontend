@@ -32,9 +32,11 @@ import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaComment } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
-import { charactersAtomLoadable } from "../../lib/atom/CharacterAtom";
+import {
+	charactersAtomLoadable,
+	checkLevelUpRelationshipAtom,
+} from "../../lib/atom/CharacterAtom";
 
-import { LevelUpModal } from "../organisms/LevelUpModal";
 const MotionCard = motion(Card);
 
 export const ChatPage: React.FC = () => {
@@ -45,6 +47,7 @@ export const ChatPage: React.FC = () => {
 	const characters = useLoadableAtom(charactersAtomLoadable);
 	const [relationship, setRelationship] = useState<Relationship>();
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
+	const checkLevelUp = useSetAtom(checkLevelUpRelationshipAtom);
 
 	const getMunicipality = () => {
 		if (!municipalities) return null;
@@ -65,7 +68,6 @@ export const ChatPage: React.FC = () => {
 	const fetchChat = useSetAtom(fetchChatAtom);
 	const [input, setInput] = useState("");
 	const [isSending, setIsSending] = useState(false);
-	const [showLevelUp, setShowLevelUp] = useState(false);
 
 	const containerPadding = useBreakpointValue({ base: 4, md: 6, lg: 8 });
 	const cardBg = useColorModeValue("white", "gray.800");
@@ -89,11 +91,11 @@ export const ChatPage: React.FC = () => {
 
 	useEffect(() => {
 		if (characterId) {
-			loadCharacterDetail(characterId);
+			loadCharacterDetail(Number(characterId));
 		}
 	}, [characterId]);
 
-	const loadCharacterDetail = async (characterId: string) => {
+	const loadCharacterDetail = async (characterId: number) => {
 		try {
 			const relationship = await getRelationship(characterId);
 			setRelationship(relationship);
@@ -114,8 +116,11 @@ export const ChatPage: React.FC = () => {
 		setIsSending(true);
 		setMessages((prev) => [...prev, { role: "user", content: input }]);
 		try {
-			send({ characterId, message: { role: "user", content: input } });
+			await send({ characterId, message: { role: "user", content: input } });
 			setInput("");
+			const relationship = await getRelationship(Number(characterId));
+			setRelationship(relationship);
+			await checkLevelUp(Number(characterId), relationship.trustLevelId);
 		} catch {
 			toast({
 				title: "送信エラー",
@@ -143,13 +148,6 @@ export const ChatPage: React.FC = () => {
 	const trustPoints = relationship?.trustPoints ?? 0;
 	const nextLevelPoints = relationship?.nextLevelPoints ?? 0;
 	const trustProgress = (trustPoints / nextLevelPoints) * 100;
-
-	// --- ダミー: メッセージ送信3回目でレベルアップモーダル表示 ---
-	useEffect(() => {
-		if (messages.length === 3) {
-			setTimeout(() => setShowLevelUp(true), 600);
-		}
-	}, [messages]);
 
 	return (
 		<Box
@@ -320,16 +318,6 @@ export const ChatPage: React.FC = () => {
 					</MotionCard>
 				</VStack>
 			</Container>
-			{/* レベルアップモーダル（ダミーデータ） */}
-			<LevelUpModal
-				isOpen={showLevelUp}
-				onClose={() => setShowLevelUp(false)}
-				level={2}
-				levelName={"顔見知り"}
-				characterName={getCharacter()?.name ?? "キャラクター"}
-				characterImage={getCharacter()?.profileImageUrl}
-				unlockedDesc={"パーソナルな話題が解放されました"}
-			/>
 		</Box>
 	);
 };

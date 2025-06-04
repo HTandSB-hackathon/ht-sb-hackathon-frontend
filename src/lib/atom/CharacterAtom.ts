@@ -11,11 +11,15 @@ import {
 	type Character,
 	type RelationShipRequest,
 	type Relationship,
+	checkLevelUpRelationship,
 	getCharacters,
 	getLockedCharacters,
 	getRelationships,
+	insertRelationship,
 	updateRelationship,
 } from "../domain/CharacterQuery";
+import { isLevelUpModalOpenAtom } from "./BaseAtom";
+import { municipalityAtomAsync } from "./CityAtom";
 
 /**
  * キャラクター一覧の状態
@@ -57,7 +61,6 @@ const relationshipsAtomAsync = atomWithRefresh<Promise<Relationship[]>>(
 
 export const favoriteCharacterIdsAtom = atom(async (get) => {
 	const relationships = await get(relationshipsAtomAsync);
-	console.log("favoriteCharacterIdsAtom relationships:", relationships);
 	return new Set(
 		relationships
 			.filter((relationship) => relationship.isFavorite)
@@ -99,6 +102,113 @@ export const updateRelationshipAtom = atom(
 		} catch (error) {
 			console.error("Error updating relationship:", error);
 			throw error;
+		}
+	},
+);
+
+export const filteredCharactersAtom = atom(async (get) => {
+	const unlockedcharacters = await get(characterAtomAsync);
+	const lockedCharacters = await get(lockedCharactersAtomAsync);
+	const characters = [...unlockedcharacters, ...lockedCharacters];
+
+	const filter = get(characterFilterAtom);
+	const relationships = await get(relationshipsAtomAsync);
+	return characters.filter((character) => {
+		if (
+			filter.municipalityId &&
+			character.municipalityId !== filter.municipalityId
+		) {
+			return false;
+		}
+		if (filter.gender && character.gender !== filter.gender) {
+			return false;
+		}
+		if (
+			filter.isLocked !== undefined &&
+			character.isLocked !== filter.isLocked
+		) {
+			return false;
+		}
+		const relationship = relationships.find(
+			(rel) => rel.characterId === character.id,
+		);
+		if (filter.trustLevel && relationship?.trustLevelId !== filter.trustLevel) {
+			return false;
+		}
+		return true;
+	});
+});
+
+export const sortedCharactersAtom = atom(async (get) => {
+	const characters = await get(filteredCharactersAtom);
+	const sortBy = get(characterSortByAtom);
+	const relationships = await get(relationshipsAtomAsync);
+
+	return [...characters].sort((a, b) => {
+		switch (sortBy) {
+			case "trustLevel": {
+				const relA = relationships.find((rel) => rel.characterId === a.id);
+				const relB = relationships.find((rel) => rel.characterId === b.id);
+				return (relB?.trustLevelId || 0) - (relA?.trustLevelId || 0);
+			}
+			case "name":
+				return a.name.localeCompare(b.name, "ja");
+			default:
+				return 0;
+		}
+	});
+});
+
+export const getNewCharacterAtom = atom(
+	null,
+	async (_, set, characterId: number) => {
+		try {
+			const character = await insertRelationship(characterId);
+			return character;
+		} catch (error) {
+			console.error("Error inserting new character:", error);
+			throw error;
+		} finally {
+			set(relationshipsAtomAsync);
+			set(characterAtomAsync);
+			set(lockedCharactersAtomAsync);
+			set(municipalityAtomAsync);
+		}
+	},
+);
+
+interface levelUpCharacterDetail {
+	character?: Character | null;
+	relationship?: Relationship | null;
+}
+
+export const levelUpCharacterDetailAtom = atom<levelUpCharacterDetail | null>(
+	null,
+);
+export const checkLevelUpRelationshipAtom = atom(
+	null,
+	async (get, set, characterId: number, curretntTrustLevelId: number) => {
+		try {
+			const relationship = await checkLevelUpRelationship(characterId);
+			if (relationship.trustLevelId > curretntTrustLevelId) {
+				const characters = await get(characterAtomAsync);
+				const character = characters.find((c) => c.id === characterId);
+				set(isLevelUpModalOpenAtom, true);
+				set(levelUpCharacterDetailAtom, {
+					character: character,
+					relationship: relationship,
+				});
+				set(characterAtomAsync);
+				set(lockedCharactersAtomAsync);
+				set(relationshipsAtomAsync);
+			}
+			return relationship;
+		} catch (error) {
+			console.error("Error checking level up relationship:", error);
+			set(isLevelUpModalOpenAtom, false);
+			set(levelUpCharacterDetailAtom, null);
+			throw error;
+		} finally {
 		}
 	},
 );
@@ -166,90 +276,6 @@ export const newlyUnlockedCharacterIdsAtom = atom<Set<string>>(new Set([]));
 export const animatingCharacterIdAtom = atom<string | null>(null);
 
 // 派生Atom
-
-/**
- * フィルター済みキャラクター一覧
- */
-// export const filteredCharactersAtom = atom((get) => {
-// 	const characters = get(charactersAtom);
-// 	const filter = get(characterFilterAtom);
-// 	const relationships = get(characterRelationshipsAtom);
-
-// 	return characters.filter((character) => {
-// 		// 都市フィルター
-// 		if (filter.city && character.municipalityId !== filter.city) {
-// 			return false;
-// 		}
-
-// 		// 性別フィルター
-// 		if (filter.gender && character.gender !== filter.gender) {
-// 			return false;
-// 		}
-
-// 		// ロック状態フィルター
-// 		if (
-// 			filter.isLocked !== undefined &&
-// 			character.isLocked !== filter.isLocked
-// 		) {
-// 			return false;
-// 		}
-
-// 		// 信頼レベルフィルター
-// 		if (filter.trustLevel) {
-// 			const relationship = relationships[character.id];
-// 			if (!relationship || relationship.trustLevel !== filter.trustLevel) {
-// 				return false;
-// 			}
-// 		}
-
-// 		return true;
-// 	});
-// });
-
-/**
- * ソート済みキャラクター一覧
- */
-// export const sortedCharactersAtom = atom((get) => {
-// 	const characters = get(filteredCharactersAtom);
-// 	const sortBy = get(characterSortByAtom);
-// 	const relationships = get(characterRelationshipsAtom);
-
-// 	return [...characters].sort((a, b) => {
-// 		switch (sortBy) {
-// 			case "trustLevel": {
-// 				const relA = relationships[a.id];
-// 				const relB = relationships[b.id];
-// 				return (relB?.trustLevel || 0) - (relA?.trustLevel || 0);
-// 			}
-// 			case "lastConversation": {
-// 				const relA = relationships[a.id];
-// 				const relB = relationships[b.id];
-// 				const dateA = relA?.lastConversationAt
-// 					? new Date(relA.lastConversationAt).getTime()
-// 					: 0;
-// 				const dateB = relB?.lastConversationAt
-// 					? new Date(relB.lastConversationAt).getTime()
-// 					: 0;
-// 				return dateB - dateA;
-// 			}
-// 			case "name":
-// 				return a.nameKana.localeCompare(b.nameKana, "ja");
-// 			case "city":
-// 				return a.city.localeCompare(b.city, "ja");
-// 			default:
-// 				return 0;
-// 		}
-// 	});
-// });
-
-/**
- * お気に入りキャラクター一覧
- */
-// export const favoriteCharactersAtom = atom((get) => {
-// 	const characters = get(charactersAtom);
-// 	const favoriteIds = get(favoriteCharacterIdsAtom);
-// 	return characters.filter((character) => favoriteIds?.has(character.id));
-// });
 
 /**
  * 信頼レベル別のキャラクター数

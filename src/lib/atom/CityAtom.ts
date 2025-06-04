@@ -1,8 +1,7 @@
 import { getMunicipalities } from "@/lib/domain/CityQuery";
-import { atom } from "jotai";
-import { loadable } from "jotai/utils";
+import { atomWithRefresh, loadable } from "jotai/utils";
 
-const municipalityAtomAsync = atom(async () => {
+export const municipalityAtomAsync = atomWithRefresh(async () => {
 	try {
 		const response = await getMunicipalities({ prefecture_id: 7 });
 		return response;

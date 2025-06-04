@@ -149,7 +149,7 @@ export const CharacterDetailPage: React.FC = () => {
 			setError(null);
 			const stories = await getStories(characterId);
 			setStories(stories);
-			const relationship = await getRelationship(characterId);
+			const relationship = await getRelationship(Number(characterId));
 			setRelationship(relationship);
 			const count = await getChatCountByCharacterId(characterId);
 			setConversationCount(count);

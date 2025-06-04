@@ -143,7 +143,7 @@ function createRelationship(res: RelationshipResponse): Relationship {
 		res.trust_level_id,
 		res.total_points,
 		res.is_favorite,
-		50,
+		res.next_level_points,
 		new Date(res.first_met_at),
 		new Date(res.created_date),
 		new Date(res.updated_date),
@@ -176,7 +176,7 @@ export async function getLockedCharacters(): Promise<Character[]> {
 }
 
 export async function getRelationship(
-	characterId: string,
+	characterId: number,
 ): Promise<Relationship> {
 	const axiosClient = createAxiosClient();
 	const response = await axiosClient.get<RelationshipResponse>(
@@ -200,6 +200,17 @@ export async function getStories(characterId: string): Promise<Story[]> {
 	return response.data.map(createStory);
 }
 
+export async function insertRelationship(
+	characterId: number,
+): Promise<Relationship> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.post<
+		Record<string, never>,
+		RelationshipResponse
+	>(`/characters/${characterId}/insert`, {});
+	return createRelationship(response.data);
+}
+
 export async function updateRelationship(
 	characterId: number,
 	relationship: RelationShipRequest,
@@ -209,5 +220,16 @@ export async function updateRelationship(
 		RelationShipRequest,
 		RelationshipResponse
 	>(`/characters/${characterId}/put`, relationship);
+	return createRelationship(response.data);
+}
+
+export async function checkLevelUpRelationship(
+	characterId: number,
+): Promise<Relationship> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.put<
+		Record<string, never>,
+		RelationshipResponse
+	>(`/characters/${characterId}/check_trust_level`, {});
 	return createRelationship(response.data);
 }

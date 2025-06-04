@@ -1,3 +1,4 @@
+import { getNewCharacterAtom } from "@/lib/atom/CharacterAtom";
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
 import type { Relationship } from "@/lib/domain/CharacterQuery";
 import type { ChatCount } from "@/lib/domain/ChatQuery";
@@ -23,6 +24,7 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSetAtom } from "jotai";
 import React from "react";
 import {
 	FaClock,
@@ -61,6 +63,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	const navigate = useNavigate();
 	const [isHovered, setIsHovered] = React.useState(false);
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
+	const unlockCharacter = useSetAtom(getNewCharacterAtom);
 	// 都道府県の市区町村データを取得
 	const getMunicipalityName = () => {
 		if (!municipalities) return null;
@@ -86,6 +89,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	const handleClick = () => {
 		if (!character.isLocked) {
 			navigate(`/characters/${character.id}`);
+		} else {
+			unlockCharacter(character.id);
 		}
 	};
 
