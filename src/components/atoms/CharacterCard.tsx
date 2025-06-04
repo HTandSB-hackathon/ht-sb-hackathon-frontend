@@ -193,6 +193,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 			filter={character.isLocked ? "grayscale(50%)" : "none"}
 			maxW="400px"
 			w="full"
+			minH="260px" // 例: 開放済みキャラクターのカード高さに合わせて最低高さを指定
 		>
 			{/* NEW バッジ */}
 			<AnimatePresence>
@@ -427,10 +428,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 							borderRadius="lg"
 							border="1px solid"
 							borderColor="gray.200"
+							display="flex"
+							alignItems="center"
+							justifyContent="center"
+							minH="80px"
 						>
-							<HStack spacing="2">
+							<HStack spacing="2" justify="center" w="100%">
 								<MdLock size="16" color="gray.500" />
-								<Text fontSize="xs" color="gray.600">
+								<Text fontSize="xs" color="gray.600" textAlign="center">
 									{character.unlockCondition}
 								</Text>
 							</HStack>
@@ -494,15 +499,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 			</CardBody>
 
 			{/* 底部のアクセントライン */}
-			{!character.isLocked && (
-				<MotionBox
-					h="3px"
-					bgGradient={cityTheme.gradient}
-					initial={{ scaleX: 0 }}
-					animate={{ scaleX: 1 }}
-					transition={{ delay: animationDelay + 0.5, duration: 0.8 }}
-				/>
-			)}
+			<MotionBox
+				h="3px"
+				bgGradient={cityTheme.gradient}
+				initial={{ scaleX: 0 }}
+				animate={{ scaleX: 1 }}
+				transition={{ delay: animationDelay + 0.5, duration: 0.8 }}
+			/>
 		</MotionCard>
 	);
 };
