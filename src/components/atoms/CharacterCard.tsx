@@ -237,7 +237,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 			<CardBody p={spacing}>
 				<VStack spacing={spacing} align="stretch">
 					{/* ヘッダー部分 */}
-					<HStack spacing={4} align="start">
+					<HStack spacing={4} align="start" position="relative">
 						<Box position="relative">
 							<Avatar
 								size={avatarSize}
@@ -252,19 +252,25 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 							{/* 地域バッジ */}
 							{!character.isLocked && (
-								<Box
-									position="absolute"
-									bottom="-2"
-									right="-2"
-									bg="white"
-									borderRadius="full"
-									p="1"
-									border="2px solid"
-									borderColor={`${cityTheme.color}.400`}
-									fontSize="sm"
-								>
-									{cityTheme.emoji}
-								</Box>
+								<Tooltip label={getMunicipalityName()}>
+									<Box
+										position="absolute"
+										bottom="-2"
+										right="-2"
+										bg="white"
+										borderRadius="full"
+										p="1"
+										border="2px solid"
+										borderColor={`${cityTheme.color}.400`}
+										fontSize="sm"
+										zIndex={1}
+										display="flex"
+										alignItems="center"
+										height="32px"
+									>
+										{cityTheme.emoji}
+									</Box>
+								</Tooltip>
 							)}
 
 							{/* オンライン状態 */}
@@ -283,50 +289,97 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 							)}
 						</Box>
 
-						<VStack align="start" spacing="1" flex="1">
-							<Text
-								fontSize={{ base: "lg", md: "xl" }}
-								fontWeight="bold"
-								color={character.isLocked ? "gray.500" : "gray.800"}
-								noOfLines={1}
+						<VStack align="start" spacing={2} flex="1" position="relative">
+							{/* 名前（9文字目以降は省略してツールチップで全量表示） */}
+							<Tooltip
+								label={!character.isLocked && character.name.length > 8 ? character.name : undefined}
+								isDisabled={character.isLocked || character.name.length <= 8}
 							>
-								{character.isLocked ? "???" : character.name}
-							</Text>
-
-							<Tag size="sm" colorScheme={cityTheme.color} variant="subtle">
-								<TagLeftIcon as={FaMapMarkerAlt} />
-								<TagLabel>
-									{character.isLocked ? "未解放" : getMunicipalityName()}
-								</TagLabel>
-							</Tag>
-
-							<HStack spacing="2" fontSize="xs" color="gray.500">
-								<Text>{cityTheme.emoji}</Text>
-								<Text>{getMunicipalityName()}</Text>
-							</HStack>
+								<Text
+									fontSize={{ base: "lg", md: "xl" }}
+									fontWeight="bold"
+									color={character.isLocked ? "gray.500" : "gray.800"}
+									noOfLines={1}
+									overflow="hidden"
+									textOverflow="ellipsis"
+									whiteSpace="nowrap"
+									maxW="100%"
+								>
+									{character.isLocked
+										? "???"
+										: character.name.length > 8
+											? character.name.slice(0, 8) + "..."
+											: character.name}
+								</Text>
+							</Tooltip>
+							{/* 市町村名（9文字目以降は省略してツールチップで全量表示） */}
+							<Tooltip
+								label={
+									!character.isLocked &&
+									getMunicipalityName() &&
+									getMunicipalityName()!.length > 8
+										? getMunicipalityName()
+										: undefined
+								}
+								isDisabled={
+									character.isLocked ||
+									!getMunicipalityName() ||
+									getMunicipalityName()!.length <= 8
+								}
+							>
+								<Tag
+									size="sm"
+									colorScheme={cityTheme.color}
+									variant="subtle"
+									maxW="180px"
+									overflow="hidden"
+									mb={2}
+								>
+									<TagLeftIcon as={FaMapMarkerAlt} />
+									<TagLabel
+										noOfLines={1}
+										overflow="hidden"
+										textOverflow="ellipsis"
+										whiteSpace="nowrap"
+										maxW="140px"
+									>
+										{character.isLocked
+											? "未解放"
+											: getMunicipalityName() && getMunicipalityName()!.length > 8
+												? getMunicipalityName()!.slice(0, 8) + "..."
+												: getMunicipalityName()}
+									</TagLabel>
+								</Tag>
+							</Tooltip>
 						</VStack>
-
 						<Spacer />
-
 						{/* お気に入りボタン */}
 						{!character.isLocked && (
-							<Tooltip
-								label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}
+							<Box
+								position="absolute"
+								right="0"
+								bottom="-2"
+								zIndex={2}
+								display="flex"
+								alignItems="center"
+								height="32px"
 							>
-								<IconButton
-									aria-label="favorite"
-									icon={isFavorite ? <FaHeart /> : <FaRegHeart />}
-									colorScheme={isFavorite ? "red" : "gray"}
-									variant={isFavorite ? "solid" : "ghost"}
-									size="sm"
-									borderRadius="full"
-									onClick={handleFavoriteClick}
-									_hover={{
-										transform: "scale(1.1)",
-										transition: "transform 0.2s",
-									}}
-								/>
-							</Tooltip>
+								<Tooltip label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}>
+									<IconButton
+										aria-label="favorite"
+										icon={isFavorite ? <FaHeart /> : <FaRegHeart />}
+										colorScheme={isFavorite ? "red" : "gray"}
+										variant={isFavorite ? "solid" : "ghost"}
+										size="sm"
+										borderRadius="full"
+										onClick={handleFavoriteClick}
+										_hover={{
+											transform: "scale(1.1)",
+											transition: "transform 0.2s",
+										}}
+									/>
+								</Tooltip>
+							</Box>
 						)}
 					</HStack>
 
