@@ -1,5 +1,4 @@
 import {
-	Avatar,
 	Badge,
 	Box,
 	Button,
@@ -22,8 +21,6 @@ import type React from "react";
 import { useState } from "react";
 import {
 	FaArrowRight,
-	FaCheck,
-	FaCheckCircle,
 	FaComment,
 	FaCrown,
 	FaGift,

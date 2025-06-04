@@ -37,7 +37,6 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 	title,
 	description,
 	icon,
-	color,
 	gradient,
 	isActive = false,
 	children,

@@ -56,22 +56,6 @@ export const TutorialStepper: React.FC<TutorialStepperProps> = ({
 	// カラーテーマ
 	const cardBg = useColorModeValue("whiteAlpha.100", "gray.800");
 
-	// グロー効果アニメーション
-	const glowAnimation = {
-		animate: {
-			boxShadow: [
-				"0 0 20px rgba(139, 92, 246, 0.3)",
-				"0 0 40px rgba(139, 92, 246, 0.6)",
-				"0 0 20px rgba(139, 92, 246, 0.3)",
-			],
-			transition: {
-				duration: 2,
-				repeat: Number.POSITIVE_INFINITY,
-				ease: "easeInOut",
-			},
-		},
-	};
-
 	return (
 		<MotionCard
 			bg={cardBg}
@@ -82,9 +66,24 @@ export const TutorialStepper: React.FC<TutorialStepperProps> = ({
 			borderColor="whiteAlpha.300"
 			overflow="hidden"
 			initial={{ opacity: 0, y: 30 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.6, delay: 0.2 }}
-			{...glowAnimation}
+			animate={{
+				opacity: 1,
+				y: 0,
+				boxShadow: [
+					"0 0 20px rgba(139, 92, 246, 0.3)",
+					"0 0 40px rgba(139, 92, 246, 0.6)",
+					"0 0 20px rgba(139, 92, 246, 0.3)",
+				],
+			}}
+			transition={{
+				opacity: { duration: 0.6, delay: 0.2 },
+				y: { duration: 0.6, delay: 0.2 },
+				boxShadow: {
+					duration: 2,
+					repeat: Number.POSITIVE_INFINITY,
+					ease: "easeInOut",
+				},
+			}}
 		>
 			<CardBody p={10}>
 				<Stepper

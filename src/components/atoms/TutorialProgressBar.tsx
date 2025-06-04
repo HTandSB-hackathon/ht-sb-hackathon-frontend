@@ -4,7 +4,6 @@ import {
 	HStack,
 	Text,
 	VStack,
-	useBreakpointValue,
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
@@ -32,7 +31,6 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 	totalSteps,
 	stepTitles = [],
 	size = "md",
-	orientation = "horizontal",
 	showLabels = true,
 	animated = true,
 }) => {
@@ -114,20 +112,6 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 		},
 	};
 
-	const sparkleVariants = {
-		animate: {
-			scale: [0, 1.5, 0],
-			opacity: [0, 1, 0],
-			rotate: [0, 180, 360],
-			transition: {
-				duration: 2,
-				repeat: Number.POSITIVE_INFINITY,
-				ease: "easeInOut",
-				delay: Math.random() * 2,
-			},
-		},
-	};
-
 	// ステップの状態を判定
 	const getStepStatus = (stepIndex: number) => {
 		if (stepIndex < currentStep) return "completed";
@@ -157,7 +141,7 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 					left="0"
 					right="0"
 					h={config.lineThickness}
-					bg={pendingColor}
+					bg="gray.200"
 					borderRadius="full"
 					transform="translateY(-50%)"
 					zIndex="1"
