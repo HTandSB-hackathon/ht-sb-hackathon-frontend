@@ -20,7 +20,7 @@ import {
 	Skeleton,
 	Spacer,
 	Stat,
-	// StatHelpText,
+	StatHelpText,
 	StatLabel,
 	StatNumber,
 	Tag,
@@ -247,7 +247,7 @@ export const CharactersPage: React.FC = () => {
 								>
 									{characters?.length}
 								</StatNumber>
-								{/* <StatHelpText>人</StatHelpText> */}
+								<StatHelpText>人</StatHelpText>
 							</Stat>
 
 							<Stat
@@ -270,7 +270,7 @@ export const CharactersPage: React.FC = () => {
 								>
 									{countByTrustLevel[5] || 0}
 								</StatNumber>
-								{/* <StatHelpText>人</StatHelpText> */}
+								<StatHelpText>人</StatHelpText>
 							</Stat>
 
 							<Stat
@@ -295,7 +295,7 @@ export const CharactersPage: React.FC = () => {
 										{municipalities.length}
 									</StatNumber>
 								)}
-								{/* <StatHelpText>箇所</StatHelpText> */}
+								<StatHelpText>箇所</StatHelpText>
 							</Stat>
 
 							<Stat
@@ -318,7 +318,7 @@ export const CharactersPage: React.FC = () => {
 								>
 									{favoriteIds.size}
 								</StatNumber>
-								{/* <StatHelpText>人</StatHelpText> */}
+								<StatHelpText>人</StatHelpText>
 							</Stat>
 						</SimpleGrid>
 					</MotionBox>
