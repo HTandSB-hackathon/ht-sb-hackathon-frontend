@@ -128,9 +128,7 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 			</CardHeader>
 
 			{/* カードボディ */}
-			<CardBody p={10}>
-				{children}
-			</CardBody>
+			<CardBody p={10}>{children}</CardBody>
 		</MotionCard>
 	);
 };

@@ -6,7 +6,6 @@ import {
 	VStack,
 	useBreakpointValue,
 	useColorModeValue,
-	keyframes,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import type React from "react";
@@ -24,22 +23,6 @@ interface TutorialProgressBarProps {
 	animated?: boolean;
 }
 
-// 高度なキーフレームアニメーション
-const shimmer = keyframes`
-  0% { background-position: -200px 0; }
-  100% { background-position: calc(200px + 100%) 0; }
-`;
-
-const pulse = keyframes`
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
-`;
-
-const glow = keyframes`
-  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
-  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
-`;
-
 /**
  * 最高級の洗練されたチュートリアル専用プログレスバー
  * 高度なアニメーション・エフェクト付きステップインジケーター
@@ -53,14 +36,6 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 	showLabels = true,
 	animated = true,
 }) => {
-	// レスポンシブ対応
-	const isVertical = orientation === "vertical";
-	const responsiveOrientation = useBreakpointValue({
-		base: "vertical",
-		md: orientation,
-	});
-	const isResponsiveVertical = responsiveOrientation === "vertical";
-
 	// 高級カラーテーマ
 	const bgGradient = useColorModeValue(
 		"linear(135deg, #667eea 0%, #764ba2 25%, #667eea 50%, #f093fb 75%, #f5576c 100%)",
@@ -73,10 +48,6 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 	const pendingGradient = useColorModeValue(
 		"linear(135deg, #e0e7ff 0%, #c7d2fe 100%)",
 		"linear(135deg, #4c5e77 0%, #5a6c84 100%)",
-	);
-	const activeGlow = useColorModeValue(
-		"0 0 40px rgba(139, 92, 246, 0.8), 0 0 80px rgba(139, 92, 246, 0.4)",
-		"0 0 40px rgba(139, 92, 246, 0.8), 0 0 80px rgba(139, 92, 246, 0.4)",
 	);
 
 	// プレミアムサイズ設定
@@ -143,23 +114,6 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 		},
 	};
 
-	const lineVariants = {
-		inactive: { 
-			scaleX: 0, 
-			opacity: 0.4,
-			background: pendingGradient,
-		},
-		completed: { 
-			scaleX: 1, 
-			opacity: 1,
-			background: completedGradient,
-			transition: {
-				scaleX: { duration: 1.2, ease: "easeOut" },
-				opacity: { duration: 0.8 },
-			},
-		},
-	};
-
 	const sparkleVariants = {
 		animate: {
 			scale: [0, 1.5, 0],
@@ -195,13 +149,7 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 	return (
 		<VStack spacing={6} w="full">
 			{/* メインプログレスバー */}
-			<Box
-				w="full"
-				maxW="600px"
-				mx="auto"
-				position="relative"
-				p={4}
-			>
+			<Box w="full" maxW="600px" mx="auto" position="relative" p={4}>
 				{/* 背景ライン */}
 				<Box
 					position="absolute"
@@ -352,7 +300,13 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 					</MotionBox>
 
 					{/* サブプログレスバー */}
-					<Box w="200px" bg="gray.100" h="8px" borderRadius="full" overflow="hidden">
+					<Box
+						w="200px"
+						bg="gray.100"
+						h="8px"
+						borderRadius="full"
+						overflow="hidden"
+					>
 						<MotionBox
 							h="full"
 							bgGradient={bgGradient}
