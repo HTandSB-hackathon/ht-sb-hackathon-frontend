@@ -11,12 +11,14 @@ import {
 	type Character,
 	type RelationShipRequest,
 	type Relationship,
+	checkLevelUpRelationship,
 	getCharacters,
 	getLockedCharacters,
 	getRelationships,
 	insertRelationship,
 	updateRelationship,
 } from "../domain/CharacterQuery";
+import { isLevelUpModalOpenAtom } from "./BaseAtom";
 import { municipalityAtomAsync } from "./CityAtom";
 
 /**
@@ -171,6 +173,42 @@ export const getNewCharacterAtom = atom(
 			set(characterAtomAsync);
 			set(lockedCharactersAtomAsync);
 			set(municipalityAtomAsync);
+		}
+	},
+);
+
+interface levelUpCharacterDetail {
+	character?: Character | null;
+	relationship?: Relationship | null;
+}
+
+export const levelUpCharacterDetailAtom = atom<levelUpCharacterDetail | null>(
+	null,
+);
+export const checkLevelUpRelationshipAtom = atom(
+	null,
+	async (get, set, characterId: number, curretntTrustLevelId: number) => {
+		try {
+			const relationship = await checkLevelUpRelationship(characterId);
+			if (relationship.trustLevelId > curretntTrustLevelId) {
+				const characters = await get(characterAtomAsync);
+				const character = characters.find((c) => c.id === characterId);
+				set(isLevelUpModalOpenAtom, true);
+				set(levelUpCharacterDetailAtom, {
+					character: character,
+					relationship: relationship,
+				});
+				set(characterAtomAsync);
+				set(lockedCharactersAtomAsync);
+				set(relationshipsAtomAsync);
+			}
+			return relationship;
+		} catch (error) {
+			console.error("Error checking level up relationship:", error);
+			set(isLevelUpModalOpenAtom, false);
+			set(levelUpCharacterDetailAtom, null);
+			throw error;
+		} finally {
 		}
 	},
 );
