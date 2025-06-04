@@ -35,6 +35,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
+import { useEffect, useState } from "react";
 import {
 	FaChevronDown,
 	FaChevronUp,
@@ -45,7 +46,6 @@ import {
 	FaUsers,
 } from "react-icons/fa";
 import { MdFavorite, MdLocationCity } from "react-icons/md";
-import { useEffect, useState } from "react";
 
 import {
 	characterCountByTrustLevelAtom,
@@ -99,9 +99,11 @@ export const CharactersPage: React.FC = () => {
 	const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
 
 	// TODO newCharacterIds で状態を管理？
-	const [prevCharacterIds, setPrevCharacterIds] = useState<Set<number>>(new Set());
+	const [prevCharacterIds, setPrevCharacterIds] = useState<Set<number>>(
+		new Set(),
+	);
 	const [newCharactersQueue, setNewCharactersQueue] = useState<
-		{ id?: number, name?: string; image?: string; desc?: string }[]
+		{ id?: number; name?: string; image?: string; desc?: string }[]
 	>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -109,7 +111,9 @@ export const CharactersPage: React.FC = () => {
 	useEffect(() => {
 		if (!characters) return;
 		const currentIds = new Set(characters.map((c) => c.id));
-		const newIds = Array.from(currentIds).filter((id) => !prevCharacterIds.has(id));
+		const newIds = Array.from(currentIds).filter(
+			(id) => !prevCharacterIds.has(id),
+		);
 		const newChars = newIds
 			.map((id) => characters.find((c) => c.id === id))
 			.filter(Boolean)

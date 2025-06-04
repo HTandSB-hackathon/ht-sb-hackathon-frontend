@@ -97,13 +97,28 @@ export const NewCharacterOpenModal: React.FC<NewCharacterOpenModalProps> = ({
 				{isOpen && (
 					<>
 						<Sparkle size={22} style={{ top: "10%", left: "18%", zIndex: 1 }} />
-						<Sparkle size={16} style={{ top: "18%", right: "20%", zIndex: 1 }} />
+						<Sparkle
+							size={16}
+							style={{ top: "18%", right: "20%", zIndex: 1 }}
+						/>
 						<Sparkle size={14} style={{ top: "38%", left: "8%", zIndex: 1 }} />
-						<Sparkle size={20} style={{ top: "60%", right: "12%", zIndex: 1 }} />
-						<Sparkle size={18} style={{ bottom: "18%", left: "22%", zIndex: 1 }} />
-						<Sparkle size={14} style={{ bottom: "12%", right: "18%", zIndex: 1 }} />
+						<Sparkle
+							size={20}
+							style={{ top: "60%", right: "12%", zIndex: 1 }}
+						/>
+						<Sparkle
+							size={18}
+							style={{ bottom: "18%", left: "22%", zIndex: 1 }}
+						/>
+						<Sparkle
+							size={14}
+							style={{ bottom: "12%", right: "18%", zIndex: 1 }}
+						/>
 						<Sparkle size={12} style={{ top: "7%", right: "40%", zIndex: 1 }} />
-						<Sparkle size={12} style={{ bottom: "8%", left: "40%", zIndex: 1 }} />
+						<Sparkle
+							size={12}
+							style={{ bottom: "8%", left: "40%", zIndex: 1 }}
+						/>
 					</>
 				)}
 				<ModalBody>
