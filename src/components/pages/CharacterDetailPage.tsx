@@ -101,7 +101,13 @@ export const CharacterDetailPage: React.FC = () => {
 	const [tabIndex, setTabIndex] = React.useState(0);
 	const [prevStoryIds, setPrevStoryIds] = useState<Set<string>>(new Set());
 	const [newStoryQueue, setNewStoryQueue] = useState<
-		{ id?: string; title?: string; content?: string; characterName?: string; characterImage?: string }[]
+		{
+			id?: string;
+			title?: string;
+			content?: string;
+			characterName?: string;
+			characterImage?: string;
+		}[]
 	>([]);
 	const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
 
