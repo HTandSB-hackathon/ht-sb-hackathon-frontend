@@ -1,3 +1,5 @@
+import { levelUpCharacterDetailAtom } from "@/lib/atom/CharacterAtom";
+import { TRUST_LEVELS } from "@/lib/types/character";
 import {
 	Avatar,
 	Box,
@@ -14,15 +16,12 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
 import { FaStar } from "react-icons/fa";
 
 interface LevelUpModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	level: number;
-	levelName: string;
-	characterName: string;
-	characterImage?: string;
 	unlockedDesc?: string;
 }
 
@@ -65,20 +64,23 @@ const Sparkle = ({
 export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 	isOpen,
 	onClose,
-	level,
-	levelName,
-	characterName,
-	characterImage,
-	unlockedDesc,
+	unlockedDesc = "",
 }) => {
 	const cardBg = useColorModeValue("white", "gray.800");
 	const accent = useColorModeValue("purple.400", "purple.300");
 	const starColor = "yellow.400";
+	const [levelUpCharacterDetail, setLevelUpCharacterDetail] = useAtom(
+		levelUpCharacterDetailAtom,
+	);
+	const level = levelUpCharacterDetail?.relationship?.trustLevelId || 1; // デフォルト値を設定
 
 	return (
 		<Modal
 			isOpen={isOpen}
-			onClose={onClose}
+			onClose={() => {
+				onClose;
+				setLevelUpCharacterDetail(null);
+			}} // モーダルを閉じるときに状態をリセット
 			isCentered
 			size="xl" // 横幅のみ広げる
 			closeOnOverlayClick={false}
@@ -158,8 +160,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 						</motion.div>
 						<Avatar
 							size="xl"
-							src={characterImage}
-							name={characterName}
+							src={levelUpCharacterDetail?.character?.profileImageUrl}
+							name={levelUpCharacterDetail?.character?.name}
 							border={`3px solid ${accent}`}
 							boxShadow="lg"
 							zIndex={1}
@@ -199,7 +201,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 							textOverflow="ellipsis"
 							maxW="90%"
 						>
-							{characterName}さんとの信頼度が上がりました！
+							{levelUpCharacterDetail?.character?.name}
+							さんとの信頼度が上がりました！
 						</Text>
 						<motion.div
 							initial={{ scale: 0.7 }}
@@ -211,7 +214,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 							}}
 						>
 							<Text fontSize="2xl" color={accent} fontWeight="extrabold">
-								Lv.{level} {levelName}
+								Lv.{levelUpCharacterDetail?.relationship?.trustLevelId}{" "}
+								{TRUST_LEVELS[level as keyof typeof TRUST_LEVELS]?.name}
 							</Text>
 						</motion.div>
 						{(unlockedDesc ?? "") && (

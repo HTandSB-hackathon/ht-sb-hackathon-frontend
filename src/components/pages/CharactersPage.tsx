@@ -36,6 +36,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
 import {
+	FaArrowRight,
 	FaChevronDown,
 	FaChevronUp,
 	FaFilter,
@@ -45,6 +46,7 @@ import {
 	FaUsers,
 } from "react-icons/fa";
 import { MdFavorite, MdLocationCity } from "react-icons/md";
+import { useNavigate } from "react-router";
 
 import {
 	characterCountByTrustLevelAtom,
@@ -95,6 +97,7 @@ export const CharactersPage: React.FC = () => {
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
 
 	const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
+	const navigate = useNavigate();
 
 	// レスポンシブデザイン
 	const isMobile = useBreakpointValue({ base: true, md: false });
@@ -198,13 +201,36 @@ export const CharactersPage: React.FC = () => {
 							border="1px solid"
 							borderColor="whiteAlpha.200"
 							shadow="xl"
+							position="relative"
 						>
+							{/* Homeへ戻るボタン*/}
+							<Box
+								position="absolute"
+								left="6"
+								top="50%"
+								transform="translateY(-50%)"
+								zIndex={2}
+							>
+								<Button
+									leftIcon={
+										<FaArrowRight style={{ transform: "scaleX(-1)" }} />
+									}
+									variant="ghost"
+									onClick={() => navigate("/home")}
+									borderRadius="xl"
+									_hover={{ bg: "whiteAlpha.200" }}
+									size="sm"
+								>
+									ホームへ戻る
+								</Button>
+							</Box>
 							<VStack spacing={4} textAlign="center">
 								<Heading
 									size={headerSize}
 									bgGradient="linear(to-r, purple.600, blue.600, teal.500)"
 									bgClip="text"
 									fontWeight="extrabold"
+									lineHeight={1.2}
 								>
 									福島のこころ 🌸
 								</Heading>
@@ -244,10 +270,15 @@ export const CharactersPage: React.FC = () => {
 									fontSize="2xl"
 									bgGradient="linear(to-r, blue.600, purple.600)"
 									bgClip="text"
+									as="span"
+									whiteSpace="nowrap"
+									display="inline"
 								>
 									{characters?.length}
+									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 								</StatNumber>
-								<StatHelpText>人</StatHelpText>
 							</Stat>
 
 							<Stat
@@ -267,10 +298,15 @@ export const CharactersPage: React.FC = () => {
 									fontSize="2xl"
 									bgGradient="linear(to-r, yellow.500, orange.500)"
 									bgClip="text"
+									as="span"
+									whiteSpace="nowrap"
+									display="inline"
 								>
 									{countByTrustLevel[5] || 0}
+									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 								</StatNumber>
-								<StatHelpText>人</StatHelpText>
 							</Stat>
 
 							<Stat
@@ -291,11 +327,16 @@ export const CharactersPage: React.FC = () => {
 										fontSize="2xl"
 										bgGradient="linear(to-r, green.500, teal.500)"
 										bgClip="text"
+										as="span"
+										whiteSpace="nowrap"
+										display="inline"
 									>
 										{municipalities.length}
+										<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+											箇所
+										</span>
 									</StatNumber>
 								)}
-								<StatHelpText>箇所</StatHelpText>
 							</Stat>
 
 							<Stat
@@ -315,10 +356,15 @@ export const CharactersPage: React.FC = () => {
 									fontSize="2xl"
 									bgGradient="linear(to-r, pink.500, red.500)"
 									bgClip="text"
+									as="span"
+									whiteSpace="nowrap"
+									display="inline"
 								>
 									{favoriteIds.size}
+									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 								</StatNumber>
-								<StatHelpText>人</StatHelpText>
 							</Stat>
 						</SimpleGrid>
 					</MotionBox>
