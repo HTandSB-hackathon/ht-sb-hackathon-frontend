@@ -43,7 +43,7 @@ import {
 import { motion } from "framer-motion";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	FaArrowLeft,
 	FaCalendarAlt,
@@ -78,6 +78,7 @@ import {
 	updateRelationshipAtom,
 } from "../../lib/atom/CharacterAtom";
 import { TRUST_LEVELS } from "../../lib/types/character";
+import { NewStoryOpenModal } from "../organisms/NewStoryOpenModal";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -98,6 +99,11 @@ export const CharacterDetailPage: React.FC = () => {
 	const [isLoading, setIsLoading] = useAtom(characterDetailLoadingAtom);
 	const [error, setError] = React.useState<string | null>(null);
 	const [tabIndex, setTabIndex] = React.useState(0);
+	const [prevStoryIds, setPrevStoryIds] = useState<Set<string>>(new Set());
+	const [newStoryQueue, setNewStoryQueue] = useState<
+		{ id?: string; title?: string; content?: string; characterName?: string; characterImage?: string }[]
+	>([]);
+	const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
 
 	const toast = useToast();
 
@@ -188,6 +194,40 @@ export const CharacterDetailPage: React.FC = () => {
 		} catch (err) {
 			console.error("お気に入り更新エラー:", err);
 		}
+	};
+
+	// ストーリー解放検知
+	useEffect(() => {
+		if (!stories || !getCharacter()) return;
+		const currentIds = new Set(stories.map((s) => s.id));
+		const newIds = Array.from(currentIds).filter((id) => !prevStoryIds.has(id));
+		const newStories = newIds
+			.map((id) => stories.find((s) => s.id === id))
+			.filter(Boolean)
+			.map((s) => ({
+				id: s?.id,
+				title: s?.title,
+				content: s?.content,
+				characterName: getCharacter()?.name,
+				characterImage: getCharacter()?.profileImageUrl,
+			}));
+		if (newStories.length > 0) {
+			setNewStoryQueue((prev) => {
+				const prevTitles = new Set(prev.map((q) => q.title));
+				const filtered = newStories.filter((c) => !prevTitles.has(c.id));
+				return [...prev, ...filtered];
+			});
+			setIsStoryModalOpen(true);
+		}
+		setPrevStoryIds(currentIds);
+	}, [stories]);
+
+	const handleCloseNewStoryModal = () => {
+		setNewStoryQueue((prev) => {
+			const [, ...rest] = prev;
+			if (rest.length === 0) setIsStoryModalOpen(false);
+			return rest;
+		});
 	};
 
 	// ローディング表示
@@ -291,6 +331,16 @@ export const CharacterDetailPage: React.FC = () => {
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
+			{/* 新ストーリー解放モーダル */}
+			<NewStoryOpenModal
+				isOpen={isStoryModalOpen}
+				onClose={handleCloseNewStoryModal}
+				storyTitle={newStoryQueue[0]?.title ?? ""}
+				storyDesc={newStoryQueue[0]?.content}
+				characterName={newStoryQueue[0]?.characterName}
+				characterImage={newStoryQueue[0]?.characterImage}
+			/>
+
 			{/* 背景装飾 */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				<MotionBox
