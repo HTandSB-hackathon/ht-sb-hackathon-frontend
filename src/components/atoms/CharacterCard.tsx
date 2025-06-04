@@ -1,5 +1,6 @@
 import { getNewCharacterAtom } from "@/lib/atom/CharacterAtom";
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import type { Relationship } from "@/lib/domain/CharacterQuery";
 import type { ChatCount } from "@/lib/domain/ChatQuery";
 import type { Municipality } from "@/lib/domain/CityQuery";
@@ -24,9 +25,7 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSetAtom, useAtomValue } from "jotai";
-import { userAtom } from "@/lib/atom/UserAtom";
-import { UserProfileMenu } from "../organisms/UserProfileMenu";
+import { useAtomValue, useSetAtom } from "jotai";
 import React from "react";
 import {
 	FaClock,
@@ -39,6 +38,7 @@ import { MdLock, MdStar } from "react-icons/md";
 import { useNavigate } from "react-router";
 import type { Character } from "../../lib/domain/CharacterQuery";
 import { TRUST_LEVELS } from "../../lib/types/character";
+import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionCard = motion(Card);
 const MotionBox = motion(Box);
@@ -247,9 +247,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 							<Box position="relative">
 								<Avatar
 									size={avatarSize}
-									src={character.isLocked ? undefined : character.profileImageUrl}
+									src={
+										character.isLocked ? undefined : character.profileImageUrl
+									}
 									name={character.isLocked ? "???" : character.name}
-									bg={character.isLocked ? "gray.400" : `${cityTheme.color}.500`}
+									bg={
+										character.isLocked ? "gray.400" : `${cityTheme.color}.500`
+									}
 									icon={character.isLocked ? <MdLock /> : undefined}
 									border="4px solid"
 									borderColor={`${cityTheme.color}.400`}
@@ -298,7 +302,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 							<VStack align="start" spacing={2} flex="1" position="relative">
 								{/* 名前（9文字目以降は省略してツールチップで全量表示） */}
 								<Tooltip
-									label={!character.isLocked && character.name.length > 8 ? character.name : undefined}
+									label={
+										!character.isLocked && character.name.length > 8
+											? character.name
+											: undefined
+									}
 									isDisabled={character.isLocked || character.name.length <= 8}
 								>
 									<Text
@@ -314,49 +322,37 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 										{character.isLocked
 											? "???"
 											: character.name.length > 8
-												? character.name.slice(0, 8) + "..."
+												? `${character.name.slice(0, 8)}...`
 												: character.name}
 									</Text>
 								</Tooltip>
-								{/* 市町村名（9文字目以降は省略してツールチップで全量表示） */}
-								<Tooltip
-									label={
-										!character.isLocked &&
-										getMunicipalityName() &&
-										getMunicipalityName()!.length > 8
-											? getMunicipalityName()
-											: undefined
-									}
-									isDisabled={
-										character.isLocked ||
-										!getMunicipalityName() ||
-										getMunicipalityName()!.length <= 8
-									}
+								<Tag
+									size="sm"
+									colorScheme={cityTheme.color}
+									variant="subtle"
+									maxW="180px"
+									overflow="hidden"
+									mb={2}
 								>
-									<Tag
-										size="sm"
-										colorScheme={cityTheme.color}
-										variant="subtle"
-										maxW="180px"
+									<TagLeftIcon as={FaMapMarkerAlt} />
+									<TagLabel
+										noOfLines={1}
 										overflow="hidden"
-										mb={2}
+										textOverflow="ellipsis"
+										whiteSpace="nowrap"
+										maxW="140px"
 									>
-										<TagLeftIcon as={FaMapMarkerAlt} />
-										<TagLabel
-											noOfLines={1}
-											overflow="hidden"
-											textOverflow="ellipsis"
-											whiteSpace="nowrap"
-											maxW="140px"
-										>
-											{character.isLocked
-												? "未解放"
-												: getMunicipalityName() && getMunicipalityName()!.length > 8
-													? getMunicipalityName()!.slice(0, 8) + "..."
-													: getMunicipalityName()}
-										</TagLabel>
-									</Tag>
-								</Tooltip>
+										{character.isLocked
+											? "未解放"
+											: (() => {
+													const name = getMunicipalityName();
+													if (!name) return "";
+													return name.length > 8
+														? `${name.slice(0, 8)}...`
+														: name;
+												})()}
+									</TagLabel>
+								</Tag>
 							</VStack>
 							<Spacer />
 							{/* お気に入りボタン */}
@@ -370,7 +366,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 									alignItems="center"
 									height="32px"
 								>
-									<Tooltip label={isFavorite ? "お気に入りから削除" : "お気に入りに追加"}>
+									<Tooltip
+										label={
+											isFavorite ? "お気に入りから削除" : "お気に入りに追加"
+										}
+									>
 										<IconButton
 											aria-label="favorite"
 											icon={isFavorite ? <FaHeart /> : <FaRegHeart />}

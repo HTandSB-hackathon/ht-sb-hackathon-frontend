@@ -10,21 +10,19 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import {
-	FaUser,
-	FaUserFriends,
-	FaCog,
-	FaSignOutAlt,
-} from "react-icons/fa";
+import type React from "react";
+import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import React from "react";
 
 export interface UserProfileMenuProps {
 	user: { name?: string | null; avatarUrl?: string | null } | null;
 	cardBg: string;
 }
 
-export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({ user, cardBg }) => {
+export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
+	user,
+	cardBg,
+}) => {
 	const navigate = useNavigate();
 
 	return (

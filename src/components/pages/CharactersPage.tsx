@@ -212,7 +212,9 @@ export const CharactersPage: React.FC = () => {
 								zIndex={2}
 							>
 								<Button
-									leftIcon={<FaArrowRight style={{ transform: "scaleX(-1)" }} />}
+									leftIcon={
+										<FaArrowRight style={{ transform: "scaleX(-1)" }} />
+									}
 									variant="ghost"
 									onClick={() => navigate("/home")}
 									borderRadius="xl"
@@ -273,7 +275,9 @@ export const CharactersPage: React.FC = () => {
 									display="inline"
 								>
 									{characters?.length}
-									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>人</span>
+									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 								</StatNumber>
 							</Stat>
 
@@ -299,7 +303,9 @@ export const CharactersPage: React.FC = () => {
 									display="inline"
 								>
 									{countByTrustLevel[5] || 0}
-									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>人</span>
+									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 								</StatNumber>
 							</Stat>
 
@@ -326,7 +332,9 @@ export const CharactersPage: React.FC = () => {
 										display="inline"
 									>
 										{municipalities.length}
-										<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>箇所</span>
+										<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+											箇所
+										</span>
 									</StatNumber>
 								)}
 							</Stat>
@@ -353,7 +361,9 @@ export const CharactersPage: React.FC = () => {
 									display="inline"
 								>
 									{favoriteIds.size}
-									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>人</span>
+									<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 								</StatNumber>
 							</Stat>
 						</SimpleGrid>
