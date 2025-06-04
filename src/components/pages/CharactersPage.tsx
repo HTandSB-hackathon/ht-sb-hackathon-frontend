@@ -228,6 +228,7 @@ export const CharactersPage: React.FC = () => {
 									bgGradient="linear(to-r, purple.600, blue.600, teal.500)"
 									bgClip="text"
 									fontWeight="extrabold"
+									lineHeight={1.2}
 								>
 									福島のこころ 🌸
 								</Heading>
