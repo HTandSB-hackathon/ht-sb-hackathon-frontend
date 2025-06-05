@@ -21,6 +21,7 @@ interface NewGiftOpenModalProps {
 	onClose: () => void;
 	giftName: string;
 	giftDesc?: string;
+	giftImage?: string; // Optional, if you want to show an image of the gift
 	characterName?: string;
 	characterImage?: string;
 }
@@ -65,6 +66,7 @@ export const NewGiftOpenModal: React.FC<NewGiftOpenModalProps> = ({
 	onClose,
 	giftName,
 	giftDesc,
+	giftImage,
 	characterName,
 	characterImage,
 }) => {
@@ -153,14 +155,38 @@ export const NewGiftOpenModal: React.FC<NewGiftOpenModalProps> = ({
 								opacity={0.5}
 							/>
 						</motion.div>
-						<Avatar
-							size="xl"
-							src={characterImage}
-							name={characterName}
-							border={`3px solid ${accent}`}
-							boxShadow="lg"
-							zIndex={1}
-						/>
+						<Box position="relative" display="inline-block">
+							<Avatar
+								size="xl"
+								src={giftImage}
+								name={giftName}
+								border={`3px solid ${accent}`}
+								boxShadow="lg"
+								zIndex={1}
+							/>
+							{characterImage && (
+								<Box
+									position="absolute"
+									bottom="-2"
+									right="-2"
+									bg="white"
+									borderRadius="full"
+									border="2px solid"
+									borderColor="purple.400"
+									fontSize="sm"
+									zIndex={2}
+									display="flex"
+									alignItems="center"
+								>
+									<Avatar
+										size="sm"
+										src={characterImage}
+										name={characterName}
+										bg="gray.100"
+									/>
+								</Box>
+							)}
+						</Box>
 					</Center>
 					<Stack spacing={3} align="center">
 						<motion.div
