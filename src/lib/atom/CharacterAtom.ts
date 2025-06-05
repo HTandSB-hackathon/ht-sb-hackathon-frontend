@@ -11,7 +11,9 @@ import {
 	type Character,
 	type RelationShipRequest,
 	type Relationship,
+	type Story,
 	checkLevelUpRelationship,
+	checkStroyUnlock,
 	getCharacters,
 	getLockedCharacters,
 	getRelationships,
@@ -19,7 +21,11 @@ import {
 	updateRelationship,
 } from "../domain/CharacterQuery";
 import type { Municipality } from "../domain/CityQuery";
-import { isLevelUpModalOpenAtom } from "./BaseAtom";
+import {
+	isLevelUpModalOpenAtom,
+	isNewCharacterModalOpenAtom,
+	isNewStoryModalOpenAtom,
+} from "./BaseAtom";
 import { municipalityAtomAsync } from "./CityAtom";
 
 /**
@@ -196,12 +202,24 @@ export const sortedCharactersAtom = atom(async (get) => {
 	});
 });
 
+export const newCharacterRelationshipAtom = atom<Relationship | null>(null);
 export const getNewCharacterAtom = atom(
 	null,
-	async (_, set, characterId: number) => {
+	async (get, set, characterId: number) => {
 		try {
-			const character = await insertRelationship(characterId);
-			return character;
+			const newRelationship = await insertRelationship(characterId);
+			const relationships = await get(relationshipsAtomAsync);
+
+			// relationshipsにnewRelationshipのIDを持つ要素が存在するか確認
+			const existingRelationship = relationships.find(
+				(relationship) => relationship.id === newRelationship.id,
+			);
+			// 存在しない場合のみ新しい関係性を設定
+			if (!existingRelationship) {
+				set(newCharacterRelationshipAtom, newRelationship);
+				set(isNewCharacterModalOpenAtom, true);
+			}
+			return newRelationship;
 		} catch (error) {
 			console.error("Error inserting new character:", error);
 			throw error;
@@ -222,6 +240,7 @@ interface levelUpCharacterDetail {
 export const levelUpCharacterDetailAtom = atom<levelUpCharacterDetail | null>(
 	null,
 );
+export const newStoryAtom = atom<Story | null>(null);
 export const checkLevelUpRelationshipAtom = atom(
 	null,
 	async (get, set, characterId: number, curretntTrustLevelId: number) => {
@@ -238,6 +257,14 @@ export const checkLevelUpRelationshipAtom = atom(
 				set(characterAtomAsync);
 				set(lockedCharactersAtomAsync);
 				set(relationshipsAtomAsync);
+
+				const newStory = await checkStroyUnlock(characterId);
+				if (newStory.requiredTrustLevel === relationship.trustLevelId) {
+					// 新しいストーリーが解放された場合の処理
+					console.log("新しいストーリーが解放されました:", newStory);
+					set(isNewStoryModalOpenAtom, true);
+					set(newStoryAtom, newStory);
+				}
 			}
 			return relationship;
 		} catch (error) {

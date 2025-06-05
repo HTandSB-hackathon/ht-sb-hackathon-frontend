@@ -56,6 +56,7 @@ export class Relationship {
 export class Story {
 	constructor(
 		public id: string,
+		public characterId: number,
 		public title: string,
 		public content: string,
 		public requiredTrustLevel: number,
@@ -100,6 +101,7 @@ export interface RelationshipResponse {
 
 export interface StoryResponse {
 	id: string;
+	character_id: number;
 	title: string;
 	content: string;
 	required_trust_level: number;
@@ -153,6 +155,7 @@ function createRelationship(res: RelationshipResponse): Relationship {
 function createStory(res: StoryResponse): Story {
 	return new Story(
 		res.id,
+		res.character_id,
 		res.title,
 		res.content,
 		res.required_trust_level,
@@ -195,7 +198,15 @@ export async function getRelationships(): Promise<Relationship[]> {
 export async function getStories(characterId: string): Promise<Story[]> {
 	const axiosClient = createAxiosClient();
 	const response = await axiosClient.get<StoryResponse[]>(
-		`/characters/${characterId}/stories`,
+		`/characters/${characterId}/stories/unlocked`,
+	);
+	return response.data.map(createStory);
+}
+
+export async function getLockedStories(characterId: string): Promise<Story[]> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.get<StoryResponse[]>(
+		`/characters/${characterId}/stories/locked`,
 	);
 	return response.data.map(createStory);
 }
@@ -232,4 +243,13 @@ export async function checkLevelUpRelationship(
 		RelationshipResponse
 	>(`/characters/${characterId}/check_trust_level`, {});
 	return createRelationship(response.data);
+}
+
+export async function checkStroyUnlock(characterId: number): Promise<Story> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.put<Record<string, never>, StoryResponse>(
+		`/characters/${characterId}/stories/unlock`,
+		{},
+	);
+	return createStory(response.data);
 }

@@ -1,4 +1,10 @@
 import {
+	charactersAtomLoadable,
+	newCharacterRelationshipAtom,
+	newlyUnlockedCharacterIdsAtom,
+} from "@/lib/atom/CharacterAtom";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
+import {
 	Avatar,
 	Box,
 	Button,
@@ -14,14 +20,12 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
 import { FaStar, FaUserPlus } from "react-icons/fa";
 
 interface NewCharacterOpenModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	characterName: string;
-	characterImage?: string;
-	unlockedDesc?: string;
 }
 
 const Sparkle = ({
@@ -62,18 +66,36 @@ const Sparkle = ({
 export const NewCharacterOpenModal: React.FC<NewCharacterOpenModalProps> = ({
 	isOpen,
 	onClose,
-	characterName,
-	characterImage,
-	unlockedDesc,
 }) => {
 	const cardBg = useColorModeValue("white", "gray.800");
 	const accent = useColorModeValue("purple.400", "purple.300");
 	const starColor = "yellow.400";
 
+	const [newCharacterIds, setNewCharacterIds] = useAtom(
+		newlyUnlockedCharacterIdsAtom,
+	);
+	const [newRelationship, setNewRelationship] = useAtom(
+		newCharacterRelationshipAtom,
+	);
+	const characters = useLoadableAtom(charactersAtomLoadable);
+
+	const character = characters?.find(
+		(c) => newRelationship?.characterId === c.id,
+	);
+	const unlockedDesc = "";
+
+	const onCloseHandler = () => {
+		setNewRelationship(null);
+		if (character) {
+			setNewCharacterIds((prev) => new Set(prev).add(String(character?.id)));
+		}
+		onClose();
+	};
+
 	return (
 		<Modal
 			isOpen={isOpen}
-			onClose={onClose}
+			onClose={onCloseHandler}
 			isCentered
 			size="xl"
 			closeOnOverlayClick={false}
@@ -153,8 +175,8 @@ export const NewCharacterOpenModal: React.FC<NewCharacterOpenModalProps> = ({
 						</motion.div>
 						<Avatar
 							size="xl"
-							src={characterImage}
-							name={characterName}
+							src={character?.profileImageUrl}
+							name={character?.name}
 							border={`3px solid ${accent}`}
 							boxShadow="lg"
 							zIndex={1}
@@ -194,7 +216,7 @@ export const NewCharacterOpenModal: React.FC<NewCharacterOpenModalProps> = ({
 							textOverflow="ellipsis"
 							maxW="90%"
 						>
-							{characterName}さんと新しく出会いました！
+							{character?.name}さんと新しく出会いました！
 						</Text>
 						{(unlockedDesc ?? "") && (
 							<Box
@@ -222,7 +244,7 @@ export const NewCharacterOpenModal: React.FC<NewCharacterOpenModalProps> = ({
 						size="lg"
 						w="full"
 						borderRadius="full"
-						onClick={onClose}
+						onClick={onCloseHandler}
 						as={motion.button}
 						whileHover={{ scale: 1.05, boxShadow: "0 0 0 2px #a78bfa" }}
 						zIndex={2}

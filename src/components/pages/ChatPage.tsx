@@ -257,9 +257,9 @@ export const ChatPage: React.FC = () => {
 					>
 						<CardBody p={4} h="100%" display="flex" flexDirection="column">
 							<Stack spacing={4} flex={1} justify="flex-end">
-								{messages.map((msg) => (
+								{messages.map((msg, index) => (
 									<Flex
-										key={msg.content}
+										key={index}
 										justify={msg.role === "user" ? "flex-end" : "flex-start"}
 									>
 										<Box
