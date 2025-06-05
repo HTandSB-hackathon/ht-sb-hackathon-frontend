@@ -1,5 +1,8 @@
-import { getMunicipalities } from "@/lib/domain/CityQuery";
+import type { Character } from "@/lib/domain/CharacterQuery";
+import { type Municipality, getMunicipalities } from "@/lib/domain/CityQuery";
+import { atom } from "jotai";
 import { atomWithRefresh, loadable } from "jotai/utils";
+import { characterAtomAsync } from "./CharacterAtom";
 
 export const municipalityAtomAsync = atomWithRefresh(async () => {
 	try {
@@ -12,3 +15,30 @@ export const municipalityAtomAsync = atomWithRefresh(async () => {
 });
 
 export const municipalityAtomLoadable = loadable(municipalityAtomAsync);
+
+interface MunicipalityWithCharacters {
+	municipality: Municipality;
+	characters: Character[] | [];
+}
+
+export const municipalityWithCharactersAtom = atom<
+	Promise<MunicipalityWithCharacters[]>
+>(async (get) => {
+	const municipalities = await get(municipalityAtomAsync);
+	const characters = await get(characterAtomAsync);
+	return municipalities.map((municipality) => {
+		const charactersData = characters.filter(
+			(c) => c.municipalityId === municipality.id,
+		);
+		console.log(
+			"Municipality:",
+			municipality.name,
+			"Characters:",
+			charactersData,
+		);
+		return {
+			municipality: municipality,
+			characters: charactersData || [],
+		};
+	});
+});

@@ -15,7 +15,7 @@ import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router";
 
 export interface UserProfileMenuProps {
-	user: { name?: string | null; avatarUrl?: string | null } | null;
+	user: { name?: string | null; avatarUrl?: string | null } | null | undefined;
 	cardBg: string;
 }
 

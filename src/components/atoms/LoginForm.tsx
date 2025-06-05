@@ -80,7 +80,7 @@ export default function LoginForm() {
 		setIsLoading(true);
 
 		try {
-			const returnUrl = sessionStorage.getItem("returnUrl") || "/";
+			const returnUrl = sessionStorage.getItem("returnUrl") || "/home";
 			sessionStorage.removeItem("returnUrl");
 
 			login({ username: email, password });
