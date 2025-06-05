@@ -67,7 +67,11 @@ import { useNavigate, useParams } from "react-router";
 
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
 import type { Relationship, Story } from "@/lib/domain/CharacterQuery";
-import { getRelationship, getStories } from "@/lib/domain/CharacterQuery";
+import {
+	getLockedStories,
+	getRelationship,
+	getStories,
+} from "@/lib/domain/CharacterQuery";
 import { getChatCountByCharacterId } from "@/lib/domain/ChatQuery";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
@@ -94,6 +98,7 @@ export const CharacterDetailPage: React.FC = () => {
 	const isFavorite = favoriteCharacterIds.has(Number(id));
 	const putFavoriteIds = useSetAtom(updateRelationshipAtom);
 	const [stories, setStories] = useState<Story[]>([]);
+	const [lockedStories, setLockedStories] = useState<Story[]>([]);
 	const [relationship, setRelationship] = useState<Relationship>();
 	const [conversationCount, setConversationCount] = useState<number>(0);
 	const [isLoading, setIsLoading] = useAtom(characterDetailLoadingAtom);
@@ -161,6 +166,8 @@ export const CharacterDetailPage: React.FC = () => {
 			setError(null);
 			const stories = await getStories(characterId);
 			setStories(stories);
+			const lockedStories = await getLockedStories(characterId);
+			setLockedStories(lockedStories);
 			const relationship = await getRelationship(Number(characterId));
 			setRelationship(relationship);
 			const count = await getChatCountByCharacterId(characterId);
@@ -337,16 +344,6 @@ export const CharacterDetailPage: React.FC = () => {
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
-			{/* 新ストーリー解放モーダル */}
-			<NewStoryOpenModal
-				isOpen={isStoryModalOpen}
-				onClose={handleCloseNewStoryModal}
-				storyTitle={newStoryQueue[0]?.title ?? ""}
-				storyDesc={newStoryQueue[0]?.content}
-				characterName={newStoryQueue[0]?.characterName}
-				characterImage={newStoryQueue[0]?.characterImage}
-			/>
-
 			{/* 背景装飾 */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				<MotionBox
@@ -895,6 +892,74 @@ export const CharacterDetailPage: React.FC = () => {
 
 										<VStack spacing={4}>
 											{stories?.map((story) => (
+												<Card
+													key={story.id}
+													w="full"
+													borderRadius="xl"
+													shadow={
+														relationship.trustLevelId >=
+														story.requiredTrustLevel
+															? "md"
+															: "sm"
+													}
+													opacity={
+														relationship.trustLevelId >=
+														story.requiredTrustLevel
+															? 1
+															: 0.6
+													}
+													bg={
+														relationship.trustLevelId >=
+														story.requiredTrustLevel
+															? "white"
+															: "gray.50"
+													}
+												>
+													<CardBody p={6}>
+														<HStack justify="space-between" mb={3}>
+															<Heading size="sm">
+																{relationship.trustLevelId >=
+																story.requiredTrustLevel
+																	? story.title
+																	: "???"}
+															</Heading>
+															<HStack>
+																<Icon
+																	as={
+																		relationship.trustLevelId >=
+																		story.requiredTrustLevel
+																			? FaUnlock
+																			: FaLock
+																	}
+																	color={
+																		relationship.trustLevelId >=
+																		story.requiredTrustLevel
+																			? "green.500"
+																			: "gray.400"
+																	}
+																/>
+																<Badge
+																	colorScheme={
+																		relationship.trustLevelId >=
+																		story.requiredTrustLevel
+																			? "green"
+																			: "gray"
+																	}
+																>
+																	Lv.{story.requiredTrustLevel}必要
+																</Badge>
+															</HStack>
+														</HStack>
+														<Text color="gray.600">
+															{relationship.trustLevelId >=
+															story.requiredTrustLevel
+																? story.content
+																: `信頼レベルを${story.requiredTrustLevel}まで上げると解放されます`}
+														</Text>
+													</CardBody>
+												</Card>
+											))}
+											{lockedStories?.map((story) => (
 												<Card
 													key={story.id}
 													w="full"

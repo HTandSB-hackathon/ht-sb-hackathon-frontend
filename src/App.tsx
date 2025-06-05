@@ -1,7 +1,11 @@
 import { ProtectedRoute } from "@/lib/route/ProtectedRoute";
 import { useAtom, useSetAtom } from "jotai";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { isLevelUpModalOpenAtom } from "./lib/atom/BaseAtom";
+import {
+	isLevelUpModalOpenAtom,
+	isNewCharacterModalOpenAtom,
+	isNewStoryModalOpenAtom,
+} from "./lib/atom/BaseAtom";
 
 import { LevelUpModal } from "./components/organisms/LevelUpModal";
 
@@ -18,18 +22,39 @@ import SettingsPage from "@/components/pages/SettingsPage";
 import TermsOfServicePage from "@/components/pages/TermsOfServicePage";
 import TutorialPage from "@/components/pages/TutorialPage";
 import { useEffect } from "react";
+import { NewCharacterOpenModal } from "./components/organisms/NewCharacterOpenModal";
+import { NewStoryOpenModal } from "./components/organisms/NewStoryOpenModal";
 import LandingPage from "./components/pages/LandingPage";
-import { levelUpCharacterDetailAtom } from "./lib/atom/CharacterAtom";
+import {
+	levelUpCharacterDetailAtom,
+	newCharacterRelationshipAtom,
+	newStoryAtom,
+	newlyUnlockedCharacterIdsAtom,
+} from "./lib/atom/CharacterAtom";
 
 function App() {
 	const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useAtom(
 		isLevelUpModalOpenAtom,
 	);
+	const [isNewCharacterModalOpen, setIsNewCharacterModalOpen] = useAtom(
+		isNewCharacterModalOpenAtom,
+	);
+	const [isNewStoryModalOpen, setIsNewStoryModalOpen] = useAtom(
+		isNewStoryModalOpenAtom,
+	);
 	const setLevelUpCharacterDetail = useSetAtom(levelUpCharacterDetailAtom);
+	const setNewCharacterRelationship = useSetAtom(newCharacterRelationshipAtom);
+	const setNewCharacterIds = useSetAtom(newlyUnlockedCharacterIdsAtom);
+	const setNewStory = useSetAtom(newStoryAtom);
 
 	useEffect(() => {
 		setIsLevelUpModalOpen(false);
+		setIsNewCharacterModalOpen(false);
 		setLevelUpCharacterDetail(null);
+		setNewCharacterRelationship(null);
+		setNewCharacterIds(new Set([]));
+		setIsNewStoryModalOpen(false);
+		setNewStory(null);
 	}, []);
 
 	return (
@@ -64,6 +89,18 @@ function App() {
 				<LevelUpModal
 					onClose={() => setIsLevelUpModalOpen(false)}
 					isOpen={isLevelUpModalOpen}
+				/>
+			)}
+			{isNewCharacterModalOpen && (
+				<NewCharacterOpenModal
+					isOpen={isNewCharacterModalOpen}
+					onClose={() => setIsNewCharacterModalOpen(false)}
+				/>
+			)}
+			{isNewStoryModalOpen && (
+				<NewStoryOpenModal
+					isOpen={isNewStoryModalOpen}
+					onClose={() => setIsNewStoryModalOpen(false)}
 				/>
 			)}
 		</div>

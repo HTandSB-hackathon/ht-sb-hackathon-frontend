@@ -1,3 +1,5 @@
+import { charactersAtomLoadable, newStoryAtom } from "@/lib/atom/CharacterAtom";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	Avatar,
 	Box,
@@ -14,15 +16,12 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useAtom } from "jotai";
 import { FaBookOpen, FaStar } from "react-icons/fa";
 
 interface NewStoryOpenModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	storyTitle: string;
-	storyDesc?: string;
-	characterName?: string;
-	characterImage?: string;
 }
 
 const Sparkle = ({
@@ -63,14 +62,15 @@ const Sparkle = ({
 export const NewStoryOpenModal: React.FC<NewStoryOpenModalProps> = ({
 	isOpen,
 	onClose,
-	storyTitle,
-	storyDesc,
-	characterName,
-	characterImage,
 }) => {
 	const cardBg = useColorModeValue("white", "gray.800");
 	const accent = useColorModeValue("purple.400", "purple.300");
 	const starColor = "yellow.400";
+
+	const [newStory, setNewStory] = useAtom(newStoryAtom);
+	const characters = useLoadableAtom(charactersAtomLoadable);
+
+	const character = characters?.find((c) => c.id === newStory?.characterId);
 
 	return (
 		<Modal
@@ -155,8 +155,8 @@ export const NewStoryOpenModal: React.FC<NewStoryOpenModalProps> = ({
 						</motion.div>
 						<Avatar
 							size="xl"
-							src={characterImage}
-							name={characterName}
+							src={character?.profileImageUrl}
+							name={character?.name}
 							border={`3px solid ${accent}`}
 							boxShadow="lg"
 							zIndex={1}
@@ -196,9 +196,10 @@ export const NewStoryOpenModal: React.FC<NewStoryOpenModalProps> = ({
 							textOverflow="ellipsis"
 							maxW="90%"
 						>
-							{characterName && `${characterName}さんの`}「{storyTitle}」
+							{character?.name && `${character?.name}さんの`}「{newStory?.title}
+							」
 						</Text>
-						{storyDesc && (
+						{newStory?.content && (
 							<Box
 								bg={useColorModeValue("purple.50", "purple.900")}
 								color={accent}
@@ -213,7 +214,7 @@ export const NewStoryOpenModal: React.FC<NewStoryOpenModalProps> = ({
 								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
 							>
-								{storyDesc}
+								{newStory?.content}
 							</Box>
 						)}
 					</Stack>
