@@ -1,7 +1,7 @@
 import { type User, getUser } from "@/lib/domain/UserQuery";
 import { atom } from "jotai";
 
-export const userAtom = atom<User | null>(null);
+export const userAtom = atom<User | null | undefined>(undefined);
 
 export const isUserLoadingAtom = atom<boolean>(false);
 
@@ -13,6 +13,7 @@ export const getUserAtom = atom(null, async (_, set) => {
 		const res = await getUser();
 		set(userAtom, res);
 	} catch (error) {
+		set(userAtom, null);
 		console.error("Failed to fetch user data:", error);
 	} finally {
 		set(isUserLoadingAtom, false);

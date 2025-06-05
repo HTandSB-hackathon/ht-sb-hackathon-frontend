@@ -1,4 +1,12 @@
-import { getUserAtom, isUserLoadingAtom, userAtom } from "@/lib/atom/UserAtom";
+import { achievementsAtomLoadable } from "@/lib/atom/AchivementAtom";
+import {
+	characterTrustLevelTop3Atom,
+	relationshipsAtomLoadable,
+} from "@/lib/atom/CharacterAtom";
+import { chatCountAllAtomLoadable } from "@/lib/atom/ChatAtom";
+import { municipalityWithCharactersAtom } from "@/lib/atom/CityAtom";
+import { isUserLoadingAtom, userAtom } from "@/lib/atom/UserAtom";
+import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	Avatar,
 	Badge,
@@ -23,8 +31,7 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useAtom, useAtomValue } from "jotai";
 import {
 	FaBolt,
 	FaCalendarAlt,
@@ -43,7 +50,13 @@ const MotionBox = motion(Box);
 export default function ProfilePage() {
 	const user = useAtomValue(userAtom);
 	const isLoading = useAtomValue(isUserLoadingAtom);
-	const fetchUser = useSetAtom(getUserAtom);
+	const chatCount = useLoadableAtom(chatCountAllAtomLoadable);
+	const relationships = useLoadableAtom(relationshipsAtomLoadable);
+	const characterTrustLevelTop3 = useAtomValue(characterTrustLevelTop3Atom);
+	const municipalityWithCharacters = useAtomValue(
+		municipalityWithCharactersAtom,
+	);
+	const unklockedAchievements = useLoadableAtom(achievementsAtomLoadable);
 
 	const bgGradient = useColorModeValue(
 		"linear(to-br, blue.50, purple.50, pink.50)",
@@ -62,12 +75,6 @@ export default function ProfilePage() {
 
 	const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3, xl: 4 });
 	const containerPadding = useBreakpointValue({ base: 4, md: 6, lg: 8 });
-
-	useEffect(() => {
-		if (!user) {
-			fetchUser();
-		}
-	}, [user, fetchUser]);
 
 	const fadeInUp = {
 		initial: { opacity: 0, y: 60 },
@@ -212,6 +219,7 @@ export default function ProfilePage() {
 									<Avatar
 										size="2xl"
 										name={user?.name || "ユーザー"}
+										src={user?.avatarUrl || undefined}
 										border="4px solid white"
 										shadow="xl"
 									/>
@@ -305,7 +313,7 @@ export default function ProfilePage() {
 											bgClip="text"
 											fontWeight="bold"
 										>
-											3
+											{relationships?.length || 0}
 										</StatNumber>
 										<StatLabel fontSize="md" color="gray.600">
 											出会った人数
@@ -344,7 +352,7 @@ export default function ProfilePage() {
 											bgClip="text"
 											fontWeight="bold"
 										>
-											48
+											{chatCount}
 										</StatNumber>
 										<StatLabel fontSize="md" color="gray.600">
 											総会話数
@@ -383,7 +391,9 @@ export default function ProfilePage() {
 											bgClip="text"
 											fontWeight="bold"
 										>
-											2
+											{relationships?.filter(
+												(relationships) => relationships.trustLevelId === 5,
+											).length || 0}
 										</StatNumber>
 										<StatLabel fontSize="md" color="gray.600">
 											最高信頼レベル
@@ -422,7 +432,9 @@ export default function ProfilePage() {
 											bgClip="text"
 											fontWeight="bold"
 										>
-											5
+											{relationships?.filter(
+												(relationships) => relationships.isFavorite,
+											).length || 0}
 										</StatNumber>
 										<StatLabel fontSize="md" color="gray.600">
 											お気に入り
@@ -449,129 +461,39 @@ export default function ProfilePage() {
 									🏆 実績・バッジ
 								</Heading>
 								<VStack spacing={4} align="stretch">
-									<HStack
-										justify="space-between"
-										align="center"
-										p={4}
-										borderRadius="xl"
-										bg="green.50"
-									>
-										<HStack>
-											<Box p={2} borderRadius="lg" bg="green.100">
-												<FaUsers color="#38A169" />
-											</Box>
-											<VStack align="start" spacing={0}>
-												<Text fontWeight="bold" color="green.700">
-													初めての出会い
-												</Text>
-												<Text fontSize="sm" color="green.600">
-													初回の農家さんとの出会いを達成
-												</Text>
-											</VStack>
-										</HStack>
-										<Badge
-											colorScheme="green"
-											size="lg"
-											px={3}
-											py={1}
-											borderRadius="full"
+									{unklockedAchievements?.map((achievement) => (
+										<HStack
+											key={achievement.id}
+											justify="space-between"
+											align="center"
+											p={4}
+											borderRadius="xl"
+											bg="green.50"
 										>
-											達成
-										</Badge>
-									</HStack>
-
-									<HStack
-										justify="space-between"
-										align="center"
-										p={4}
-										borderRadius="xl"
-										bg="blue.50"
-									>
-										<HStack>
-											<Box p={2} borderRadius="lg" bg="blue.100">
-												<FaBolt color="#3182CE" />
-											</Box>
-											<VStack align="start" spacing={0}>
-												<Text fontWeight="bold" color="blue.700">
-													信頼レベル2達成
-												</Text>
-												<Text fontSize="sm" color="blue.600">
-													深い信頼関係を築きました
-												</Text>
-											</VStack>
+											<HStack>
+												<Box p={2} borderRadius="lg" bg="green.100">
+													<FaUsers color="#38A169" />
+												</Box>
+												<VStack align="start" spacing={0}>
+													<Text fontWeight="bold" color="green.700">
+														{achievement.name}
+													</Text>
+													<Text fontSize="sm" color="green.600">
+														{achievement.description}
+													</Text>
+												</VStack>
+											</HStack>
+											<Badge
+												colorScheme="green"
+												size="lg"
+												px={3}
+												py={1}
+												borderRadius="full"
+											>
+												達成
+											</Badge>
 										</HStack>
-										<Badge
-											colorScheme="blue"
-											size="lg"
-											px={3}
-											py={1}
-											borderRadius="full"
-										>
-											達成
-										</Badge>
-									</HStack>
-
-									<HStack
-										justify="space-between"
-										align="center"
-										p={4}
-										borderRadius="xl"
-										bg="purple.50"
-									>
-										<HStack>
-											<Box p={2} borderRadius="lg" bg="purple.100">
-												<FaComment color="#805AD5" />
-											</Box>
-											<VStack align="start" spacing={0}>
-												<Text fontWeight="bold" color="purple.700">
-													おしゃべり上手
-												</Text>
-												<Text fontSize="sm" color="purple.600">
-													10回以上の会話を達成
-												</Text>
-											</VStack>
-										</HStack>
-										<Badge
-											colorScheme="purple"
-											size="lg"
-											px={3}
-											py={1}
-											borderRadius="full"
-										>
-											達成
-										</Badge>
-									</HStack>
-
-									<HStack
-										justify="space-between"
-										align="center"
-										p={4}
-										borderRadius="xl"
-										bg="gray.50"
-									>
-										<HStack>
-											<Box p={2} borderRadius="lg" bg="gray.100">
-												<FaGift color="#718096" />
-											</Box>
-											<VStack align="start" spacing={0}>
-												<Text fontWeight="bold" color="gray.700">
-													贈り物コレクター
-												</Text>
-												<Text fontSize="sm" color="gray.600">
-													農家さんからの贈り物を受け取る
-												</Text>
-											</VStack>
-										</HStack>
-										<Badge
-											colorScheme="gray"
-											size="lg"
-											px={3}
-											py={1}
-											borderRadius="full"
-										>
-											未達成
-										</Badge>
-									</HStack>
+									))}
 								</VStack>
 							</CardBody>
 						</MotionCard>
@@ -591,86 +513,44 @@ export default function ProfilePage() {
 									🌱 信頼レベルの成長
 								</Heading>
 								<VStack spacing={6} align="stretch">
-									<Box>
-										<HStack justify="space-between" mb={2}>
-											<Text fontWeight="bold" color="gray.700">
-												佐藤花子さん
-											</Text>
-											<Badge
-												colorScheme="green"
-												px={3}
-												py={1}
-												borderRadius="full"
-											>
-												Lv.2
-											</Badge>
-										</HStack>
-										<Progress
-											value={80}
-											size="lg"
-											colorScheme="green"
-											borderRadius="full"
-											hasStripe
-											isAnimated
-										/>
-										<Text fontSize="sm" color="gray.600" mt={1}>
-											須賀川市・農家（信頼度 80%）
-										</Text>
-									</Box>
+									{characterTrustLevelTop3?.length > 0 &&
+										characterTrustLevelTop3.map((data) => {
+											const progress =
+												(data.relationship.trustPoints /
+													data.relationship.nextLevelPoints) *
+												100;
 
-									<Box>
-										<HStack justify="space-between" mb={2}>
-											<Text fontWeight="bold" color="gray.700">
-												田中一郎さん
-											</Text>
-											<Badge
-												colorScheme="blue"
-												px={3}
-												py={1}
-												borderRadius="full"
-											>
-												Lv.1
-											</Badge>
-										</HStack>
-										<Progress
-											value={45}
-											size="lg"
-											colorScheme="blue"
-											borderRadius="full"
-											hasStripe
-											isAnimated
-										/>
-										<Text fontSize="sm" color="gray.600" mt={1}>
-											三春町・農家（信頼度 45%）
-										</Text>
-									</Box>
-
-									<Box>
-										<HStack justify="space-between" mb={2}>
-											<Text fontWeight="bold" color="gray.700">
-												鈴木太郎さん
-											</Text>
-											<Badge
-												colorScheme="purple"
-												px={3}
-												py={1}
-												borderRadius="full"
-											>
-												Lv.1
-											</Badge>
-										</HStack>
-										<Progress
-											value={30}
-											size="lg"
-											colorScheme="purple"
-											borderRadius="full"
-											hasStripe
-											isAnimated
-										/>
-										<Text fontSize="sm" color="gray.600" mt={1}>
-											会津若松市・農家（信頼度 30%）
-										</Text>
-									</Box>
+											return (
+												<Box key={data.relationship.id}>
+													<HStack justify="space-between" mb={2}>
+														<Text fontWeight="bold" color="gray.700">
+															{data.character?.name} さん
+														</Text>
+														<Badge
+															colorScheme="green"
+															px={3}
+															py={1}
+															borderRadius="full"
+														>
+															Lv.{data.relationship.trustLevelId}
+														</Badge>
+													</HStack>
+													<Progress
+														value={progress}
+														size="lg"
+														colorScheme="green"
+														borderRadius="full"
+														hasStripe
+														isAnimated
+													/>
+													<Text fontSize="sm" color="gray.600" mt={1}>
+														{data.municipality?.name}・
+														{data.character?.occupationId}（次のレベルまで{" "}
+														{progress}%）
+													</Text>
+												</Box>
+											);
+										})}
 
 									<Box
 										p={4}
@@ -682,7 +562,18 @@ export default function ProfilePage() {
 										<HStack justify="center">
 											<FaRocket color="#805AD5" />
 											<Text color="purple.600" fontWeight="bold">
-												次のレベルまで あと20%
+												次のレベルまで あと
+												{characterTrustLevelTop3?.length > 0
+													? characterTrustLevelTop3.reduce(
+															(acc, data) =>
+																acc +
+																(data.relationship.trustPoints /
+																	data.relationship.nextLevelPoints) *
+																	100,
+															0,
+														) / characterTrustLevelTop3.length
+													: 0}
+												%
 											</Text>
 										</HStack>
 									</Box>
@@ -707,33 +598,23 @@ export default function ProfilePage() {
 								🗾 福島県でのつながり
 							</Heading>
 							<SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
-								<VStack spacing={2} p={4} borderRadius="xl" bg="green.50">
-									<FaMountain size={24} color="#38A169" />
-									<Text fontWeight="bold" color="green.700">
-										須賀川市
-									</Text>
-									<Text fontSize="sm" color="green.600">
-										1人の農家さん
-									</Text>
-								</VStack>
-								<VStack spacing={2} p={4} borderRadius="xl" bg="blue.50">
-									<MdLocationCity size={24} color="#3182CE" />
-									<Text fontWeight="bold" color="blue.700">
-										三春町
-									</Text>
-									<Text fontSize="sm" color="blue.600">
-										1人の農家さん
-									</Text>
-								</VStack>
-								<VStack spacing={2} p={4} borderRadius="xl" bg="purple.50">
-									<FaMountain size={24} color="#805AD5" />
-									<Text fontWeight="bold" color="purple.700">
-										会津若松市
-									</Text>
-									<Text fontSize="sm" color="purple.600">
-										1人の農家さん
-									</Text>
-								</VStack>
+								{municipalityWithCharacters?.map((municipality) => (
+									<VStack
+										key={municipality.municipality.id}
+										spacing={2}
+										p={4}
+										borderRadius="xl"
+										bg="green.50"
+									>
+										<FaMountain size={24} color="#38A169" />
+										<Text fontWeight="bold" color="green.700">
+											{municipality.municipality.name}
+										</Text>
+										<Text fontSize="sm" color="green.600">
+											{municipality.characters.length}人のつながり
+										</Text>
+									</VStack>
+								))}
 								<VStack
 									spacing={2}
 									p={4}

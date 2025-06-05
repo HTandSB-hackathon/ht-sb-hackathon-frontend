@@ -11,8 +11,11 @@ import { CharactersPage } from "@/components/pages/CharactersPage";
 import ChatPage from "@/components/pages/ChatPage";
 import HomePage from "@/components/pages/HomePage";
 import LoginPage from "@/components/pages/LoginPage";
+import PrivacyPolicyPage from "@/components/pages/PrivacyPolicyPage";
 import ProfilePage from "@/components/pages/ProfilePage";
 import RegisterPage from "@/components/pages/RegisterPage";
+import SettingsPage from "@/components/pages/SettingsPage";
+import TermsOfServicePage from "@/components/pages/TermsOfServicePage";
 import TutorialPage from "@/components/pages/TutorialPage";
 import { useEffect } from "react";
 import LandingPage from "./components/pages/LandingPage";
@@ -37,6 +40,8 @@ function App() {
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/tutorial" element={<TutorialPage />} />
+					<Route path="/privacy" element={<PrivacyPolicyPage />} />
+					<Route path="/terms" element={<TermsOfServicePage />} />
 
 					{/* ログイン関係のルート */}
 					<Route path="/auth/login" element={<LoginPage />} />
@@ -48,6 +53,7 @@ function App() {
 						<Route path="/tutorial" element={<TutorialPage />} />
 						<Route path="/home" element={<HomePage />} />
 						<Route path="/profile" element={<ProfilePage />} />
+						<Route path="/settings" element={<SettingsPage />} />
 						<Route path="/characters" element={<CharactersPage />} />
 						<Route path="/characters/:id" element={<CharacterDetailPage />} />
 						<Route path="/chats/:characterId" element={<ChatPage />} />
