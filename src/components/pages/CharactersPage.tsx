@@ -35,6 +35,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
+import { useEffect, useState } from "react";
 import {
 	FaArrowRight,
 	FaChevronDown,
@@ -72,6 +73,7 @@ import type {
 	TrustLevel,
 } from "../../lib/types/character";
 import { CharacterCard } from "../atoms/CharacterCard";
+import { NewCharacterOpenModal } from "../organisms/NewCharacterOpenModal";
 
 const MotionBox = motion(Box);
 // const MotionFlex = motion(Flex);
@@ -98,6 +100,50 @@ export const CharactersPage: React.FC = () => {
 
 	const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
 	const navigate = useNavigate();
+
+	// TODO newCharacterIds で状態を管理？
+	const [prevCharacterIds, setPrevCharacterIds] = useState<Set<number>>(
+		new Set(),
+	);
+	const [newCharactersQueue, setNewCharactersQueue] = useState<
+		{ id?: number; name?: string; image?: string; desc?: string }[]
+	>([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	// 新キャラクター解放検知
+	useEffect(() => {
+		if (!characters) return;
+		const currentIds = new Set(characters.map((c) => c.id));
+		const newIds = Array.from(currentIds).filter(
+			(id) => !prevCharacterIds.has(id),
+		);
+		const newChars = newIds
+			.map((id) => characters.find((c) => c.id === id))
+			.filter(Boolean)
+			.map((c) => ({
+				id: c?.id,
+				name: c?.name,
+				image: c?.profileImageUrl,
+				desc: c?.introduction,
+			}));
+		if (newChars.length > 0) {
+			setNewCharactersQueue((prev) => {
+				const prevIds = new Set(prev.map((c) => c.id));
+				const filtered = newChars.filter((c) => !prevIds.has(c.id));
+				return [...prev, ...filtered];
+			});
+			setIsModalOpen(true);
+		}
+		setPrevCharacterIds(currentIds);
+	}, [characters]);
+
+	const handleCloseNewCharacterModal = () => {
+		setNewCharactersQueue((prev) => {
+			const [, ...rest] = prev;
+			if (rest.length === 0) setIsModalOpen(false);
+			return rest;
+		});
+	};
 
 	// レスポンシブデザイン
 	const isMobile = useBreakpointValue({ base: true, md: false });
@@ -145,6 +191,14 @@ export const CharactersPage: React.FC = () => {
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
+			{/* 新キャラクター解放モーダル */}
+			<NewCharacterOpenModal
+				isOpen={isModalOpen}
+				onClose={handleCloseNewCharacterModal}
+				characterName={newCharactersQueue[0]?.name ?? ""}
+				characterImage={newCharactersQueue[0]?.image}
+				unlockedDesc={newCharactersQueue[0]?.desc}
+			/>
 			{/* 背景装飾 */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				<MotionBox
