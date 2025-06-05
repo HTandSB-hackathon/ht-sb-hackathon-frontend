@@ -209,7 +209,6 @@ export const NewAchivementOpenModal: React.FC<NewAchivementOpenModalProps> = ({
 						>
 							{achivement.description}
 						</Box>
-						
 					</Stack>
 				</ModalBody>
 				<ModalFooter zIndex={2} position="relative">
