@@ -8,6 +8,7 @@ import {
 } from "@/lib/domain/ChatQuery";
 import { atom } from "jotai";
 import { atomWithRefresh, loadable } from "jotai/utils";
+import { relationshipsAtomAsync } from "./CharacterAtom";
 
 export const chatAtom = atom<Chat[]>([]);
 
@@ -63,6 +64,7 @@ export const sendChatAtom = atom(
 		} finally {
 			set(chatCountAllAtomAsync);
 			set(chatCountByCharacterIdAtomAsync);
+			set(relationshipsAtomAsync);
 		}
 	},
 );

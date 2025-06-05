@@ -18,6 +18,7 @@ import {
 	insertRelationship,
 	updateRelationship,
 } from "../domain/CharacterQuery";
+import type { Municipality } from "../domain/CityQuery";
 import { isLevelUpModalOpenAtom } from "./BaseAtom";
 import { municipalityAtomAsync } from "./CityAtom";
 
@@ -25,15 +26,17 @@ import { municipalityAtomAsync } from "./CityAtom";
  * キャラクター一覧の状態
  */
 export const charactersAtom = atom<Character[]>([]);
-const characterAtomAsync = atomWithRefresh<Promise<Character[]>>(async () => {
-	try {
-		const response = await getCharacters();
-		return response;
-	} catch (error) {
-		console.error("Error fetching municipalities:", error);
-		return [];
-	}
-});
+export const characterAtomAsync = atomWithRefresh<Promise<Character[]>>(
+	async () => {
+		try {
+			const response = await getCharacters();
+			return response;
+		} catch (error) {
+			console.error("Error fetching municipalities:", error);
+			return [];
+		}
+	},
+);
 
 const lockedCharactersAtomAsync = atomWithRefresh<Promise<Character[]>>(
 	async () => {
@@ -47,7 +50,7 @@ const lockedCharactersAtomAsync = atomWithRefresh<Promise<Character[]>>(
 	},
 );
 
-const relationshipsAtomAsync = atomWithRefresh<Promise<Relationship[]>>(
+export const relationshipsAtomAsync = atomWithRefresh<Promise<Relationship[]>>(
 	async () => {
 		try {
 			const response = await getRelationships();
@@ -66,6 +69,40 @@ export const favoriteCharacterIdsAtom = atom(async (get) => {
 			.filter((relationship) => relationship.isFavorite)
 			.map((relationship) => relationship.characterId),
 	);
+});
+
+interface characterTrustLevelTop3 {
+	relationship: Relationship;
+	character: Character | null;
+	municipality: Municipality | null;
+}
+
+export const characterTrustLevelTop3Atom = atom<
+	Promise<characterTrustLevelTop3[]>
+>(async (get) => {
+	const characters = await get(characterAtomAsync);
+	const relationships = await get(relationshipsAtomAsync);
+	const municipalities = await get(municipalityAtomAsync);
+
+	const top3Relationships = relationships
+		.sort((a, b) => {
+			return b.trustPoints - a.trustPoints;
+		})
+		.slice(0, 3);
+	return top3Relationships.map((relationship) => {
+		const character = characters.find(
+			(char) => char.id === relationship.characterId,
+		);
+		const municipality = municipalities.find(
+			(muni) => muni.id === character?.municipalityId,
+		);
+
+		return {
+			relationship: relationship,
+			character: character || null,
+			municipality: municipality || null,
+		};
+	});
 });
 
 export const charactersAtomLoadable = loadable(characterAtomAsync);
