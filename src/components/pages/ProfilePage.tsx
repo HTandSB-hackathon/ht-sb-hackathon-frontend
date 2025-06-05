@@ -36,8 +36,8 @@ import {
 	FaBolt,
 	FaCalendarAlt,
 	FaComment,
-	FaMailBulk,
 	FaHeart,
+	FaMailBulk,
 	FaMountain,
 	FaRocket,
 	FaUsers,
@@ -65,9 +65,9 @@ export default function ProfilePage() {
 	);
 
 	const cardBg = useColorModeValue(
-			"rgba(255, 255, 255, 0.8)",
-			"rgba(26, 32, 44, 0.8)",
-		);
+		"rgba(255, 255, 255, 0.8)",
+		"rgba(26, 32, 44, 0.8)",
+	);
 
 	const gradientText = useColorModeValue(
 		"linear(to-r, purple.600, blue.600, teal.500)",
@@ -186,256 +186,400 @@ export default function ProfilePage() {
 			>
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
-					<SimpleHeader title="あなたの つな農 データ" navigateTo="/home" navigateLavel="ホームへ戻る"/>
+					<SimpleHeader
+						title="あなたの つな農 データ"
+						navigateTo="/home"
+						navigateLavel="ホームへ戻る"
+					/>
 					<motion.div
-					variants={staggerContainer}
-					initial="initial"
-					animate="animate"
-				>
-					{/* Hero Profile Section */}
-					<MotionCard
-						variants={fadeInUp}
-						borderRadius="3xl"
-						bg={cardBg}
-						backdropFilter="blur(20px)"
-						border="1px solid"
-						borderColor="whiteAlpha.200"
-						shadow="2xl"
-						mb={8}
-						overflow="hidden"
-						position="relative"
+						variants={staggerContainer}
+						initial="initial"
+						animate="animate"
 					>
-						<CardBody p={8} position="relative">
-							<HStack spacing={6} align="start">
-								<MotionBox
-									whileHover={{ scale: 1.05 }}
-									transition={{ duration: 0.2 }}
-								>
-									<Avatar
-										size="2xl"
-										name={user?.name || "ユーザー"}
-										src={user?.avatarUrl || undefined}
-										border="4px solid white"
-										shadow="xl"
-									/>
-								</MotionBox>
-								<VStack align="start" spacing={3} flex={1}>
-									<HStack>
-										<Heading
+						{/* Hero Profile Section */}
+						<MotionCard
+							variants={fadeInUp}
+							borderRadius="3xl"
+							bg={cardBg}
+							backdropFilter="blur(20px)"
+							border="1px solid"
+							borderColor="whiteAlpha.200"
+							shadow="2xl"
+							mb={8}
+							overflow="hidden"
+							position="relative"
+						>
+							<CardBody p={8} position="relative">
+								<HStack spacing={6} align="start">
+									<MotionBox
+										whileHover={{ scale: 1.05 }}
+										transition={{ duration: 0.2 }}
+									>
+										<Avatar
 											size="2xl"
-											bgGradient={gradientText}
-											bgClip="text"
-											fontWeight="bold"
-										>
-											{user?.name || "ユーザー名"}
-										</Heading>
-										<Badge
-											colorScheme="green"
-											variant="solid"
-											px={3}
-											py={1}
+											name={user?.name || "ユーザー"}
+											src={user?.avatarUrl || undefined}
+											border="4px solid white"
+											shadow="xl"
+										/>
+									</MotionBox>
+									<VStack align="start" spacing={3} flex={1}>
+										<HStack>
+											<Heading
+												size="2xl"
+												bgGradient={gradientText}
+												bgClip="text"
+												fontWeight="bold"
+											>
+												{user?.name || "ユーザー名"}
+											</Heading>
+											<Badge
+												colorScheme="green"
+												variant="solid"
+												px={3}
+												py={1}
+												borderRadius="full"
+												fontSize="sm"
+											>
+												🌟 アクティブ
+											</Badge>
+										</HStack>
+										<Box>
+											<HStack spacing={2}>
+												<FaMailBulk color="purple.500" />
+												<Text fontSize="md" color="gray.600">
+													メールアドレス: {user?.email}
+												</Text>
+											</HStack>
+											<HStack spacing={2}>
+												<FaCalendarAlt color="purple.500" />
+												<Text fontSize="md" color="gray.600">
+													登録日: {new Date().toLocaleDateString("ja-JP")}
+												</Text>
+											</HStack>
+										</Box>
+									</VStack>
+									<VStack spacing={3}>
+										<IconButton
+											aria-label="プロフィール編集"
+											icon={<MdEdit />}
+											colorScheme="purple"
+											variant="ghost"
+											size="lg"
 											borderRadius="full"
-											fontSize="sm"
-										>
-											🌟 アクティブ
-										</Badge>
-									</HStack>
-									<Box>
-										<HStack spacing={2}>
-											<FaMailBulk color="purple.500" />
-											<Text fontSize="md" color="gray.600">
-												メールアドレス: {user?.email}
-											</Text>
-										</HStack>
-										<HStack spacing={2}>
-											<FaCalendarAlt color="purple.500" />
-											<Text fontSize="md" color="gray.600">
-												登録日: {new Date().toLocaleDateString("ja-JP")}
-											</Text>
-										</HStack>
-									</Box>
-								</VStack>
-								<VStack spacing={3}>
-									<IconButton
-										aria-label="プロフィール編集"
-										icon={<MdEdit />}
-										colorScheme="purple"
-										variant="ghost"
-										size="lg"
-										borderRadius="full"
+										/>
+									</VStack>
+								</HStack>
+							</CardBody>
+						</MotionCard>
+
+						{/* Statistics Dashboard */}
+						<MotionBox variants={fadeInUp} mb={8}>
+							<SimpleGrid columns={gridColumns} spacing={6}>
+								<MotionCard
+									whileHover={{ scale: 1.05, y: -5 }}
+									borderRadius="2xl"
+									bg={cardBg}
+									backdropFilter="blur(20px)"
+									border="1px solid"
+									borderColor="whiteAlpha.200"
+									shadow="xl"
+									position="relative"
+									overflow="hidden"
+								>
+									<Box
+										position="absolute"
+										top={0}
+										left={0}
+										right={0}
+										h="4px"
+										bgGradient="linear(to-r, green.400, teal.400)"
 									/>
-								</VStack>
-							</HStack>
-						</CardBody>
-					</MotionCard>
+									<CardBody p={6}>
+										<Stat textAlign="center">
+											<HStack justify="center" mb={2}>
+												<FaUsers size={24} color="#38A169" />
+											</HStack>
+											<StatNumber
+												fontSize="3xl"
+												bgGradient="linear(to-r, green.500, teal.500)"
+												bgClip="text"
+												fontWeight="bold"
+											>
+												{relationships?.length || 0}
+											</StatNumber>
+											<StatLabel fontSize="md" color="gray.600">
+												出会った人数
+											</StatLabel>
+										</Stat>
+									</CardBody>
+								</MotionCard>
 
-					{/* Statistics Dashboard */}
-					<MotionBox variants={fadeInUp} mb={8}>
-						<SimpleGrid columns={gridColumns} spacing={6}>
+								<MotionCard
+									whileHover={{ scale: 1.05, y: -5 }}
+									borderRadius="2xl"
+									bg={cardBg}
+									backdropFilter="blur(20px)"
+									border="1px solid"
+									borderColor="whiteAlpha.200"
+									shadow="xl"
+									position="relative"
+									overflow="hidden"
+								>
+									<Box
+										position="absolute"
+										top={0}
+										left={0}
+										right={0}
+										h="4px"
+										bgGradient="linear(to-r, blue.400, purple.400)"
+									/>
+									<CardBody p={6}>
+										<Stat textAlign="center">
+											<HStack justify="center" mb={2}>
+												<FaComment size={24} color="#3182CE" />
+											</HStack>
+											<StatNumber
+												fontSize="3xl"
+												bgGradient="linear(to-r, blue.500, purple.500)"
+												bgClip="text"
+												fontWeight="bold"
+											>
+												{chatCount}
+											</StatNumber>
+											<StatLabel fontSize="md" color="gray.600">
+												総会話数
+											</StatLabel>
+										</Stat>
+									</CardBody>
+								</MotionCard>
+
+								<MotionCard
+									whileHover={{ scale: 1.05, y: -5 }}
+									borderRadius="2xl"
+									bg={cardBg}
+									backdropFilter="blur(20px)"
+									border="1px solid"
+									borderColor="whiteAlpha.200"
+									shadow="xl"
+									position="relative"
+									overflow="hidden"
+								>
+									<Box
+										position="absolute"
+										top={0}
+										left={0}
+										right={0}
+										h="4px"
+										bgGradient="linear(to-r, purple.400, pink.400)"
+									/>
+									<CardBody p={6}>
+										<Stat textAlign="center">
+											<HStack justify="center" mb={2}>
+												<FaBolt size={24} color="#805AD5" />
+											</HStack>
+											<StatNumber
+												fontSize="3xl"
+												bgGradient="linear(to-r, purple.500, pink.500)"
+												bgClip="text"
+												fontWeight="bold"
+											>
+												{relationships?.filter(
+													(relationships) => relationships.trustLevelId === 5,
+												).length || 0}
+											</StatNumber>
+											<StatLabel fontSize="md" color="gray.600">
+												最高信頼レベル
+											</StatLabel>
+										</Stat>
+									</CardBody>
+								</MotionCard>
+
+								<MotionCard
+									whileHover={{ scale: 1.05, y: -5 }}
+									borderRadius="2xl"
+									bg={cardBg}
+									backdropFilter="blur(20px)"
+									border="1px solid"
+									borderColor="whiteAlpha.200"
+									shadow="xl"
+									position="relative"
+									overflow="hidden"
+								>
+									<Box
+										position="absolute"
+										top={0}
+										left={0}
+										right={0}
+										h="4px"
+										bgGradient="linear(to-r, orange.400, red.400)"
+									/>
+									<CardBody p={6}>
+										<Stat textAlign="center">
+											<HStack justify="center" mb={2}>
+												<FaHeart size={24} color="#E53E3E" />
+											</HStack>
+											<StatNumber
+												fontSize="3xl"
+												bgGradient="linear(to-r, orange.500, red.500)"
+												bgClip="text"
+												fontWeight="bold"
+											>
+												{relationships?.filter(
+													(relationships) => relationships.isFavorite,
+												).length || 0}
+											</StatNumber>
+											<StatLabel fontSize="md" color="gray.600">
+												お気に入り
+											</StatLabel>
+										</Stat>
+									</CardBody>
+								</MotionCard>
+							</SimpleGrid>
+						</MotionBox>
+
+						{/* Achievements Section */}
+						<Grid
+							templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+							gap={8}
+							mb={8}
+						>
 							<MotionCard
-								whileHover={{ scale: 1.05, y: -5 }}
+								variants={fadeInUp}
 								borderRadius="2xl"
 								bg={cardBg}
 								backdropFilter="blur(20px)"
 								border="1px solid"
 								borderColor="whiteAlpha.200"
 								shadow="xl"
-								position="relative"
-								overflow="hidden"
 							>
-								<Box
-									position="absolute"
-									top={0}
-									left={0}
-									right={0}
-									h="4px"
-									bgGradient="linear(to-r, green.400, teal.400)"
-								/>
 								<CardBody p={6}>
-									<Stat textAlign="center">
-										<HStack justify="center" mb={2}>
-											<FaUsers size={24} color="#38A169" />
-										</HStack>
-										<StatNumber
-											fontSize="3xl"
-											bgGradient="linear(to-r, green.500, teal.500)"
-											bgClip="text"
-											fontWeight="bold"
-										>
-											{relationships?.length || 0}
-										</StatNumber>
-										<StatLabel fontSize="md" color="gray.600">
-											出会った人数
-										</StatLabel>
-									</Stat>
+									<Heading size="lg" mb={6} color="gray.700">
+										🏆 実績・バッジ
+									</Heading>
+									<VStack spacing={4} align="stretch">
+										{unklockedAchievements?.map((achievement) => (
+											<HStack
+												key={achievement.id}
+												justify="space-between"
+												align="center"
+												p={4}
+												borderRadius="xl"
+												bg="green.50"
+											>
+												<HStack>
+													<Box p={2} borderRadius="lg" bg="green.100">
+														<FaUsers color="#38A169" />
+													</Box>
+													<VStack align="start" spacing={0}>
+														<Text fontWeight="bold" color="green.700">
+															{achievement.name}
+														</Text>
+														<Text fontSize="sm" color="green.600">
+															{achievement.description}
+														</Text>
+													</VStack>
+												</HStack>
+												<Badge
+													colorScheme="green"
+													size="lg"
+													px={3}
+													py={1}
+													borderRadius="full"
+												>
+													達成
+												</Badge>
+											</HStack>
+										))}
+									</VStack>
 								</CardBody>
 							</MotionCard>
 
+							{/* Trust Level Progress */}
 							<MotionCard
-								whileHover={{ scale: 1.05, y: -5 }}
+								variants={fadeInUp}
 								borderRadius="2xl"
 								bg={cardBg}
 								backdropFilter="blur(20px)"
 								border="1px solid"
 								borderColor="whiteAlpha.200"
 								shadow="xl"
-								position="relative"
-								overflow="hidden"
 							>
-								<Box
-									position="absolute"
-									top={0}
-									left={0}
-									right={0}
-									h="4px"
-									bgGradient="linear(to-r, blue.400, purple.400)"
-								/>
 								<CardBody p={6}>
-									<Stat textAlign="center">
-										<HStack justify="center" mb={2}>
-											<FaComment size={24} color="#3182CE" />
-										</HStack>
-										<StatNumber
-											fontSize="3xl"
-											bgGradient="linear(to-r, blue.500, purple.500)"
-											bgClip="text"
-											fontWeight="bold"
+									<Heading size="lg" mb={6} color="gray.700">
+										🌱 信頼レベルの成長
+									</Heading>
+									<VStack spacing={6} align="stretch">
+										{characterTrustLevelTop3?.length > 0 &&
+											characterTrustLevelTop3.map((data) => {
+												const progress =
+													(data.relationship.trustPoints /
+														data.relationship.nextLevelPoints) *
+													100;
+
+												return (
+													<Box key={data.relationship.id}>
+														<HStack justify="space-between" mb={2}>
+															<Text fontWeight="bold" color="gray.700">
+																{data.character?.name} さん
+															</Text>
+															<Badge
+																colorScheme="green"
+																px={3}
+																py={1}
+																borderRadius="full"
+															>
+																Lv.{data.relationship.trustLevelId}
+															</Badge>
+														</HStack>
+														<Progress
+															value={progress}
+															size="lg"
+															colorScheme="green"
+															borderRadius="full"
+															hasStripe
+															isAnimated
+														/>
+														<Text fontSize="sm" color="gray.600" mt={1}>
+															{data.municipality?.name}・
+															{data.character?.occupationId}（次のレベルまで{" "}
+															{progress}%）
+														</Text>
+													</Box>
+												);
+											})}
+
+										<Box
+											p={4}
+											borderRadius="xl"
+											bg="purple.50"
+											border="2px dashed"
+											borderColor="purple.200"
 										>
-											{chatCount}
-										</StatNumber>
-										<StatLabel fontSize="md" color="gray.600">
-											総会話数
-										</StatLabel>
-									</Stat>
+											<HStack justify="center">
+												<FaRocket color="#805AD5" />
+												<Text color="purple.600" fontWeight="bold">
+													次のレベルまで あと
+													{characterTrustLevelTop3?.length > 0
+														? characterTrustLevelTop3.reduce(
+																(acc, data) =>
+																	acc +
+																	(data.relationship.trustPoints /
+																		data.relationship.nextLevelPoints) *
+																		100,
+																0,
+															) / characterTrustLevelTop3.length
+														: 0}
+													%
+												</Text>
+											</HStack>
+										</Box>
+									</VStack>
 								</CardBody>
 							</MotionCard>
+						</Grid>
 
-							<MotionCard
-								whileHover={{ scale: 1.05, y: -5 }}
-								borderRadius="2xl"
-								bg={cardBg}
-								backdropFilter="blur(20px)"
-								border="1px solid"
-								borderColor="whiteAlpha.200"
-								shadow="xl"
-								position="relative"
-								overflow="hidden"
-							>
-								<Box
-									position="absolute"
-									top={0}
-									left={0}
-									right={0}
-									h="4px"
-									bgGradient="linear(to-r, purple.400, pink.400)"
-								/>
-								<CardBody p={6}>
-									<Stat textAlign="center">
-										<HStack justify="center" mb={2}>
-											<FaBolt size={24} color="#805AD5" />
-										</HStack>
-										<StatNumber
-											fontSize="3xl"
-											bgGradient="linear(to-r, purple.500, pink.500)"
-											bgClip="text"
-											fontWeight="bold"
-										>
-											{relationships?.filter(
-												(relationships) => relationships.trustLevelId === 5,
-											).length || 0}
-										</StatNumber>
-										<StatLabel fontSize="md" color="gray.600">
-											最高信頼レベル
-										</StatLabel>
-									</Stat>
-								</CardBody>
-							</MotionCard>
-
-							<MotionCard
-								whileHover={{ scale: 1.05, y: -5 }}
-								borderRadius="2xl"
-								bg={cardBg}
-								backdropFilter="blur(20px)"
-								border="1px solid"
-								borderColor="whiteAlpha.200"
-								shadow="xl"
-								position="relative"
-								overflow="hidden"
-							>
-								<Box
-									position="absolute"
-									top={0}
-									left={0}
-									right={0}
-									h="4px"
-									bgGradient="linear(to-r, orange.400, red.400)"
-								/>
-								<CardBody p={6}>
-									<Stat textAlign="center">
-										<HStack justify="center" mb={2}>
-											<FaHeart size={24} color="#E53E3E" />
-										</HStack>
-										<StatNumber
-											fontSize="3xl"
-											bgGradient="linear(to-r, orange.500, red.500)"
-											bgClip="text"
-											fontWeight="bold"
-										>
-											{relationships?.filter(
-												(relationships) => relationships.isFavorite,
-											).length || 0}
-										</StatNumber>
-										<StatLabel fontSize="md" color="gray.600">
-											お気に入り
-										</StatLabel>
-									</Stat>
-								</CardBody>
-							</MotionCard>
-						</SimpleGrid>
-					</MotionBox>
-
-					{/* Achievements Section */}
-					<Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={8} mb={8}>
+						{/* Regional Connection Map */}
 						<MotionCard
 							variants={fadeInUp}
 							borderRadius="2xl"
@@ -444,186 +588,50 @@ export default function ProfilePage() {
 							border="1px solid"
 							borderColor="whiteAlpha.200"
 							shadow="xl"
+							mb={8}
 						>
 							<CardBody p={6}>
 								<Heading size="lg" mb={6} color="gray.700">
-									🏆 実績・バッジ
+									🗾 福島県でのつながり
 								</Heading>
-								<VStack spacing={4} align="stretch">
-									{unklockedAchievements?.map((achievement) => (
-										<HStack
-											key={achievement.id}
-											justify="space-between"
-											align="center"
+								<SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
+									{municipalityWithCharacters?.map((municipality) => (
+										<VStack
+											key={municipality.municipality.id}
+											spacing={2}
 											p={4}
 											borderRadius="xl"
 											bg="green.50"
 										>
-											<HStack>
-												<Box p={2} borderRadius="lg" bg="green.100">
-													<FaUsers color="#38A169" />
-												</Box>
-												<VStack align="start" spacing={0}>
-													<Text fontWeight="bold" color="green.700">
-														{achievement.name}
-													</Text>
-													<Text fontSize="sm" color="green.600">
-														{achievement.description}
-													</Text>
-												</VStack>
-											</HStack>
-											<Badge
-												colorScheme="green"
-												size="lg"
-												px={3}
-												py={1}
-												borderRadius="full"
-											>
-												達成
-											</Badge>
-										</HStack>
-									))}
-								</VStack>
-							</CardBody>
-						</MotionCard>
-
-						{/* Trust Level Progress */}
-						<MotionCard
-							variants={fadeInUp}
-							borderRadius="2xl"
-							bg={cardBg}
-							backdropFilter="blur(20px)"
-							border="1px solid"
-							borderColor="whiteAlpha.200"
-							shadow="xl"
-						>
-							<CardBody p={6}>
-								<Heading size="lg" mb={6} color="gray.700">
-									🌱 信頼レベルの成長
-								</Heading>
-								<VStack spacing={6} align="stretch">
-									{characterTrustLevelTop3?.length > 0 &&
-										characterTrustLevelTop3.map((data) => {
-											const progress =
-												(data.relationship.trustPoints /
-													data.relationship.nextLevelPoints) *
-												100;
-
-											return (
-												<Box key={data.relationship.id}>
-													<HStack justify="space-between" mb={2}>
-														<Text fontWeight="bold" color="gray.700">
-															{data.character?.name} さん
-														</Text>
-														<Badge
-															colorScheme="green"
-															px={3}
-															py={1}
-															borderRadius="full"
-														>
-															Lv.{data.relationship.trustLevelId}
-														</Badge>
-													</HStack>
-													<Progress
-														value={progress}
-														size="lg"
-														colorScheme="green"
-														borderRadius="full"
-														hasStripe
-														isAnimated
-													/>
-													<Text fontSize="sm" color="gray.600" mt={1}>
-														{data.municipality?.name}・
-														{data.character?.occupationId}（次のレベルまで{" "}
-														{progress}%）
-													</Text>
-												</Box>
-											);
-										})}
-
-									<Box
-										p={4}
-										borderRadius="xl"
-										bg="purple.50"
-										border="2px dashed"
-										borderColor="purple.200"
-									>
-										<HStack justify="center">
-											<FaRocket color="#805AD5" />
-											<Text color="purple.600" fontWeight="bold">
-												次のレベルまで あと
-												{characterTrustLevelTop3?.length > 0
-													? characterTrustLevelTop3.reduce(
-															(acc, data) =>
-																acc +
-																(data.relationship.trustPoints /
-																	data.relationship.nextLevelPoints) *
-																	100,
-															0,
-														) / characterTrustLevelTop3.length
-													: 0}
-												%
+											<FaMountain size={24} color="#38A169" />
+											<Text fontWeight="bold" color="green.700">
+												{municipality.municipality.name}
 											</Text>
-										</HStack>
-									</Box>
-								</VStack>
-							</CardBody>
-						</MotionCard>
-					</Grid>
-
-					{/* Regional Connection Map */}
-					<MotionCard
-						variants={fadeInUp}
-						borderRadius="2xl"
-						bg={cardBg}
-						backdropFilter="blur(20px)"
-						border="1px solid"
-						borderColor="whiteAlpha.200"
-						shadow="xl"
-						mb={8}
-					>
-						<CardBody p={6}>
-							<Heading size="lg" mb={6} color="gray.700">
-								🗾 福島県でのつながり
-							</Heading>
-							<SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
-								{municipalityWithCharacters?.map((municipality) => (
+											<Text fontSize="sm" color="green.600">
+												{municipality.characters.length}人のつながり
+											</Text>
+										</VStack>
+									))}
 									<VStack
-										key={municipality.municipality.id}
 										spacing={2}
 										p={4}
 										borderRadius="xl"
-										bg="green.50"
+										bg="gray.50"
+										border="2px dashed"
+										borderColor="gray.300"
 									>
-										<FaMountain size={24} color="#38A169" />
-										<Text fontWeight="bold" color="green.700">
-											{municipality.municipality.name}
+										<MdPerson size={24} color="#718096" />
+										<Text fontWeight="bold" color="gray.600">
+											新しいエリア
 										</Text>
-										<Text fontSize="sm" color="green.600">
-											{municipality.characters.length}人のつながり
+										<Text fontSize="sm" color="gray.500">
+											探索してみよう！
 										</Text>
 									</VStack>
-								))}
-								<VStack
-									spacing={2}
-									p={4}
-									borderRadius="xl"
-									bg="gray.50"
-									border="2px dashed"
-									borderColor="gray.300"
-								>
-									<MdPerson size={24} color="#718096" />
-									<Text fontWeight="bold" color="gray.600">
-										新しいエリア
-									</Text>
-									<Text fontSize="sm" color="gray.500">
-										探索してみよう！
-									</Text>
-								</VStack>
-							</SimpleGrid>
-						</CardBody>
-					</MotionCard>
-				</motion.div>
+								</SimpleGrid>
+							</CardBody>
+						</MotionCard>
+					</motion.div>
 				</VStack>
 			</Container>
 

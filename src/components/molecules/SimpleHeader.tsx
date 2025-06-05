@@ -24,7 +24,7 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
 	title = "",
 	subtitle = "",
 	navigateTo,
-	navigateLavel
+	navigateLavel,
 }) => {
 	const navigate = useNavigate();
 	const headerSize = useBreakpointValue({ base: "xl", md: "2xl", lg: "3xl" });

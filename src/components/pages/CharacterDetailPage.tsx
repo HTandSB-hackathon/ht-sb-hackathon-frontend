@@ -82,8 +82,8 @@ import {
 	updateRelationshipAtom,
 } from "../../lib/atom/CharacterAtom";
 import { TRUST_LEVELS } from "../../lib/types/character";
-import { NewStoryOpenModal } from "../organisms/NewStoryOpenModal";
 import { SimpleHeader } from "../molecules/SimpleHeader";
+import { NewStoryOpenModal } from "../organisms/NewStoryOpenModal";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -370,7 +370,7 @@ export const CharacterDetailPage: React.FC = () => {
 			<Container maxW="6xl" p={containerPadding} position="relative" zIndex="1">
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
-					<SimpleHeader navigateTo="/characters" navigateLavel="一覧へ戻る"/>
+					<SimpleHeader navigateTo="/characters" navigateLavel="一覧へ戻る" />
 
 					{/* メインプロフィール */}
 					<MotionCard
