@@ -36,7 +36,7 @@ import {
 	FaBolt,
 	FaCalendarAlt,
 	FaComment,
-	FaGift,
+	FaMailBulk,
 	FaHeart,
 	FaMountain,
 	FaRocket,
@@ -205,15 +205,6 @@ export default function ProfilePage() {
 						overflow="hidden"
 						position="relative"
 					>
-						<Box
-							position="absolute"
-							top={0}
-							left={0}
-							right={0}
-							h="120px"
-							bgGradient="linear(to-r, purple.500, blue.500, teal.400)"
-							opacity={0.8}
-						/>
 						<CardBody p={8} position="relative">
 							<HStack spacing={6} align="start">
 								<MotionBox
@@ -249,17 +240,20 @@ export default function ProfilePage() {
 											🌟 アクティブ
 										</Badge>
 									</HStack>
-									<Text fontSize="lg" color="gray.600">
-										{user?.email}
-									</Text>
-									<HStack spacing={4}>
+									<Box>
+										<HStack spacing={2}>
+											<FaMailBulk color="purple.500" />
+											<Text fontSize="md" color="gray.600">
+												メールアドレス: {user?.email}
+											</Text>
+										</HStack>
 										<HStack spacing={2}>
 											<FaCalendarAlt color="purple.500" />
-											<Text fontSize="sm" color="gray.600">
+											<Text fontSize="md" color="gray.600">
 												登録日: {new Date().toLocaleDateString("ja-JP")}
 											</Text>
 										</HStack>
-									</HStack>
+									</Box>
 								</VStack>
 								<VStack spacing={3}>
 									<IconButton
