@@ -15,7 +15,7 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { FaStar } from "react-icons/fa";
+import { FaMedal, FaStar } from "react-icons/fa";
 
 interface NewAchivementOpenModalProps {
 	isOpen: boolean;
@@ -171,7 +171,7 @@ export const NewAchivementOpenModal: React.FC<NewAchivementOpenModalProps> = ({
 							}}
 							style={{ color: starColor, fontSize: "2.5rem", zIndex: 1 }}
 						>
-							<FaStar />
+							<FaMedal />
 						</motion.div>
 						<Heading
 							size="lg"
@@ -181,7 +181,7 @@ export const NewAchivementOpenModal: React.FC<NewAchivementOpenModalProps> = ({
 							textOverflow="ellipsis"
 							maxW="90%"
 						>
-							新しいバッジを獲得しました！
+							新しい実績を獲得しました！
 						</Heading>
 						<Text
 							fontWeight="bold"
