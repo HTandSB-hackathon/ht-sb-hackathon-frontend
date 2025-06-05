@@ -43,7 +43,7 @@ import {
 	FaUsers,
 } from "react-icons/fa";
 import { MdEdit, MdLocationCity, MdPerson } from "react-icons/md";
-import { BackToHomeHeader } from "../molecules/BackToHomeHeader";
+import { SimpleHeader } from "../molecules/SimpleHeader";
 
 const MotionCard = motion(Card);
 const MotionBox = motion(Box);
@@ -186,7 +186,7 @@ export default function ProfilePage() {
 			>
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
-					<BackToHomeHeader title="福島のこころ 🌸" subtitle="美しい福島で出会う、温かい人々との特別なつながり"/>
+					<SimpleHeader title="あなたの つな農 データ" navigateTo="/home" navigateLavel="ホームへ戻る"/>
 					<motion.div
 					variants={staggerContainer}
 					initial="initial"
@@ -277,15 +277,6 @@ export default function ProfilePage() {
 
 					{/* Statistics Dashboard */}
 					<MotionBox variants={fadeInUp} mb={8}>
-						<Heading
-							size="xl"
-							mb={6}
-							textAlign="center"
-							bgGradient={gradientText}
-							bgClip="text"
-						>
-							📊 あなたの つな農 データ
-						</Heading>
 						<SimpleGrid columns={gridColumns} spacing={6}>
 							<MotionCard
 								whileHover={{ scale: 1.05, y: -5 }}

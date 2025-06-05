@@ -11,16 +11,20 @@ import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 
-interface BackToHomeHeaderProps {
-	title: string;
-	subtitle: string;
+interface SimpleHeaderProps {
+	title?: string;
+	subtitle?: string;
+	navigateTo: string;
+	navigateLavel: string;
 }
 
 const MotionBox = motion(Box);
 
-export const BackToHomeHeader: React.FC<BackToHomeHeaderProps> = ({
-	title,
-	subtitle,
+export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
+	title = "",
+	subtitle = "",
+	navigateTo,
+	navigateLavel
 }) => {
 	const navigate = useNavigate();
 	const headerSize = useBreakpointValue({ base: "xl", md: "2xl", lg: "3xl" });
@@ -56,12 +60,12 @@ export const BackToHomeHeader: React.FC<BackToHomeHeaderProps> = ({
 					<Button
 						leftIcon={<FaArrowRight style={{ transform: "scaleX(-1)" }} />}
 						variant="ghost"
-						onClick={() => navigate("/home")}
+						onClick={() => navigate(navigateTo)}
 						borderRadius="xl"
 						_hover={{ bg: "whiteAlpha.200" }}
 						size="sm"
 					>
-						ホームへ戻る
+						{navigateLavel}
 					</Button>
 				</Box>
 				<VStack spacing={4} textAlign="center">

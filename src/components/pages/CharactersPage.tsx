@@ -74,7 +74,7 @@ import type {
 } from "../../lib/types/character";
 import { CharacterCard } from "../atoms/CharacterCard";
 import { NewCharacterOpenModal } from "../organisms/NewCharacterOpenModal";
-import { BackToHomeHeader } from "../molecules/BackToHomeHeader";
+import { SimpleHeader } from "../molecules/SimpleHeader";
 
 const MotionBox = motion(Box);
 // const MotionFlex = motion(Flex);
@@ -191,7 +191,7 @@ export const CharactersPage: React.FC = () => {
 			<Container maxW="8xl" p={containerPadding} position="relative" zIndex="1">
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
-					<BackToHomeHeader title="福島のこころ 🌸" subtitle="美しい福島で出会う、温かい人々との特別なつながり"/>
+					<SimpleHeader title="福島のこころ 🌸" subtitle="美しい福島で出会う、温かい人々との特別なつながり" navigateTo="/home" navigateLavel="ホームへ戻る"/>
 
 					{/* 統計カード */}
 					<MotionBox
