@@ -43,6 +43,7 @@ import {
 	FaUsers,
 } from "react-icons/fa";
 import { MdEdit, MdLocationCity, MdPerson } from "react-icons/md";
+import { BackToHomeHeader } from "../molecules/BackToHomeHeader";
 
 const MotionCard = motion(Card);
 const MotionBox = motion(Box);
@@ -64,9 +65,9 @@ export default function ProfilePage() {
 	);
 
 	const cardBg = useColorModeValue(
-		"rgba(255, 255, 255, 0.8)",
-		"rgba(26, 32, 44, 0.8)",
-	);
+			"rgba(255, 255, 255, 0.8)",
+			"rgba(26, 32, 44, 0.8)",
+		);
 
 	const gradientText = useColorModeValue(
 		"linear(to-r, purple.600, blue.600, teal.500)",
@@ -183,7 +184,10 @@ export default function ProfilePage() {
 				position="relative"
 				zIndex={1}
 			>
-				<motion.div
+				<VStack spacing={8} align="stretch">
+					{/* ヘッダー */}
+					<BackToHomeHeader title="福島のこころ 🌸" subtitle="美しい福島で出会う、温かい人々との特別なつながり"/>
+					<motion.div
 					variants={staggerContainer}
 					initial="initial"
 					animate="animate"
@@ -635,6 +639,7 @@ export default function ProfilePage() {
 						</CardBody>
 					</MotionCard>
 				</motion.div>
+				</VStack>
 			</Container>
 
 			<style>

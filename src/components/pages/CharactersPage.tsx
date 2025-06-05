@@ -74,6 +74,7 @@ import type {
 } from "../../lib/types/character";
 import { CharacterCard } from "../atoms/CharacterCard";
 import { NewCharacterOpenModal } from "../organisms/NewCharacterOpenModal";
+import { BackToHomeHeader } from "../molecules/BackToHomeHeader";
 
 const MotionBox = motion(Box);
 // const MotionFlex = motion(Flex);
@@ -190,63 +191,7 @@ export const CharactersPage: React.FC = () => {
 			<Container maxW="8xl" p={containerPadding} position="relative" zIndex="1">
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
-					<MotionBox
-						initial={{ opacity: 0, y: -50 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6 }}
-					>
-						<Box
-							bg={headerBg}
-							backdropFilter="blur(20px)"
-							borderRadius="2xl"
-							p={6}
-							border="1px solid"
-							borderColor="whiteAlpha.200"
-							shadow="xl"
-							position="relative"
-						>
-							{/* Homeへ戻るボタン*/}
-							<Box
-								position="absolute"
-								left="6"
-								top="50%"
-								transform="translateY(-50%)"
-								zIndex={2}
-							>
-								<Button
-									leftIcon={
-										<FaArrowRight style={{ transform: "scaleX(-1)" }} />
-									}
-									variant="ghost"
-									onClick={() => navigate("/home")}
-									borderRadius="xl"
-									_hover={{ bg: "whiteAlpha.200" }}
-									size="sm"
-								>
-									ホームへ戻る
-								</Button>
-							</Box>
-							<VStack spacing={4} textAlign="center">
-								<Heading
-									size={headerSize}
-									bgGradient="linear(to-r, purple.600, blue.600, teal.500)"
-									bgClip="text"
-									fontWeight="extrabold"
-									lineHeight={1.2}
-								>
-									福島のこころ 🌸
-								</Heading>
-								<Text
-									fontSize={{ base: "md", md: "lg" }}
-									color="gray.600"
-									maxW="2xl"
-									lineHeight="tall"
-								>
-									美しい福島で出会う、温かい人々との特別なつながり
-								</Text>
-							</VStack>
-						</Box>
-					</MotionBox>
+					<BackToHomeHeader title="福島のこころ 🌸" subtitle="美しい福島で出会う、温かい人々との特別なつながり"/>
 
 					{/* 統計カード */}
 					<MotionBox
