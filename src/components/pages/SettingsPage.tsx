@@ -1,5 +1,5 @@
 import { soundEnabledAtom } from "@/lib/atom/BaseAtom";
-import { userAtom } from "@/lib/atom/UserAtom";
+import { updateUserAtom, userAtom } from "@/lib/atom/UserAtom";
 import {
 	Badge,
 	Box,
@@ -29,7 +29,7 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
 import { useState } from "react";
 import {
@@ -122,6 +122,8 @@ const SettingsPage: React.FC = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const user = useAtomValue(userAtom);
 
+	const userUpdate = useSetAtom(updateUserAtom);
+
 	// 設定状態の管理
 	const [settings, setSettings] = useState({
 		displayName: user?.name || "",
@@ -141,9 +143,15 @@ const SettingsPage: React.FC = () => {
 		}));
 	};
 
-	const handleSaveProfile = () => {
-		// プロフィール保存処理
-		console.log("プロフィールを保存:", settings);
+	const handleSaveProfile = async () => {
+		try {
+			await userUpdate({
+				name: settings.displayName,
+				email: settings.email,
+			});
+		} catch (error) {
+			console.error("プロフィール更新エラー:", error);
+		}
 	};
 
 	const handleDeleteAccount = () => {

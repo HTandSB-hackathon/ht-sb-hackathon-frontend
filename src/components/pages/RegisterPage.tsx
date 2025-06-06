@@ -1,4 +1,7 @@
-import { loginInGithubAtom } from "@/lib/atom/AuthAtom";
+import {
+	createAccountInPasswordAtom,
+	loginInGithubAtom,
+} from "@/lib/atom/AuthAtom";
 import {
 	Badge,
 	Box,
@@ -82,6 +85,7 @@ const RegisterPage: React.FC = () => {
 	const [showPassword, setShowPassword] = React.useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
+	const createUser = useSetAtom(createAccountInPasswordAtom);
 	// ステップ管理
 	const steps = [
 		{ title: "基本情報", description: "お名前とメールアドレス" },
@@ -169,7 +173,11 @@ const RegisterPage: React.FC = () => {
 
 		try {
 			// API呼び出し（モック）
-			await new Promise((resolve) => setTimeout(resolve, 2000));
+			await createUser({
+				email: formData.email,
+				password: formData.password,
+				name: formData.username,
+			});
 
 			toast({
 				title: "登録完了！",
