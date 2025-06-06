@@ -1,3 +1,5 @@
+import { soundEnabledAtom } from "@/lib/atom/BaseAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import {
 	Badge,
 	Box,
@@ -27,6 +29,7 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useAtom, useAtomValue } from "jotai";
 import type React from "react";
 import { useState } from "react";
 import {
@@ -117,16 +120,15 @@ const SettingItem: React.FC<SettingItemProps> = ({
 const SettingsPage: React.FC = () => {
 	const navigate = useNavigate();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const user = useAtomValue(userAtom);
 
 	// 設定状態の管理
 	const [settings, setSettings] = useState({
-		displayName: "山田太郎",
-		email: "yamada@example.com",
-		levelUpNotifications: true,
-		messageNotifications: true,
-		pushNotifications: false,
-		language: "ja",
+		displayName: user?.name || "",
+		email: user?.email || "",
 	});
+
+	const [soundEnabled, setSoundEnabled] = useAtom(soundEnabledAtom);
 
 	// 背景色の設定
 	const bgGradient =
@@ -240,7 +242,7 @@ const SettingsPage: React.FC = () => {
 					</SettingsSection>
 
 					{/* 通知設定 */}
-					<SettingsSection title="通知設定" icon={FaBell} color="green">
+					{/* <SettingsSection title="通知設定" icon={FaBell} color="green">
 						<VStack spacing={4} align="stretch">
 							<SettingItem
 								label="レベルアップ通知"
@@ -290,6 +292,22 @@ const SettingsPage: React.FC = () => {
 								/>
 							</SettingItem>
 						</VStack>
+					</SettingsSection> */}
+
+					<SettingsSection title="サウンド設定" icon={FaGlobe} color="purple">
+						<VStack spacing={4} align="stretch">
+							<SettingItem
+								label="BGMサウンド"
+								description="アプリ内のBGMを有効にします"
+							>
+								<Switch
+									isChecked={soundEnabled}
+									onChange={(e) => setSoundEnabled(e.target.checked)}
+									colorScheme="green"
+									size="lg"
+								/>
+							</SettingItem>
+						</VStack>
 					</SettingsSection>
 
 					{/* プライバシー設定 */}
@@ -312,7 +330,7 @@ const SettingsPage: React.FC = () => {
 								</Button>
 							</SettingItem>
 							<Divider />
-							<SettingItem
+							{/* <SettingItem
 								label="データエクスポート"
 								description="あなたのデータをダウンロード"
 							>
@@ -324,7 +342,7 @@ const SettingsPage: React.FC = () => {
 									データをエクスポート
 								</Button>
 							</SettingItem>
-							<Divider />
+							<Divider /> */}
 							<SettingItem
 								label="アカウント削除"
 								description="すべてのデータが永久に削除されます"
@@ -352,7 +370,7 @@ const SettingsPage: React.FC = () => {
 									py={1}
 									borderRadius="full"
 								>
-									v1.0.0
+									{import.meta.env.VITE_APP_VERSION || "development"}
 								</Badge>
 							</SettingItem>
 							<Divider />
