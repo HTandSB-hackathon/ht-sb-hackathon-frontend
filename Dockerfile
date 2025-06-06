@@ -13,10 +13,12 @@ RUN npm ci --quiet
 # ソースコードをコピー
 COPY . .
 
-# サブディレクトリのパスを環境変数で指定可能にする
+# 環境変数で指定可能にする
 ARG BASE_PATH=/ht-sb
+ARG VITE_APP_VERSION
 ENV VITE_BASE_PATH=$BASE_PATH
 ENV VITE_PUBLIC_API_URL=https://163.44.125.128/api-ht-sb/api/v1
+ENV VITE_APP_VERSION=$VERSION
 
 # アプリケーションをビルド
 RUN npm run build
