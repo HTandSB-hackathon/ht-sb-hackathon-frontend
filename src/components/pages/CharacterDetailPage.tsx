@@ -82,6 +82,7 @@ import {
 	updateRelationshipAtom,
 } from "../../lib/atom/CharacterAtom";
 import { TRUST_LEVELS } from "../../lib/types/character";
+import { SimpleHeader } from "../molecules/SimpleHeader";
 import { NewStoryOpenModal } from "../organisms/NewStoryOpenModal";
 
 const MotionBox = motion(Box);
@@ -369,56 +370,7 @@ export const CharacterDetailPage: React.FC = () => {
 			<Container maxW="6xl" p={containerPadding} position="relative" zIndex="1">
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
-					<MotionCard
-						initial={{ opacity: 0, y: -30 }}
-						animate={{ opacity: 1, y: 0 }}
-						bg={headerBg}
-						backdropFilter="blur(20px)"
-						borderRadius="2xl"
-						shadow="xl"
-						border="1px solid"
-						borderColor="whiteAlpha.200"
-					>
-						<CardBody p={6}>
-							<Flex align="center" gap={4}>
-								<Button
-									leftIcon={<FaArrowLeft />}
-									variant="ghost"
-									onClick={handleBack}
-									borderRadius="xl"
-									_hover={{ bg: "whiteAlpha.200" }}
-								>
-									戻る
-								</Button>
-
-								<Spacer />
-
-								{getMunicipality() && (
-									<Badge
-										colorScheme={getMunicipality()?.color}
-										variant="solid"
-										px={4}
-										py={2}
-										borderRadius="full"
-										fontSize="sm"
-										fontWeight="bold"
-									>
-										{getMunicipality()?.emoji} {getMunicipality()?.name}
-									</Badge>
-								)}
-
-								<Tooltip label="シェア">
-									<IconButton
-										aria-label="share"
-										icon={<FaShare />}
-										variant="ghost"
-										borderRadius="full"
-										_hover={{ bg: "whiteAlpha.200" }}
-									/>
-								</Tooltip>
-							</Flex>
-						</CardBody>
-					</MotionCard>
+					<SimpleHeader navigateTo="/characters" navigateLavel="一覧へ戻る" />
 
 					{/* メインプロフィール */}
 					<MotionCard
