@@ -1,4 +1,5 @@
 import { createAxiosClient } from "@/lib/infrastructure/AxiosClient";
+import { User, type UserResponse, createUser } from "./UserQuery";
 
 class AuthInPassword {
 	constructor(
@@ -12,6 +13,12 @@ class AuthInPassword {
 export interface AuthInPasswordRequest {
 	username: string;
 	password: string;
+}
+
+export interface UserCreateRequest {
+	name: string;
+	password: string;
+	email: string;
 }
 
 export interface AuthInPasswordResponse {
@@ -43,4 +50,15 @@ export async function postAuthInPassword(
 		password,
 	});
 	return createAuthInPassword(response.data);
+}
+
+export async function postUserCreate(
+	request: UserCreateRequest,
+): Promise<UserResponse> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.post<UserCreateRequest, UserResponse>(
+		"/auth/register",
+		request,
+	);
+	return createUser(response.data);
 }

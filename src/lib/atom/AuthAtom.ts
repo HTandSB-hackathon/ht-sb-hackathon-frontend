@@ -2,7 +2,9 @@ import { atom } from "jotai";
 import { atomWithStorage, createJSONStorage } from "jotai/utils";
 import {
 	type AuthInPasswordRequest,
+	type UserCreateRequest,
 	postAuthInPassword,
+	postUserCreate,
 } from "../domain/AuthQuery";
 import { userAtom } from "./UserAtom";
 
@@ -28,7 +30,20 @@ export const isLoggedInAtom = atom((get) => {
 	return authToken !== null && authToken !== undefined && user;
 });
 
-// write only aton
+export const createAccountInPasswordAtom = atom(
+	null,
+	async (_, set, userInfo: UserCreateRequest) => {
+		set(isLoadingAuthAtom, true);
+		try {
+			const user = await postUserCreate(userInfo);
+		} catch (error) {
+			console.error("Account creation failed:", error);
+		} finally {
+			set(isLoadingAuthAtom, false);
+		}
+	},
+);
+
 // PasswordInログインするためのatom
 export const loginInPasswordAtom = atom(
 	null,

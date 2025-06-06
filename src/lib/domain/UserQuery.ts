@@ -18,7 +18,15 @@ export interface UserResponse {
 	last_login_at?: string | null; // ISO 8601形式の文字列
 }
 
-function createUser(res: UserResponse): User {
+export interface UserUpdateRequest {
+	name?: string | null;
+	email?: string;
+	password?: string;
+	avatar_url?: string | null;
+	last_login_at?: string | null; // ISO 8601形式の文字列
+}
+
+export function createUser(res: UserResponse): User {
 	return new User(
 		res.id,
 		res.name,
@@ -31,5 +39,14 @@ function createUser(res: UserResponse): User {
 export async function getUser(): Promise<User> {
 	const axiosClient = createAxiosClient();
 	const response = await axiosClient.get<UserResponse>("/users/me");
+	return createUser(response.data);
+}
+
+export async function updateUser(request: UserUpdateRequest): Promise<User> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.put<UserUpdateRequest, UserResponse>(
+		"/users/me",
+		request,
+	);
 	return createUser(response.data);
 }
