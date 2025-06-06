@@ -32,6 +32,8 @@ import {
 	newlyUnlockedCharacterIdsAtom,
 } from "./lib/atom/CharacterAtom";
 
+import { BGMManagerProvider } from "./lib/provider/BGMProvider";
+
 function App() {
 	const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useAtom(
 		isLevelUpModalOpenAtom,
@@ -60,6 +62,7 @@ function App() {
 	return (
 		<div>
 			<BrowserRouter basename="/ht-sb">
+				<BGMManagerProvider />
 				<Routes>
 					<Route path="" element={<LandingPage />} />
 					<Route path="/login" element={<LoginPage />} />

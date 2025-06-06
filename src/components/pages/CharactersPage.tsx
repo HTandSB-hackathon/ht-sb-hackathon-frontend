@@ -73,6 +73,7 @@ import type {
 	TrustLevel,
 } from "../../lib/types/character";
 import { CharacterCard } from "../atoms/CharacterCard";
+import { ClickSound } from "../atoms/ClickSound";
 import { SimpleHeader } from "../molecules/SimpleHeader";
 import { NewCharacterOpenModal } from "../organisms/NewCharacterOpenModal";
 
@@ -594,19 +595,21 @@ export const CharactersPage: React.FC = () => {
 												delay: index * 0.1,
 											}}
 										>
-											<CharacterCard
-												character={character}
-												relationship={relationships?.find(
-													(r) => r.characterId === character.id,
-												)}
-												chatCount={chatCountByCharacterIds?.find(
-													(c) => c.characterId === character.id,
-												)}
-												isNew={newCharacterIds.has(String(character.id))}
-												animationDelay={index * 0.1}
-												isFavorite={favoriteIds.has(character.id)}
-												onFavoriteToggle={handleFavoriteToggle}
-											/>
+											<ClickSound>
+												<CharacterCard
+													character={character}
+													relationship={relationships?.find(
+														(r) => r.characterId === character.id,
+													)}
+													chatCount={chatCountByCharacterIds?.find(
+														(c) => c.characterId === character.id,
+													)}
+													isNew={newCharacterIds.has(String(character.id))}
+													animationDelay={index * 0.1}
+													isFavorite={favoriteIds.has(character.id)}
+													onFavoriteToggle={handleFavoriteToggle}
+												/>
+											</ClickSound>
 										</MotionBox>
 									))}
 								</AnimatePresence>
