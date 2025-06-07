@@ -147,9 +147,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 	// 最後の会話
 	const getLastConversationText = () => {
-		if (chatCount?.count === 0) return "まだ会話なし";
+		if (!chatCount || chatCount?.count === 0) return "まだ会話なし";
 
-		const lastDate = new Date();
+		const lastDate = chatCount.lastChatDate;
 		const now = new Date();
 		const diffTime = Math.abs(now.getTime() - lastDate.getTime());
 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
