@@ -1,3 +1,5 @@
+import { authTokenAtom } from "@/lib/atom/AuthAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import {
 	Avatar,
 	Box,
@@ -10,6 +12,7 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
+import { useSetAtom } from "jotai";
 import type React from "react";
 import { FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router";
@@ -24,6 +27,9 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 	cardBg,
 }) => {
 	const navigate = useNavigate();
+
+	const setAuthToken = useSetAtom(authTokenAtom);
+	const setUser = useSetAtom(userAtom);
 
 	return (
 		<Box position="fixed" top={4} right={4} zIndex="1000">
@@ -96,6 +102,9 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 						_hover={{ bg: "red.50" }}
 						color="red.600"
 						onClick={() => {
+							// トークンとユーザー情報をクリア
+							setAuthToken(null);
+							setUser(null);
 							navigate("/login");
 						}}
 					>
