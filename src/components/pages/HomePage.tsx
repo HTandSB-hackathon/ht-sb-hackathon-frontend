@@ -54,6 +54,7 @@ import {
 	recentConversationCharacterIdsAtom,
 } from "@/lib/atom/CharacterAtom";
 import { chatCountAllAtomLoadable } from "@/lib/atom/ChatAtom";
+import { eventsAtomLoadable } from "@/lib/atom/EventAtom";
 import { userAtom } from "@/lib/atom/UserAtom";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import { UserProfileMenu } from "../organisms/UserProfileMenu";
@@ -76,6 +77,9 @@ const HomePage: React.FC = () => {
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
 	const user = useAtomValue(userAtom);
 	const chatCountAll = useLoadableAtom(chatCountAllAtomLoadable);
+	const events = useLoadableAtom(eventsAtomLoadable);
+
+	console.log("イベントデータ:", event);
 
 	// レスポンシブデザイン（スマホ最適化）
 	const heroHeight = useBreakpointValue({
@@ -730,62 +734,28 @@ const HomePage: React.FC = () => {
 									</CardHeader>
 									<CardBody p={6}>
 										<VStack spacing={4} align="stretch">
-											<Box
-												p={4}
-												bg="yellow.50"
-												borderRadius="lg"
-												border="1px solid"
-												borderColor="yellow.200"
-											>
-												<HStack mb={2}>
-													<Icon as={FaCrown} color="yellow.500" />
-													<Text fontWeight="bold" color="yellow.700">
-														信頼度レベルアップ！
-													</Text>
-												</HStack>
-												<Text fontSize="sm" color="gray.700">
-													この週に{trustLevel5Count}
-													人の方との関係が深まりました。
-												</Text>
-											</Box>
-
-											<Box
-												p={4}
-												bg="blue.50"
-												borderRadius="lg"
-												border="1px solid"
-												borderColor="blue.200"
-											>
-												<HStack mb={2}>
-													<Icon as={FaMapMarkerAlt} color="blue.500" />
-													<Text fontWeight="bold" color="blue.700">
-														新しい地域を発見
-													</Text>
-												</HStack>
-												<Text fontSize="sm" color="gray.700">
-													福島の隠れた魅力スポットについて学びました。
-												</Text>
-											</Box>
-
-											{favoriteIds.size > 0 && (
-												<Box
-													p={4}
-													bg="pink.50"
-													borderRadius="lg"
-													border="1px solid"
-													borderColor="pink.200"
-												>
-													<HStack mb={2}>
-														<Icon as={FaHeart} color="pink.500" />
-														<Text fontWeight="bold" color="pink.700">
-															特別な絆
+											{events &&
+												events?.length > 0 &&
+												events.map((event, index) => (
+													<Box
+														p={4}
+														key={index}
+														bg="yellow.50"
+														borderRadius="lg"
+														border="1px solid"
+														borderColor="yellow.200"
+													>
+														<HStack mb={2}>
+															<Icon as={FaCrown} color="yellow.500" />
+															<Text fontWeight="bold" color="yellow.700">
+																{event.title}
+															</Text>
+														</HStack>
+														<Text fontSize="sm" color="gray.700">
+															{event.description}
 														</Text>
-													</HStack>
-													<Text fontSize="sm" color="gray.700">
-														{favoriteIds.size}人の方をお気に入りに追加しました。
-													</Text>
-												</Box>
-											)}
+													</Box>
+												))}
 										</VStack>
 									</CardBody>
 								</MotionCard>
