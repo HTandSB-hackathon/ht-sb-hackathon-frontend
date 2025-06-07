@@ -1,6 +1,6 @@
 import { ProtectedRoute } from "@/lib/route/ProtectedRoute";
 import { useAtom, useSetAtom } from "jotai";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import {
 	isLevelUpModalOpenAtom,
 	isNewCharacterModalOpenAtom,
@@ -25,6 +25,7 @@ import { useEffect } from "react";
 import { NewCharacterOpenModal } from "./components/organisms/NewCharacterOpenModal";
 import { NewStoryOpenModal } from "./components/organisms/NewStoryOpenModal";
 import LandingPage from "./components/pages/LandingPage";
+import NotFoundPage from "./components/pages/NotFoundPage";
 import {
 	levelUpCharacterDetailAtom,
 	newCharacterRelationshipAtom,
@@ -78,14 +79,16 @@ function App() {
 					{/* ルートが存在しない場合の404ページ */}
 					{/* 認証が必要なルート */}
 					<Route element={<ProtectedRoute />}>
-						<Route path="/tutorial" element={<TutorialPage />} />
 						<Route path="/home" element={<HomePage />} />
 						<Route path="/profile" element={<ProfilePage />} />
 						<Route path="/settings" element={<SettingsPage />} />
 						<Route path="/characters" element={<CharactersPage />} />
 						<Route path="/characters/:id" element={<CharacterDetailPage />} />
 						<Route path="/chats/:characterId" element={<ChatPage />} />
+						<Route path="*" element={<NotFoundPage />} />
 					</Route>
+					{/* キャッチオールルート - 定義されていないパスは全てランディングページにリダイレクト */}
+					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</BrowserRouter>
 			{isLevelUpModalOpen && (
