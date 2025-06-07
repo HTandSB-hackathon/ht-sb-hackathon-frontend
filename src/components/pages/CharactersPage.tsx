@@ -64,7 +64,10 @@ import {
 	// sortedCharactersAtom,
 } from "@/lib/atom/CharacterAtom";
 import { chatCountByCharacterIdAtomLoadable } from "@/lib/atom/ChatAtom";
-import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import {
+	municipalityAtomLoadable,
+	municipalityFascinatingAtomLoadable,
+} from "@/lib/atom/CityAtom";
 import { occupationsAtomLoadable } from "@/lib/atom/OccupationAtom";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
@@ -99,6 +102,9 @@ export const CharactersPage: React.FC = () => {
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
 	const newCharacterIds = useAtomValue(newlyUnlockedCharacterIdsAtom);
 	const countByTrustLevel = useAtomValue(characterCountByTrustLevelAtom);
+	const municipalitieFascinations = useLoadableAtom(
+		municipalityFascinatingAtomLoadable,
+	);
 
 	const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
 	const navigate = useNavigate();

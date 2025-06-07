@@ -1,9 +1,15 @@
 import { getNewCharacterAtom } from "@/lib/atom/CharacterAtom";
-import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import {
+	municipalityAtomLoadable,
+	municipalityFascinatingAtomLoadable,
+} from "@/lib/atom/CityAtom";
 import { userAtom } from "@/lib/atom/UserAtom";
 import type { Relationship } from "@/lib/domain/CharacterQuery";
 import type { ChatCount } from "@/lib/domain/ChatQuery";
-import type { Municipality } from "@/lib/domain/CityQuery";
+import type {
+	Municipality,
+	MunicipalityFascinating,
+} from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	Avatar,
@@ -66,6 +72,9 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	const [isHovered, setIsHovered] = React.useState(false);
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
 	const unlockCharacter = useSetAtom(getNewCharacterAtom);
+	const municipalitieFascinations = useLoadableAtom(
+		municipalityFascinatingAtomLoadable,
+	);
 	const user = useAtomValue(userAtom);
 	// 都道府県の市区町村データを取得
 	const getMunicipalityName = () => {
@@ -113,37 +122,24 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 		: 0;
 
 	// 地域テーマ
-	const getCityTheme = (city: string) => {
-		const themes: Record<
-			string,
-			{ color: string; emoji: string; gradient: string }
-		> = {
-			須賀川市: {
-				color: "purple",
-				emoji: "🍇",
-				gradient: "linear(to-r, purple.400, pink.400)",
-			},
-			三春町: {
-				color: "pink",
-				emoji: "🌸",
-				gradient: "linear(to-r, pink.400, rose.400)",
-			},
-			中島村: {
-				color: "green",
-				emoji: "🌾",
-				gradient: "linear(to-r, green.400, teal.400)",
-			},
-		};
-		return (
-			themes[city] || {
-				color: "gray",
-				emoji: "🏔️",
-				gradient: "linear(to-r, gray.400, gray.500)",
-			}
+	const getCityTheme = () => {
+		const theme = municipalitieFascinations?.find(
+			(municipalitieFascination: MunicipalityFascinating) =>
+				municipalitieFascination.municipalityId === character.municipalityId,
 		);
+		if (theme) {
+			return {
+				color: theme.color,
+				emoji: theme.emoji,
+				gradient: theme.gradient,
+			};
+		}
+		return {
+			color: "gray",
+			emoji: "🏙️",
+			gradient: "linear(to-r, gray.100, gray.300)",
+		};
 	};
-
-	const cityTheme = getCityTheme("須賀川市");
 
 	// 最後の会話
 	const getLastConversationText = () => {
@@ -192,7 +188,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 				onMouseLeave={() => setIsHovered(false)}
 				_hover={{
 					boxShadow: `0 16px 48px ${shadowColor}`,
-					borderColor: `${cityTheme.color}.300`,
+					borderColor: `${getCityTheme().color}.300`,
 				}}
 				opacity={character.isLocked ? 0.7 : 1}
 				filter={character.isLocked ? "grayscale(50%)" : "none"}
@@ -236,7 +232,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 					left="0"
 					right="0"
 					height="120px"
-					bgGradient={cityTheme.gradient}
+					bgGradient={getCityTheme().gradient}
 					opacity="0.1"
 				/>
 
@@ -252,11 +248,13 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 									}
 									name={character.isLocked ? "???" : character.name}
 									bg={
-										character.isLocked ? "gray.400" : `${cityTheme.color}.500`
+										character.isLocked
+											? "gray.400"
+											: `${getCityTheme().color}.500`
 									}
 									icon={character.isLocked ? <MdLock /> : undefined}
 									border="4px solid"
-									borderColor={`${cityTheme.color}.400`}
+									borderColor={`${getCityTheme().color}.400`}
 									shadow="lg"
 								/>
 
@@ -271,14 +269,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 											borderRadius="full"
 											p="1"
 											border="2px solid"
-											borderColor={`${cityTheme.color}.400`}
+											borderColor={`${getCityTheme().color}.400`}
 											fontSize="sm"
 											zIndex={1}
 											display="flex"
 											alignItems="center"
 											height="32px"
 										>
-											{cityTheme.emoji}
+											{getCityTheme().emoji}
 										</Box>
 									</Tooltip>
 								)}
@@ -328,7 +326,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 								</Tooltip>
 								<Tag
 									size="sm"
-									colorScheme={cityTheme.color}
+									colorScheme={getCityTheme().color}
 									variant="subtle"
 									maxW="180px"
 									overflow="hidden"
@@ -488,7 +486,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 													<Tag
 														key={index}
 														size="sm"
-														colorScheme={cityTheme.color}
+														colorScheme={getCityTheme().color}
 														variant="outline"
 													>
 														{hobby}
@@ -506,7 +504,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 				{/* 底部のアクセントライン */}
 				<MotionBox
 					h="3px"
-					bgGradient={cityTheme.gradient}
+					bgGradient={getCityTheme().gradient}
 					initial={{ scaleX: 0 }}
 					animate={{ scaleX: 1 }}
 					transition={{ delay: animationDelay + 0.5, duration: 0.8 }}

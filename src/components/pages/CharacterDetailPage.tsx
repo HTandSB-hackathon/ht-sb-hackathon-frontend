@@ -65,7 +65,10 @@ import {
 } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
 
-import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import {
+	municipalityAtomLoadable,
+	municipalityFascinatingAtomLoadable,
+} from "@/lib/atom/CityAtom";
 import { occupationsAtomLoadable } from "@/lib/atom/OccupationAtom";
 import type { Relationship, Story } from "@/lib/domain/CharacterQuery";
 import {
@@ -74,7 +77,10 @@ import {
 	getStories,
 } from "@/lib/domain/CharacterQuery";
 import { getChatCountByCharacterId } from "@/lib/domain/ChatQuery";
-import type { Municipality } from "@/lib/domain/CityQuery";
+import type {
+	Municipality,
+	MunicipalityFascinating,
+} from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
 	characterDetailLoadingAtom,
@@ -107,6 +113,9 @@ export const CharacterDetailPage: React.FC = () => {
 	const [tabIndex, setTabIndex] = React.useState(0);
 
 	const occupations = useLoadableAtom(occupationsAtomLoadable);
+	const municipalitieFascinations = useLoadableAtom(
+		municipalityFascinatingAtomLoadable,
+	);
 
 	const toast = useToast();
 
@@ -143,6 +152,17 @@ export const CharacterDetailPage: React.FC = () => {
 		if (!characters) return null;
 
 		return characters.find((character) => character.id === Number(id));
+	};
+
+	const getCity = () => {
+		if (!municipalitieFascinations) return null;
+
+		const fascination = municipalitieFascinations?.find(
+			(municipalitieFascination: MunicipalityFascinating) =>
+				municipalitieFascination.municipalityId ===
+				getCharacter()?.municipalityId,
+		);
+		return fascination;
 	};
 
 	// データ取得
@@ -709,11 +729,11 @@ export const CharacterDetailPage: React.FC = () => {
 									<VStack spacing={8}>
 										<Box textAlign="center">
 											<Heading size="lg" mb={4}>
-												{getMunicipality()?.emoji} {getMunicipality()?.name}
+												{getCity()?.emoji} {getMunicipality()?.name}
 												の魅力
 											</Heading>
 											<Text color="gray.600" fontSize="lg">
-												{getMunicipality()?.specialty}
+												{getCity()?.content}
 											</Text>
 										</Box>
 
@@ -722,59 +742,24 @@ export const CharacterDetailPage: React.FC = () => {
 											spacing={6}
 											w="full"
 										>
-											<MotionCard
-												whileHover={{ y: -5 }}
-												bg="blue.50"
-												borderRadius="xl"
-												textAlign="center"
-												p={6}
-											>
-												<Text fontSize="4xl" mb={4}>
-													🏞️
-												</Text>
-												<Heading size="md" mb={2}>
-													観光スポット
-												</Heading>
-												<Text color="gray.600">
-													美しい自然と歴史的建造物が織りなす絶景
-												</Text>
-											</MotionCard>
-
-											<MotionCard
-												whileHover={{ y: -5 }}
-												bg="orange.50"
-												borderRadius="xl"
-												textAlign="center"
-												p={6}
-											>
-												<Text fontSize="4xl" mb={4}>
-													🍜
-												</Text>
-												<Heading size="md" mb={2}>
-													ご当地グルメ
-												</Heading>
-												<Text color="gray.600">
-													地元食材を使った心温まる絶品料理
-												</Text>
-											</MotionCard>
-
-											<MotionCard
-												whileHover={{ y: -5 }}
-												bg="green.50"
-												borderRadius="xl"
-												textAlign="center"
-												p={6}
-											>
-												<Text fontSize="4xl" mb={4}>
-													🎭
-												</Text>
-												<Heading size="md" mb={2}>
-													伝統文化
-												</Heading>
-												<Text color="gray.600">
-													受け継がれる伝統と現代の融合
-												</Text>
-											</MotionCard>
+											{getCity()?.details.map((detail, index) => (
+												<MotionCard
+													key={index}
+													whileHover={{ y: -5 }}
+													bg="blue.50"
+													borderRadius="xl"
+													textAlign="center"
+													p={6}
+												>
+													<Text fontSize="4xl" mb={4}>
+														{detail.emoji}
+													</Text>
+													<Heading size="md" mb={2}>
+														{detail.title}
+													</Heading>
+													<Text color="gray.600">{detail.content}</Text>
+												</MotionCard>
+											))}
 										</SimpleGrid>
 
 										<Center>

@@ -1,5 +1,10 @@
 import type { Character } from "@/lib/domain/CharacterQuery";
-import { type Municipality, getMunicipalities } from "@/lib/domain/CityQuery";
+import {
+	type Municipality,
+	type MunicipalityFascinating,
+	getMunicipalities,
+	getMunicipalityFascinating,
+} from "@/lib/domain/CityQuery";
 import { atom } from "jotai";
 import { atomWithRefresh, loadable } from "jotai/utils";
 import { characterAtomAsync } from "./CharacterAtom";
@@ -14,7 +19,22 @@ export const municipalityAtomAsync = atomWithRefresh(async () => {
 	}
 });
 
+export const municipalityFascinatingAtomAsync = atomWithRefresh(async () => {
+	try {
+		const response = await getMunicipalityFascinating({
+			prefecture_id: 7,
+		});
+		return response;
+	} catch (error) {
+		console.error("Error fetching municipality fascinating data:", error);
+		return [];
+	}
+});
+
 export const municipalityAtomLoadable = loadable(municipalityAtomAsync);
+export const municipalityFascinatingAtomLoadable = loadable(
+	municipalityFascinatingAtomAsync,
+);
 
 interface MunicipalityWithCharacters {
 	municipality: Municipality;
