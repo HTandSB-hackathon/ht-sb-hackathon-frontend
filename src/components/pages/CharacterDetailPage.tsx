@@ -66,6 +66,7 @@ import {
 import { useNavigate, useParams } from "react-router";
 
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import { occupationsAtomLoadable } from "@/lib/atom/OccupationAtom";
 import type { Relationship, Story } from "@/lib/domain/CharacterQuery";
 import {
 	getLockedStories,
@@ -83,7 +84,6 @@ import {
 } from "../../lib/atom/CharacterAtom";
 import { TRUST_LEVELS } from "../../lib/types/character";
 import { SimpleHeader } from "../molecules/SimpleHeader";
-import { NewStoryOpenModal } from "../organisms/NewStoryOpenModal";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -105,17 +105,8 @@ export const CharacterDetailPage: React.FC = () => {
 	const [isLoading, setIsLoading] = useAtom(characterDetailLoadingAtom);
 	const [error, setError] = React.useState<string | null>(null);
 	const [tabIndex, setTabIndex] = React.useState(0);
-	const [prevStoryIds, setPrevStoryIds] = useState<Set<string>>(new Set());
-	const [newStoryQueue, setNewStoryQueue] = useState<
-		{
-			id?: string;
-			title?: string;
-			content?: string;
-			characterName?: string;
-			characterImage?: string;
-		}[]
-	>([]);
-	const [isStoryModalOpen, setIsStoryModalOpen] = useState(false);
+
+	const occupations = useLoadableAtom(occupationsAtomLoadable);
 
 	const toast = useToast();
 
@@ -208,40 +199,6 @@ export const CharacterDetailPage: React.FC = () => {
 		} catch (err) {
 			console.error("お気に入り更新エラー:", err);
 		}
-	};
-
-	// ストーリー解放検知
-	useEffect(() => {
-		if (!stories || !getCharacter()) return;
-		const currentIds = new Set(stories.map((s) => s.id));
-		const newIds = Array.from(currentIds).filter((id) => !prevStoryIds.has(id));
-		const newStories = newIds
-			.map((id) => stories.find((s) => s.id === id))
-			.filter(Boolean)
-			.map((s) => ({
-				id: s?.id,
-				title: s?.title,
-				content: s?.content,
-				characterName: getCharacter()?.name,
-				characterImage: getCharacter()?.profileImageUrl,
-			}));
-		if (newStories.length > 0) {
-			setNewStoryQueue((prev) => {
-				const prevTitles = new Set(prev.map((q) => q.title));
-				const filtered = newStories.filter((c) => !prevTitles.has(c.id));
-				return [...prev, ...filtered];
-			});
-			setIsStoryModalOpen(true);
-		}
-		setPrevStoryIds(currentIds);
-	}, [stories]);
-
-	const handleCloseNewStoryModal = () => {
-		setNewStoryQueue((prev) => {
-			const [, ...rest] = prev;
-			if (rest.length === 0) setIsStoryModalOpen(false);
-			return rest;
-		});
 	};
 
 	// ローディング表示
@@ -338,6 +295,13 @@ export const CharacterDetailPage: React.FC = () => {
 	}
 
 	const trustLevel = relationship?.trustLevelId || 1;
+	const occupation = occupations?.find((occ) => {
+		const occupationId = getCharacter()?.occupationId;
+		if (!occupationId) {
+			return false;
+		}
+		return occ.id === occupationId;
+	});
 	const trustInfo = TRUST_LEVELS[trustLevel as keyof typeof TRUST_LEVELS];
 	const progress = relationship
 		? (relationship.trustPoints / relationship.nextLevelPoints) * 100
@@ -438,14 +402,6 @@ export const CharacterDetailPage: React.FC = () => {
 									<Heading size={headerSize} color="gray.800" noOfLines={1}>
 										{getCharacter()?.name}
 									</Heading>
-									{/* <Text
-										fontSize="lg"
-										color="gray.500"
-										fontWeight="medium"
-										noOfLines={1}
-									>
-										{getCharacter()?.nameKana}
-									</Text> */}
 
 									{/* スマホ表示最適化: 縦並びレイアウト */}
 									<VStack
@@ -461,7 +417,7 @@ export const CharacterDetailPage: React.FC = () => {
 										<HStack spacing={2}>
 											<Icon as={MdWork} color="blue.500" />
 											<Text fontWeight="medium" noOfLines={1}>
-												{getCharacter()?.occupationId}
+												{occupation?.name}
 											</Text>
 										</HStack>
 										<HStack spacing={2}>
@@ -485,7 +441,7 @@ export const CharacterDetailPage: React.FC = () => {
 										</HStack>
 										<HStack>
 											<Icon as={MdWork} color="blue.500" />
-											<Text>{getCharacter()?.occupationId}</Text>
+											<Text>{occupation?.name}</Text>
 										</HStack>
 										<HStack>
 											<Icon as={FaMapMarkerAlt} color="green.500" />
