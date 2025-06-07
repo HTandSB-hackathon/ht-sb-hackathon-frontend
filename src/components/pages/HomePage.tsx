@@ -54,7 +54,10 @@ import {
 	recentConversationCharacterIdsAtom,
 } from "@/lib/atom/CharacterAtom";
 import { chatCountAllAtomLoadable } from "@/lib/atom/ChatAtom";
-import { eventsAtomLoadable } from "@/lib/atom/EventAtom";
+import {
+	eventsAtomLoadable,
+	fukushimaWeeksAtomLoadable,
+} from "@/lib/atom/EventAtom";
 import { userAtom } from "@/lib/atom/UserAtom";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import { UserProfileMenu } from "../organisms/UserProfileMenu";
@@ -78,8 +81,7 @@ const HomePage: React.FC = () => {
 	const user = useAtomValue(userAtom);
 	const chatCountAll = useLoadableAtom(chatCountAllAtomLoadable);
 	const events = useLoadableAtom(eventsAtomLoadable);
-
-	console.log("イベントデータ:", event);
+	const fukushimaWeeks = useLoadableAtom(fukushimaWeeksAtomLoadable);
 
 	// レスポンシブデザイン（スマホ最適化）
 	const heroHeight = useBreakpointValue({
@@ -418,45 +420,6 @@ const HomePage: React.FC = () => {
 												<StatHelpText>回</StatHelpText>
 											</Stat>
 										</SimpleGrid>
-
-										{/* 信頼度分布 */}
-										<Box mt={8}>
-											<Text fontWeight="bold" mb={4} color="gray.700">
-												🤝 信頼関係の分布
-											</Text>
-											<VStack spacing={3}>
-												{[
-													{ level: 5, name: "家族同然", color: "yellow" },
-													{ level: 4, name: "親友", color: "purple" },
-													{ level: 3, name: "友達", color: "blue" },
-													{ level: 2, name: "顔見知り", color: "green" },
-													{ level: 1, name: "初対面", color: "gray" },
-												].map(({ level, name, color }) => (
-													<Flex key={level} align="center" w="full">
-														<Text fontSize="sm" minW="80px" color="gray.600">
-															Lv.{level} {name}
-														</Text>
-														<Progress
-															value={
-																totalCharacters > 0
-																	? (countByTrustLevel[level] /
-																			totalCharacters) *
-																		100
-																	: 0
-															}
-															colorScheme={color}
-															size="lg"
-															flex="1"
-															mx={3}
-															borderRadius="full"
-														/>
-														<Text fontSize="sm" minW="30px" fontWeight="bold">
-															{countByTrustLevel[level] || 0}
-														</Text>
-													</Flex>
-												))}
-											</VStack>
-										</Box>
 									</CardBody>
 								</MotionCard>
 
@@ -477,7 +440,7 @@ const HomePage: React.FC = () => {
 									>
 										<HStack>
 											<Text fontSize="xl">{seasonInfo.emoji}</Text>
-											<Heading size="lg">福島の今日</Heading>
+											<Heading size="lg">市町村ウィーク</Heading>
 										</HStack>
 									</CardHeader>
 									<CardBody p={6}>
@@ -503,36 +466,39 @@ const HomePage: React.FC = () => {
 
 											<Box>
 												<Text fontWeight="bold" mb={4} color="gray.700">
-													🗾 福島の魅力的な地域
+													🗾 過去の放送
 												</Text>
 												<SimpleGrid columns={1} spacing={3}>
-													{fukushimaRegions.map((region) => (
+													{fukushimaWeeks?.map((fukushimaWeek) => (
 														<Box
-															key={region.name}
+															key={fukushimaWeek.title}
 															p={4}
 															borderRadius="lg"
 															border="1px solid"
 															borderColor="gray.200"
 															cursor="pointer"
 															_hover={{
-																borderColor: `${region.color}.300`,
+																borderColor: "green.300",
 																transform: "translateY(-2px)",
 																shadow: "md",
 															}}
 															transition="all 0.2s"
-															onClick={() => navigate("/characters")}
+															onClick={() =>
+																window.open(fukushimaWeek.url, "_blank")
+															}
 														>
 															<HStack>
-																<Text fontSize="xl">{region.emoji}</Text>
+																<Text fontSize="xl">
+																	{fukushimaWeek.municipality}
+																</Text>
 																<VStack align="start" spacing={1} flex="1">
 																	<Text fontWeight="bold" color="gray.800">
-																		{region.name}
+																		{fukushimaWeek.date}
 																	</Text>
 																	<Text fontSize="sm" color="gray.600">
-																		{region.description}
+																		{fukushimaWeek.title}
 																	</Text>
 																</VStack>
-																<Icon as={FaArrowRight} color="gray.400" />
 															</HStack>
 														</Box>
 													))}
@@ -671,23 +637,6 @@ const HomePage: React.FC = () => {
 													<Text fontWeight="bold">キャラクター一覧</Text>
 													<Text fontSize="sm" opacity="0.8">
 														福島の人々と出会う
-													</Text>
-												</VStack>
-											</Button>
-
-											<Button
-												leftIcon={<FaHeart />}
-												colorScheme="red"
-												variant="outline"
-												justifyContent="start"
-												h="auto"
-												p={4}
-												onClick={() => navigate("/characters")}
-											>
-												<VStack align="start" spacing={1}>
-													<Text fontWeight="bold">お気に入り</Text>
-													<Text fontSize="sm" opacity="0.8">
-														大切な人たちと再会する
 													</Text>
 												</VStack>
 											</Button>
