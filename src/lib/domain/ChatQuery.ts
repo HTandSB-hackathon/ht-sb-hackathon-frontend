@@ -11,6 +11,7 @@ export class ChatCount {
 	constructor(
 		public characterId: number,
 		public count: number,
+		public lastChatDate: Date, // デフォルト値を設定
 	) {}
 }
 
@@ -33,13 +34,18 @@ interface ChatResponse {
 interface ChatCountResponse {
 	character_id: number;
 	count: number;
+	last_chat_date: string; // ISO 8601形式の文字列
 }
 
 function createChat(res: ChatResponse): Chat {
 	return new Chat(res.role, res.response);
 }
 function createChatCount(res: ChatCountResponse): ChatCount {
-	return new ChatCount(res.character_id, res.count);
+	return new ChatCount(
+		res.character_id,
+		res.count,
+		new Date(res.last_chat_date),
+	);
 }
 
 function fetchChat(res: ChatMessage): Chat {

@@ -65,6 +65,7 @@ import {
 } from "@/lib/atom/CharacterAtom";
 import { chatCountByCharacterIdAtomLoadable } from "@/lib/atom/ChatAtom";
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import { occupationsAtomLoadable } from "@/lib/atom/OccupationAtom";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import type {
@@ -75,7 +76,6 @@ import type {
 import { CharacterCard } from "../atoms/CharacterCard";
 import { ClickSound } from "../atoms/ClickSound";
 import { SimpleHeader } from "../molecules/SimpleHeader";
-import { NewCharacterOpenModal } from "../organisms/NewCharacterOpenModal";
 
 const MotionBox = motion(Box);
 // const MotionFlex = motion(Flex);
