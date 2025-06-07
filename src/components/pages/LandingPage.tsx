@@ -125,6 +125,13 @@ const LandingPage: React.FC = () => {
 		return () => window.removeEventListener("scroll", onScroll);
 	}, []);
 
+	// ログインしている場合はホームへ
+	useEffect(() => {
+		if (isLoggedIn) {
+			navigate("/home");
+		}
+	}, [isLoggedIn, navigate]);
+
 	const handleScrollTop = () => {
 		window.scrollTo({ top: 0, behavior: "smooth" });
 	};
@@ -309,7 +316,7 @@ const LandingPage: React.FC = () => {
 										bgGradient="linear(to-r, purple.500, blue.500)"
 										color="white"
 										rightIcon={<FaUserPlus />}
-										onClick={() => navigate(isLoggedIn ? "/home" : "/register")}
+										onClick={() => navigate(isLoggedIn ? "/home" : "/tutorial")}
 										borderRadius="2xl"
 										px={8}
 										py={6}
@@ -1309,7 +1316,7 @@ const LandingPage: React.FC = () => {
 										bgGradient="linear(to-r, purple.500, blue.500, teal.500)"
 										color="white"
 										rightIcon={<FaRocket />}
-										onClick={() => navigate(isLoggedIn ? "/home" : "/register")}
+										onClick={() => navigate(isLoggedIn ? "/home" : "/tutorial")}
 										borderRadius="2xl"
 										px={12}
 										py={8}
