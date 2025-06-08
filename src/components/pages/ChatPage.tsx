@@ -22,6 +22,7 @@ import {
 	Spacer,
 	Stack,
 	Text,
+	Textarea,
 	VStack,
 	useBreakpointValue,
 	useColorModeValue,
@@ -77,7 +78,7 @@ export const ChatPage: React.FC = () => {
 	);
 
 	const messagesEndRef = useRef<HTMLDivElement>(null);
-	const inputRef = useRef<HTMLInputElement>(null);
+	const inputRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
 		if (characterId) {
@@ -118,6 +119,10 @@ export const ChatPage: React.FC = () => {
 		try {
 			await send({ characterId, message: { role: "user", content: input } });
 			setInput("");
+			// テキストエリアの高さをリセット
+			if (inputRef.current) {
+				inputRef.current.style.height = "auto";
+			}
 			const relationship = await getRelationship(Number(characterId));
 			setRelationship(relationship);
 			await checkLevelUp(Number(characterId), relationship.trustLevelId);
@@ -290,24 +295,47 @@ export const ChatPage: React.FC = () => {
 					>
 						<CardBody p={3}>
 							<HStack spacing={2}>
-								<Input
+								<Textarea
 									ref={inputRef}
 									placeholder="メッセージを入力..."
 									value={input}
-									onChange={(e) => setInput(e.target.value)}
+									onChange={(e) => {
+										setInput(e.target.value);
+										// 自動リサイズ
+										const textarea = e.target as HTMLTextAreaElement;
+										textarea.style.height = "auto";
+										textarea.style.height = `${textarea.scrollHeight}px`;
+									}}
+									onInput={(e) => {
+										// 直接入力時も自動リサイズ
+										const textarea = e.currentTarget as HTMLTextAreaElement;
+										textarea.style.height = "auto";
+										textarea.style.height = `${textarea.scrollHeight}px`;
+									}}
 									onKeyDown={(e) => {
-										if (e.key === "Enter") handleSend();
+										if (e.key === "Enter" && !e.shiftKey) {
+											e.preventDefault();
+											handleSend();
+										}
 									}}
 									isDisabled={isSending}
 									bg="gray.50"
-									borderRadius="full"
+									borderRadius="2xl"
+									resize="none"
+									rows={1}
+									style={{
+										overflow: "hidden",
+										minHeight: "2.5em",
+										maxHeight: "8em",
+										lineHeight: "1.5",
+									}}
 								/>
 								<Button
 									colorScheme="purple"
 									leftIcon={<FaComment />}
 									onClick={handleSend}
 									isLoading={isSending}
-									borderRadius="full"
+									borderRadius="2xl"
 									px={6}
 									disabled={!input.trim()}
 								>
