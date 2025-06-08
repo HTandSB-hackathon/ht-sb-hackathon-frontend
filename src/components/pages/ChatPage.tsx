@@ -119,11 +119,12 @@ export const ChatPage: React.FC = () => {
 			await send({ characterId, message: { role: "user", content: input } });
 			setInput("");
 			const relationship = await getRelationship(Number(characterId));
-			await checkLevelUp(Number(characterId), relationship.trustLevelId)
-				.then((updatedRelationship) => {				
-					// 信頼度の更新を反映	
+			await checkLevelUp(Number(characterId), relationship.trustLevelId).then(
+				(updatedRelationship) => {
+					// 信頼度の更新を反映
 					setRelationship(updatedRelationship);
-				});
+				},
+			);
 		} catch {
 			toast({
 				title: "送信エラー",
