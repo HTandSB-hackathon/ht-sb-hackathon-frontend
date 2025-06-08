@@ -91,12 +91,6 @@ function App() {
 					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</BrowserRouter>
-			{isLevelUpModalOpen && (
-				<LevelUpModal
-					onClose={() => setIsLevelUpModalOpen(false)}
-					isOpen={isLevelUpModalOpen}
-				/>
-			)}
 			{isNewCharacterModalOpen && (
 				<NewCharacterOpenModal
 					isOpen={isNewCharacterModalOpen}
@@ -107,6 +101,12 @@ function App() {
 				<NewStoryOpenModal
 					isOpen={isNewStoryModalOpen}
 					onClose={() => setIsNewStoryModalOpen(false)}
+				/>
+			)}
+			{isLevelUpModalOpen && (
+				<LevelUpModal
+					onClose={() => setIsLevelUpModalOpen(false)}
+					isOpen={isLevelUpModalOpen}
 				/>
 			)}
 		</div>
