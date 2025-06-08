@@ -249,7 +249,7 @@ const LandingPage: React.FC = () => {
 								width="auto"
 								mx="auto"
 								display="block"
-								onError={(e) => {
+								onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
 									e.currentTarget.style.display = "none";
 								}}
 							/>
@@ -1125,7 +1125,7 @@ const LandingPage: React.FC = () => {
 							width="auto"
 							mx="auto"
 							display="block"
-							onError={(e) => {
+							onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
 								e.currentTarget.style.display = "none";
 							}}
 						/>
