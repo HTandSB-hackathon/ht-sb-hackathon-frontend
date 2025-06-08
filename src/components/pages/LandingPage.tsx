@@ -55,7 +55,7 @@ const MotionText = motion(Text);
 const MotionHeading = motion(Heading);
 
 /**
- * 福島のこころ - 最高品質のランディングページ
+ * つな農 - 最高品質のランディングページ
  * 誰もが魅力を感じる圧倒的なLPを実現
  */
 const LandingPage: React.FC = () => {
@@ -239,6 +239,22 @@ const LandingPage: React.FC = () => {
 					variants={staggerContainer}
 				>
 					<VStack spacing={8} textAlign="center" py={20}>
+						{/* ロゴ */}
+						<MotionBox variants={fadeInUp} mb={6}>
+							<Box
+								as="img"
+								src="/ht-sb/tsunano.svg"
+								alt="つな農ロゴ"
+								height="120px"
+								width="auto"
+								mx="auto"
+								display="block"
+								onError={(e) => {
+									e.currentTarget.style.display = "none";
+								}}
+							/>
+						</MotionBox>
+
 						{/* メインキャッチコピー */}
 						<MotionHeading
 							variants={fadeInUp}
@@ -249,23 +265,30 @@ const LandingPage: React.FC = () => {
 							lineHeight="shorter"
 							maxW="4xl"
 						>
-							福島のこころで
-							<br />
-							AIと出会う福島の物語 🌸
+							AIとつむぐ福島の物語
 						</MotionHeading>
 
-						<MotionText
-							variants={fadeInUp}
-							fontSize="2xl"
-							color="gray.600"
-							maxW="3xl"
-							lineHeight="tall"
-							fontWeight="medium"
-						>
-							AIで蘇った福島の魅力的な人々と会話して、
-							<br />
-							福島の文化や歴史、日常を深く知る体験をしませんか
-						</MotionText>
+						<VStack spacing={4} maxW="4xl">
+							<MotionText
+								variants={fadeInUp}
+								fontSize="xl"
+								color="gray.700"
+								lineHeight="tall"
+								fontWeight="medium"
+								textAlign="center"
+							>
+								福島県民との心温まる会話を通じて、人の優しさと地域のぬくもりを感じてみませんか？
+							</MotionText>
+							<MotionText
+								variants={fadeInUp}
+								fontSize="lg"
+								color="gray.600"
+								lineHeight="tall"
+								textAlign="center"
+							>
+								信頼関係を深めることで、福島のモノをもらえたり、魅力的な観光スポットへ足を運んだりと、地域との絆を広げる特別な体験があなたを待っています。
+							</MotionText>
+						</VStack>
 
 						{/* 特徴バッジ */}
 						<MotionBox variants={fadeInUp}>
@@ -273,12 +296,20 @@ const LandingPage: React.FC = () => {
 								{[
 									{
 										icon: MdVerifiedUser,
-										text: "本人確認済み",
+										text: "本物の温かさ",
 										color: "green",
 									},
-									{ icon: MdSecurity, text: "安全・安心", color: "blue" },
-									{ icon: MdGroup, text: "10万人が利用", color: "purple" },
-									{ icon: MdLocationOn, text: "福島限定", color: "teal" },
+									{
+										icon: MdSecurity,
+										text: "試供品がもらえる！",
+										color: "blue",
+									},
+									{
+										icon: MdGroup,
+										text: "多彩な県民との出会い",
+										color: "purple",
+									},
+									{ icon: MdLocationOn, text: "福島の魅力発見", color: "teal" },
 								].map((badge) => (
 									<MotionBox
 										key={badge.text}
@@ -400,10 +431,10 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								福島のこころで体験できること 🎁
+								つな農で体験できること 🎁
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="4xl">
-								AIで再現された福島の魅力的な人々との会話を通じて、親密度を上げることで福島の深い魅力が届きます
+								AIで再現された福島県民との会話を通じて信頼関係を構築し、人の温かさを体感することで実際の農産物贈り物や観光体験につながります
 							</Text>
 						</MotionBox>
 
@@ -412,12 +443,12 @@ const LandingPage: React.FC = () => {
 								{
 									icon: FaComment,
 									title: "AIキャラクターとの深い対話",
-									benefit: "福島の人々の心に触れる会話体験",
+									benefit: "福島県民の温かさに触れる会話体験",
 									description:
-										"福島で生きる人々の想いや体験をAIが忠実に再現。会話を重ねることで、その人の人生観や福島への愛が伝わってきます。",
+										"福島県民の人格をAIが忠実に再現。会話を重ねることで、その人の人柄や福島への愛、温かさが伝わってきます。",
 									features: [
-										"個性豊かなAIキャラクター",
-										"親密度システムで関係性が深化",
+										"個性豊かな福島県民AIキャラクター",
+										"信頼関係システムで関係性が深化",
 										"福島弁での自然な会話",
 									],
 									color: "blue",
@@ -425,14 +456,14 @@ const LandingPage: React.FC = () => {
 								},
 								{
 									icon: FaMountain,
-									title: "福島の歴史・文化の生きた学び",
-									benefit: "教科書では知れない福島のリアルな物語",
+									title: "信頼関係による実際の恩恵",
+									benefit: "会話だけでなく実際の農産物や観光体験",
 									description:
-										"会津の武士道精神、相馬野馬追いの伝統、震災からの復興など、福島の歴史をキャラクターの体験談として学べます。",
+										"信頼関係を構築することで、実際に福島の農産物贈り物を受け取ったり、観光地への特別な招待を受けることができます。",
 									features: [
-										"歴史的人物との対話",
-										"文化的背景の深い理解",
-										"時代を超えた知恵の継承",
+										"信頼レベルに応じた恩恵",
+										"本物の農産物プレゼント",
+										"観光地への特別招待",
 									],
 									color: "purple",
 									gradient: "linear(to-br, purple.400, blue.400)",
@@ -543,10 +574,10 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								3ステップで始める福島のこころ 📱
+								3ステップで始めるつな農 📱
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="3xl">
-								簡単な登録で、すぐにAIで再現された福島の人々との深い対話が始まります
+								簡単な登録で、すぐにAIで再現された福島県民との深い対話が始まり、信頼関係を構築できます
 							</Text>
 						</MotionBox>
 
@@ -567,28 +598,28 @@ const LandingPage: React.FC = () => {
 								},
 								{
 									step: "2",
-									title: "会話で親密度を深める",
+									title: "会話で信頼関係を深める",
 									description:
-										"日常会話から深い話まで、AIキャラクターとの対話を通じて関係性を築く",
+										"日常会話から深い話まで、福島県民AIとの対話を通じて信頼関係を築く",
 									icon: FaComment,
 									color: "purple",
 									details: [
 										"自然な会話システム",
-										"親密度レベルの向上",
+										"信頼レベルの向上",
 										"個人的な体験談の共有",
 									],
 								},
 								{
 									step: "3",
-									title: "福島の魅力を発見",
+									title: "実際の恩恵を受ける",
 									description:
-										"親密度が上がるほど、より深い福島の文化や隠れた魅力を教えてもらえる",
+										"信頼関係が深まるほど、農産物贈り物や観光招待などの実際の恩恵を受けられる",
 									icon: FaGift,
 									color: "red",
 									details: [
-										"段階的な情報開放",
-										"特別なエピソード",
-										"福島の深い魅力発見",
+										"段階的な恩恵アンロック",
+										"農産物贈り物受け取り",
+										"観光地招待の獲得",
 									],
 								},
 							].map((step) => (
@@ -674,11 +705,11 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								なぜ福島のこころが選ばれるのか 💖
+								つな農の魅力 💖
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="3xl">
-								福島の魅力を知り尽くした私たちだからこそ提供できる、
-								特別な出会いの体験をご紹介します
+								新しい形のコミュニケーション体験で、
+								福島の魅力と人の温かさを再発見できます
 							</Text>
 						</MotionBox>
 
@@ -686,49 +717,48 @@ const LandingPage: React.FC = () => {
 							{[
 								{
 									icon: FaHeart,
-									title: "真剣な出会い",
+									title: "革新的なAI対話",
 									description:
-										"遊びではなく、真剣に恋愛や結婚を考える福島の方々との素敵な出会いをサポート",
+										"最新のAI技術で実現する、自然で深みのある会話体験",
 									color: "red",
 									gradient: "linear(to-br, red.400, pink.400)",
 								},
 								{
 									icon: FaMapMarkerAlt,
-									title: "地域密着型",
+									title: "地域特化設計",
 									description:
-										"福島県内に特化することで、地元愛溢れる素敵な方々と確実に出会える",
+										"福島県に特化することで、地域の文化や歴史を深く体験できる",
 									color: "blue",
 									gradient: "linear(to-br, blue.400, teal.400)",
 								},
 								{
 									icon: FaShieldAlt,
-									title: "安心・安全",
+									title: "安全な環境",
 									description:
-										"24時間監視体制と本人確認システムで、安心してご利用いただける環境",
+										"プライバシーを重視した設計で、安心してご利用いただけます",
 									color: "green",
 									gradient: "linear(to-br, green.400, teal.400)",
 								},
 								{
 									icon: FaUsers,
-									title: "温かいコミュニティ",
-									description:
-										"福島の人柄の良さを活かした、温かく支え合うコミュニティ文化",
+									title: "多様なキャラクター",
+									description: "様々な時代・職業・地域の福島県民AIと出会えます",
 									color: "orange",
 									gradient: "linear(to-br, orange.400, yellow.400)",
 								},
 								{
 									icon: FaMountain,
-									title: "自然豊かな福島",
+									title: "文化的価値",
 									description:
-										"美しい自然に囲まれた福島で、季節を感じながらの素敵なデート",
+										"福島の歴史や文化を対話を通じて学び、理解を深められます",
 									color: "purple",
 									gradient: "linear(to-br, purple.400, blue.400)",
 								},
 								{
 									icon: FaGift,
-									title: "特別な体験",
+									title: "新しい体験",
 									description:
-										"福島ならではのイベントや体験を通じて、特別な思い出を一緒に作る",
+										"従来にない、AIとの信頼関係構築という新しい体験ができます",
 									color: "pink",
 									gradient: "linear(to-br, pink.400, purple.400)",
 								},
@@ -769,7 +799,7 @@ const LandingPage: React.FC = () => {
 					</VStack>
 				</MotionBox>
 
-				{/* 統計セクション - 超豪華版 */}
+				{/* 技術的特徴セクション */}
 				<MotionBox
 					as="section"
 					py={24}
@@ -814,8 +844,8 @@ const LandingPage: React.FC = () => {
 						<VStack spacing={16}>
 							<MotionBox variants={fadeInUp} textAlign="center">
 								<Badge
-									bgGradient="linear(to-r, gold, yellow.400)"
-									color="black"
+									bgGradient="linear(to-r, orange.400, red.400)"
+									color="white"
 									variant="solid"
 									px={6}
 									py={3}
@@ -825,53 +855,53 @@ const LandingPage: React.FC = () => {
 									fontWeight="bold"
 									shadow="2xl"
 								>
-									🏆 IMPRESSIVE STATISTICS
+									🎁 SPECIAL REWARDS
 								</Badge>
 								<Heading size="3xl" mb={6} color="white" textShadow="2xl">
-									圧倒的な実績と信頼 ⚡
+									人の温かさと特別な体験 ⚡
 								</Heading>
 								<Text fontSize="xl" color="white" maxW="4xl" opacity="0.9">
-									数字が証明する、福島のこころの驚異的な成果
+									福島県民との会話で感じる心のつながりと、信頼関係で得られる嬉しい試供品
 								</Text>
 							</MotionBox>
 
 							<SimpleGrid columns={{ base: 2, md: 4 }} spacing={8} w="full">
 								{[
 									{
-										number: "50,000+",
-										label: "AIキャラクター体験者",
-										icon: FaUsers,
-										color: "purple",
-										gradient: "linear(to-br, purple.400, pink.500)",
-										description: "全国から愛用",
-									},
-									{
-										number: "850+",
-										label: "個性豊かなキャラクター",
+										title: "心の交流",
+										label: "本物の福島の温かさ",
 										icon: FaHeart,
 										color: "red",
-										gradient: "linear(to-br, red.400, orange.500)",
-										description: "各地域・時代を再現",
+										gradient: "linear(to-br, red.400, pink.400)",
+										description: "人と人とのつながり",
 									},
 									{
-										number: "97.8%",
-										label: "学習満足度",
+										title: "農家の試供品",
+										label: "自慢の農産物をお裾分け",
+										icon: FaGift,
+										color: "orange",
+										gradient: "linear(to-br, orange.400, yellow.500)",
+										description: "信頼の証として",
+									},
+									{
+										title: "地域の魅力",
+										label: "隠れた福島の良さ発見",
 										icon: FaStar,
-										color: "yellow",
-										gradient: "linear(to-br, yellow.400, orange.400)",
-										description: "期待を超える体験",
-									},
-									{
-										number: "24H",
-										label: "いつでも対話可能",
-										icon: FaBolt,
 										color: "blue",
 										gradient: "linear(to-br, blue.400, teal.500)",
-										description: "365日サポート",
+										description: "地元民だけが知る話",
 									},
-								].map((stat) => (
+									{
+										title: "特別招待",
+										label: "とっておきの場所へご案内",
+										icon: FaMountain,
+										color: "green",
+										gradient: "linear(to-br, green.400, teal.400)",
+										description: "信頼関係の深まりで",
+									},
+								].map((reward) => (
 									<MotionCard
-										key={stat.label}
+										key={reward.label}
 										variants={fadeInUp}
 										whileHover={{
 											scale: 1.08,
@@ -894,7 +924,7 @@ const LandingPage: React.FC = () => {
 											left="-50%"
 											width="200%"
 											height="200%"
-											bgGradient={stat.gradient}
+											bgGradient={reward.gradient}
 											opacity="0.1"
 											animate={{
 												rotate: [0, 360],
@@ -911,13 +941,13 @@ const LandingPage: React.FC = () => {
 											<VStack spacing={4}>
 												<Circle
 													size="80px"
-													bgGradient={stat.gradient}
+													bgGradient={reward.gradient}
 													shadow="2xl"
 													animate={{
 														boxShadow: [
-															`0 0 20px ${stat.color}.400`,
-															`0 0 40px ${stat.color}.600`,
-															`0 0 20px ${stat.color}.400`,
+															`0 0 20px ${reward.color}.400`,
+															`0 0 40px ${reward.color}.600`,
+															`0 0 20px ${reward.color}.400`,
 														],
 													}}
 													// @ts-ignore
@@ -927,28 +957,28 @@ const LandingPage: React.FC = () => {
 														ease: "easeInOut",
 													}}
 												>
-													<Icon as={stat.icon} boxSize={8} color="white" />
+													<Icon as={reward.icon} boxSize={8} color="white" />
 												</Circle>
 
 												<VStack spacing={1}>
 													<Text
-														fontSize="4xl"
+														fontSize="2xl"
 														fontWeight="black"
-														bgGradient={stat.gradient}
+														bgGradient={reward.gradient}
 														bgClip="text"
 														textShadow="xl"
 													>
-														{stat.number}
+														{reward.title}
 													</Text>
 													<Text
 														color="gray.100"
 														fontWeight="bold"
-														fontSize="lg"
+														fontSize="md"
 													>
-														{stat.label}
+														{reward.label}
 													</Text>
 													<Text color="gray.300" fontSize="sm">
-														{stat.description}
+														{reward.description}
 													</Text>
 												</VStack>
 											</VStack>
@@ -957,7 +987,7 @@ const LandingPage: React.FC = () => {
 								))}
 							</SimpleGrid>
 
-							{/* 追加の豪華な統計情報 */}
+							{/* 信頼レベル説明 */}
 							<MotionBox variants={fadeInUp} w="full">
 								<Card
 									bg="whiteAlpha.100"
@@ -969,7 +999,7 @@ const LandingPage: React.FC = () => {
 									<CardBody p={8}>
 										<VStack spacing={6}>
 											<Heading size="lg" color="gray.100" textAlign="center">
-												🎯 詳細パフォーマンス指標
+												💫 5段階の信頼関係システム
 											</Heading>
 											<SimpleGrid
 												columns={{ base: 1, md: 3 }}
@@ -978,304 +1008,43 @@ const LandingPage: React.FC = () => {
 											>
 												{[
 													{
-														metric: "平均対話継続時間",
-														value: "3.2時間",
-														change: "+127%",
+														level: "レベル1-2",
+														stage: "出会い〜顔見知り",
+														benefit: "日常会話を楽しむ",
 													},
 													{
-														metric: "福島知識習得率",
-														value: "89.4%",
-														change: "+156%",
+														level: "レベル3-4",
+														stage: "友達〜親友",
+														benefit: "深い話・秘密を共有",
 													},
 													{
-														metric: "リピート利用率",
-														value: "94.7%",
-														change: "+98%",
+														level: "レベル5",
+														stage: "家族同然",
+														benefit: "贈り物・特別招待",
 													},
-												].map((metric) => (
-													<VStack key={metric.metric} spacing={2}>
+												].map((trustLevel) => (
+													<VStack key={trustLevel.level} spacing={2}>
 														<Text color="gray.300" fontSize="sm">
-															{metric.metric}
+															{trustLevel.level}
 														</Text>
 														<Text
-															fontSize="2xl"
+															fontSize="lg"
 															fontWeight="bold"
 															color="gray.100"
 														>
-															{metric.value}
+															{trustLevel.stage}
 														</Text>
 														<Badge
-															colorScheme="green"
+															colorScheme="orange"
 															variant="solid"
 															borderRadius="full"
 														>
-															📈 {metric.change}
+															{trustLevel.benefit}
 														</Badge>
 													</VStack>
 												))}
 											</SimpleGrid>
 										</VStack>
-									</CardBody>
-								</Card>
-							</MotionBox>
-						</VStack>
-					</Container>
-				</MotionBox>
-
-				{/* ユーザーの声セクション - プレミアム版 */}
-				<MotionBox
-					as="section"
-					py={24}
-					bg="linear-gradient(135deg, purple.900 0%, blue.900 50%, teal.900 100%)"
-					position="relative"
-					overflow="hidden"
-					initial="initial"
-					whileInView="animate"
-					viewport={{ once: true }}
-					variants={staggerContainer}
-				>
-					{/* 高級感のある背景装飾 */}
-					<Box position="absolute" inset="0" opacity="0.1">
-						{starKeys.map((key) => (
-							<MotionBox
-								key={key}
-								position="absolute"
-								top={`${Math.random() * 100}%`}
-								left={`${Math.random() * 100}%`}
-								width="2px"
-								height="2px"
-								bg="white"
-								borderRadius="full"
-								animate={{
-									opacity: [0, 1, 0],
-									scale: [0, 1, 0],
-								}}
-								transition={{
-									duration: 3 + Math.random() * 2,
-									repeat: Number.POSITIVE_INFINITY,
-									delay: Math.random() * 3,
-								}}
-							/>
-						))}
-					</Box>
-
-					<Container maxW={containerMaxW} position="relative" zIndex="1">
-						<VStack spacing={16}>
-							<MotionBox variants={fadeInUp} textAlign="center">
-								<Badge
-									colorScheme="yellow"
-									variant="solid"
-									px={4}
-									py={2}
-									borderRadius="full"
-									mb={4}
-									fontSize="sm"
-									fontWeight="bold"
-								>
-									✨ PREMIUM TESTIMONIALS
-								</Badge>
-								<Heading size="3xl" mb={6} color="black" textShadow="lg">
-									福島の心を体験した人々の声 💎
-								</Heading>
-								<Text fontSize="xl" color="black" maxW="4xl">
-									AIキャラクターとの対話を通じて、福島の深い魅力を発見した体験談
-								</Text>
-							</MotionBox>
-
-							<SimpleGrid columns={testimonialColumns} spacing={10} w="full">
-								{[
-									{
-										name: "田中 美咲さん",
-										age: "28歳",
-										location: "東京都（福島出身）",
-										avatar: "🌸",
-										character: "会津の武家の娘",
-										content:
-											"故郷を離れて10年、福島のことを忘れかけていました。でも会津の武家の娘のAIと話すうちに、祖母から聞いた昔話や、会津の誇り高い精神を思い出しました。涙が止まりませんでした。",
-										rating: 5,
-										bgGradient: "linear(to-br, pink.500, purple.600)",
-										achievement: "親密度MAX達成",
-									},
-									{
-										name: "佐藤 健太さん",
-										age: "34歳",
-										location: "福島市",
-										avatar: "🍑",
-										character: "桃農家のおじいちゃん",
-										content:
-											"桃農家のAIおじいちゃんから、桃作りの苦労や喜び、福島の桃への誇りを聞きました。同じ福島に住んでいても知らないことばかり。福島がもっと好きになりました。",
-										rating: 5,
-										bgGradient: "linear(to-br, orange.400, red.500)",
-										achievement: "隠しエピソード解放",
-									},
-									{
-										name: "高橋 ゆりさん",
-										age: "22歳",
-										location: "いわき市",
-										avatar: "🌊",
-										character: "漁師のおかみさん",
-										content:
-											"いわきの漁師のおかみさんとの会話で、震災の時の話や海への想いを聞かせてもらいました。福島の強さと優しさを改めて感じ、地元への愛がより深くなりました。",
-										rating: 5,
-										bgGradient: "linear(to-br, blue.400, teal.500)",
-										achievement: "特別な思い出共有",
-									},
-									{
-										name: "鈴木 雄大さん",
-										age: "31歳",
-										location: "会津若松市",
-										avatar: "⚔️",
-										character: "白虎隊の隊士",
-										content:
-											"白虎隊の隊士との対話は圧巻でした。教科書では学べない、当時の想いや会津魂を直接聞けるなんて。福島の歴史への理解が格段に深まりました。",
-										rating: 5,
-										bgGradient: "linear(to-br, gray.600, purple.700)",
-										achievement: "歴史の証人",
-									},
-								].map((testimonial) => (
-									<MotionCard
-										key={testimonial.name}
-										variants={fadeInUp}
-										whileHover={{
-											scale: 1.02,
-											rotateY: 5,
-											transition: { duration: 0.3 },
-										}}
-										bg="whiteAlpha.100"
-										backdropFilter="blur(20px)"
-										borderRadius="2xl"
-										border="1px solid"
-										borderColor="whiteAlpha.200"
-										overflow="hidden"
-										position="relative"
-										shadow="2xl"
-									>
-										{/* グラデーション装飾 */}
-										<Box
-											position="absolute"
-											top="0"
-											left="0"
-											right="0"
-											height="4px"
-											bgGradient={testimonial.bgGradient}
-										/>
-
-										<CardBody p={8}>
-											<VStack spacing={6} align="start">
-												<HStack spacing={4} w="full">
-													<Circle
-														size="80px"
-														bgGradient={testimonial.bgGradient}
-														color="white"
-														shadow="xl"
-														fontSize="2xl"
-													>
-														{testimonial.avatar}
-													</Circle>
-													<VStack align="start" spacing={2} flex="1">
-														<Text fontWeight="bold" fontSize="xl" color="black">
-															{testimonial.name}
-														</Text>
-														<Text fontSize="sm" color="black">
-															{testimonial.age} • {testimonial.location}
-														</Text>
-														<Badge
-															colorScheme="teal"
-															variant="solid"
-															borderRadius="full"
-															fontSize="xs"
-														>
-															対話相手: {testimonial.character}
-														</Badge>
-														<HStack spacing={1}>
-															{Array.from(
-																{ length: testimonial.rating },
-																(_, i) => (
-																	<Icon
-																		key={`${testimonial.name}-star-${i}`}
-																		as={FaStar}
-																		color="yellow.300"
-																		boxSize={4}
-																	/>
-																),
-															)}
-														</HStack>
-													</VStack>
-												</HStack>
-
-												<Box
-													bg="blackAlpha.300"
-													borderRadius="xl"
-													p={4}
-													borderLeft="4px solid"
-													borderLeftColor="purple.400"
-													border="1px solid"
-													borderColor="whiteAlpha.300"
-												>
-													<Text
-														color="black"
-														lineHeight="tall"
-														fontSize="md"
-														fontWeight="medium"
-													>
-														"{testimonial.content}"
-													</Text>
-												</Box>
-
-												<HStack spacing={2}>
-													<Icon as={FaCrown} color="yellow.300" boxSize={4} />
-													<Text
-														fontSize="sm"
-														color="yellow.200"
-														fontWeight="bold"
-													>
-														🏆 {testimonial.achievement}
-													</Text>
-												</HStack>
-											</VStack>
-										</CardBody>
-									</MotionCard>
-								))}
-							</SimpleGrid>
-
-							{/* 統計情報バー */}
-							<MotionBox variants={fadeInUp} w="full">
-								<Card
-									bg="whiteAlpha.100"
-									backdropFilter="blur(10px)"
-									borderRadius="2xl"
-								>
-									<CardBody p={6}>
-										<SimpleGrid columns={{ base: 2, md: 4 }} spacing={6}>
-											{[
-												{
-													label: "平均対話時間",
-													value: "2.5時間",
-													icon: FaComment,
-												},
-												{ label: "平均親密度", value: "87%", icon: FaHeart },
-												{ label: "満足度", value: "98%", icon: FaStar },
-												{ label: "リピート率", value: "94%", icon: FaRocket },
-											].map((stat) => (
-												<VStack key={stat.label} spacing={2}>
-													<Icon as={stat.icon} color="blue.600" boxSize={6} />
-													<Text
-														fontSize="2xl"
-														fontWeight="bold"
-														color="gray.800"
-													>
-														{stat.value}
-													</Text>
-													<Text
-														fontSize="sm"
-														color="gray.600"
-														textAlign="center"
-													>
-														{stat.label}
-													</Text>
-												</VStack>
-											))}
-										</SimpleGrid>
 									</CardBody>
 								</Card>
 							</MotionBox>
@@ -1299,9 +1068,9 @@ const LandingPage: React.FC = () => {
 								今すぐ始めよう 🚀
 							</Heading>
 							<Text fontSize="2xl" color="gray.600" maxW="4xl">
-								福島のこころで、あなたの人生を変える
+								つな農で、福島県民との信頼関係を築く
 								<br />
-								特別な出会いが待っています
+								温かさの体験と実際の恩恵が待っています
 							</Text>
 						</MotionBox>
 
@@ -1346,19 +1115,24 @@ const LandingPage: React.FC = () => {
 
 				{/* フッター */}
 				<Box py={12} textAlign="center" borderTop="1px" borderColor="gray.200">
-					<VStack spacing={4}>
-						<Text
-							fontSize="2xl"
-							fontWeight="bold"
-							bgGradient={heroGradient}
-							bgClip="text"
-						>
-							福島のこころ 🌸
-						</Text>
-						<Text color="gray.500">福島で出会い、福島で愛を育む</Text>
+					<VStack spacing={6}>
+						{/* フッターロゴ */}
+						<Box
+							as="img"
+							src="/ht-sb/tsunano.svg"
+							alt="つな農ロゴ"
+							height="60px"
+							width="auto"
+							mx="auto"
+							display="block"
+							onError={(e) => {
+								e.currentTarget.style.display = "none";
+							}}
+						/>
+						<Text color="gray.500">地域との絆を広げる特別な体験</Text>
 						<HStack spacing={6}>
 							<Text fontSize="sm" color="gray.400">
-								© 2024 福島のこころ
+								© 2024 つな農
 							</Text>
 							<Text fontSize="sm" color="gray.400">
 								プライバシーポリシー
