@@ -103,6 +103,7 @@ function App() {
 					onClose={() => setIsNewStoryModalOpen(false)}
 				/>
 			)}
+			{/* モーダルの中では最前面に表示 */}
 			{isLevelUpModalOpen && (
 				<LevelUpModal
 					onClose={() => setIsLevelUpModalOpen(false)}
