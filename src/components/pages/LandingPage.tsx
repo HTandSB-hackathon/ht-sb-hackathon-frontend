@@ -347,7 +347,7 @@ const LandingPage: React.FC = () => {
 										bgGradient="linear(to-r, purple.500, blue.500)"
 										color="white"
 										rightIcon={<FaUserPlus />}
-										onClick={() => navigate(isLoggedIn ? "/home" : "/tutorial")}
+										onClick={() => navigate(isLoggedIn ? "/home" : "/register")}
 										borderRadius="2xl"
 										px={8}
 										py={6}
@@ -1085,7 +1085,7 @@ const LandingPage: React.FC = () => {
 										bgGradient="linear(to-r, purple.500, blue.500, teal.500)"
 										color="white"
 										rightIcon={<FaRocket />}
-										onClick={() => navigate(isLoggedIn ? "/home" : "/tutorial")}
+										onClick={() => navigate(isLoggedIn ? "/home" : "/register")}
 										borderRadius="2xl"
 										px={12}
 										py={8}
