@@ -84,14 +84,6 @@ export default function LoginPage() {
 							新規登録はこちら
 						</Link>
 					</Text>
-
-					<HStack justify="center" mt={3} spacing={1}>
-						<Icon as={FaHeart} color="red.400" boxSize={3} />
-						<Text fontSize="xs" color="gray.400">
-							福島のこころで素敵な出会いを
-						</Text>
-						<Icon as={FaHeart} color="red.400" boxSize={3} />
-					</HStack>
 				</MotionBox>
 			</VStack>
 		</Box>

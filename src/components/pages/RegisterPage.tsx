@@ -318,7 +318,7 @@ const RegisterPage: React.FC = () => {
 									fontWeight="extrabold"
 									mb={2}
 								>
-									福島のこころに参加しよう 🌸
+									つな農に参加しよう 🌸
 								</Heading>
 								<Text
 									fontSize="lg"

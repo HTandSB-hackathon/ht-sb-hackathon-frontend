@@ -67,7 +67,7 @@ const MotionCard = motion(Card);
 const MotionFlex = motion(Flex);
 
 /**
- * つな農 - 福島のこころ ホームページ
+ * つな農 ホームページ
  * ユーザーが最初に体験する魅力的な世界
  */
 const HomePage: React.FC = () => {
@@ -85,9 +85,9 @@ const HomePage: React.FC = () => {
 
 	// レスポンシブデザイン（スマホ最適化）
 	const heroHeight = useBreakpointValue({
-		base: "50vh",
-		md: "60vh",
-		lg: "70vh",
+		base: "22vh",
+		md: "28vh",
+		lg: "32vh",
 	});
 	const containerPadding = useBreakpointValue({ base: 2, sm: 4, md: 6, lg: 8 });
 	const gridTemplateColumns = useBreakpointValue({
@@ -95,16 +95,6 @@ const HomePage: React.FC = () => {
 		md: "1fr",
 		lg: "2fr 1fr",
 		xl: "3fr 2fr",
-	});
-	const heroTitleSize = useBreakpointValue({
-		base: "xl",
-		sm: "2xl",
-		md: "3xl",
-	});
-	const heroSubtitleSize = useBreakpointValue({
-		base: "lg",
-		sm: "xl",
-		md: "2xl",
 	});
 	const cardSpacing = useBreakpointValue({ base: 4, md: 6, lg: 8 });
 	const statsColumns = useBreakpointValue({ base: 2, sm: 2, md: 4 });
@@ -286,25 +276,22 @@ const HomePage: React.FC = () => {
 						/>
 
 						<VStack spacing={6} textAlign="center" color="white" zIndex="2">
-							<Text fontSize={{ base: "md", sm: "lg", md: "xl" }} opacity="0.9">
+							<Text
+								fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
+								fontWeight="bold"
+								opacity="0.9"
+							>
 								{getGreeting()}！
 							</Text>
-							<Heading
-								size={heroTitleSize}
-								fontWeight="extrabold"
-								textShadow="lg"
-								lineHeight="shorter"
-							>
-								おかえりなさい 🏠
-							</Heading>
 							<Text
-								fontSize={heroSubtitleSize}
+								fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
 								maxW="2xl"
 								opacity="0.95"
 								lineHeight="tall"
 								px={{ base: 2, sm: 0 }}
+								fontWeight="extrabold"
 							>
-								福島のこころが、あなたを待っています
+								福島の魅力的な人々が、あなたを待っています！
 							</Text>
 							<VStack spacing={4} pt={4} w="full" maxW="md">
 								<Button
@@ -358,7 +345,7 @@ const HomePage: React.FC = () => {
 										>
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={FaUsers} mr={1} />
+													<Icon as={FaUsers} mr={2} />
 													出会った人
 												</StatLabel>
 												<StatNumber
@@ -366,15 +353,22 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, blue.600, purple.600)"
 													bgClip="text"
 													fontWeight="bold"
+													as="span"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{totalCharacters}
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														人
+													</span>
 												</StatNumber>
-												<StatHelpText>人</StatHelpText>
 											</Stat>
 
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={FaCrown} mr={1} />
+													<Icon as={FaCrown} mr={2} />
 													家族同然
 												</StatLabel>
 												<StatNumber
@@ -382,15 +376,22 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, yellow.500, orange.500)"
 													bgClip="text"
 													fontWeight="bold"
+													as="span"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{trustLevel5Count}
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														人
+													</span>
 												</StatNumber>
-												<StatHelpText>人</StatHelpText>
 											</Stat>
 
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={MdFavorite} mr={1} />
+													<Icon as={MdFavorite} mr={2} />
 													お気に入り
 												</StatLabel>
 												<StatNumber
@@ -398,15 +399,22 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, pink.500, red.500)"
 													bgClip="text"
 													fontWeight="bold"
+													as="span"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{totalFavorites}
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														人
+													</span>
 												</StatNumber>
-												<StatHelpText>人</StatHelpText>
 											</Stat>
 
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={MdChatBubble} mr={1} />
+													<Icon as={MdChatBubble} mr={2} />
 													総会話数
 												</StatLabel>
 												<StatNumber
@@ -414,10 +422,17 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, green.500, teal.500)"
 													bgClip="text"
 													fontWeight="bold"
+													as="span"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{chatCountAll}
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														回
+													</span>
 												</StatNumber>
-												<StatHelpText>回</StatHelpText>
 											</Stat>
 										</SimpleGrid>
 									</CardBody>
@@ -711,42 +726,6 @@ const HomePage: React.FC = () => {
 							</VStack>
 						</GridItem>
 					</Grid>
-
-					{/* 底部のCTAセクション */}
-					<MotionFlex
-						variants={fadeInUp}
-						bg={cardBg}
-						borderRadius="2xl"
-						shadow="xl"
-						border="1px solid"
-						borderColor="gray.200"
-						p={{ base: 6, md: 8 }}
-						direction={{ base: "column", md: "row" }}
-						align="center"
-						justify="space-between"
-						gap={6}
-						textAlign={{ base: "center", md: "left" }}
-					>
-						<VStack align={{ base: "center", md: "start" }} spacing={2}>
-							<Heading size={{ base: "md", md: "lg" }} color="gray.800">
-								今日も福島のこころとつながろう 🌸
-							</Heading>
-							<Text color="gray.600">
-								新しい出会いが、あなたを待っています。
-							</Text>
-						</VStack>
-						<VStack spacing={4} w={{ base: "full", md: "auto" }}>
-							<Button
-								colorScheme="purple"
-								size={{ base: "md", sm: "lg" }}
-								w={{ base: "full", sm: "auto" }}
-								rightIcon={<FaArrowRight />}
-								onClick={() => navigate("/characters")}
-							>
-								新しい出会いを始める
-							</Button>
-						</VStack>
-					</MotionFlex>
 				</MotionBox>
 			</Container>
 		</Box>
