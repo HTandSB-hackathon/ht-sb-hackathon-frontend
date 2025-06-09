@@ -18,6 +18,7 @@ import {
 	Grid,
 	HStack,
 	Heading,
+	Icon,
 	IconButton,
 	Progress,
 	SimpleGrid,
@@ -42,7 +43,7 @@ import {
 	FaRocket,
 	FaUsers,
 } from "react-icons/fa";
-import { MdEdit, MdLocationCity, MdPerson } from "react-icons/md";
+import { MdChatBubble, MdEdit, MdLocationCity, MdPerson } from "react-icons/md";
 import { SimpleHeader } from "../molecules/SimpleHeader";
 
 const MotionCard = motion(Card);
@@ -297,20 +298,25 @@ export default function ProfilePage() {
 									/>
 									<CardBody p={6}>
 										<Stat textAlign="center">
-											<HStack justify="center" mb={2}>
-												<FaUsers size={24} color="#38A169" />
-											</HStack>
+											<StatLabel color="gray.500" fontSize="sm">
+												<Icon as={FaUsers} mr={2} />
+												出会った人
+											</StatLabel>
 											<StatNumber
 												fontSize="3xl"
 												bgGradient="linear(to-r, green.500, teal.500)"
 												bgClip="text"
 												fontWeight="bold"
+																					as="span"
+									whiteSpace="nowrap"
+									display="inline"
 											>
 												{relationships?.length || 0}
+																					<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 											</StatNumber>
-											<StatLabel fontSize="md" color="gray.600">
-												出会った人数
-											</StatLabel>
+
 										</Stat>
 									</CardBody>
 								</MotionCard>
@@ -336,20 +342,26 @@ export default function ProfilePage() {
 									/>
 									<CardBody p={6}>
 										<Stat textAlign="center">
-											<HStack justify="center" mb={2}>
-												<FaComment size={24} color="#3182CE" />
-											</HStack>
+																							<StatLabel color="gray.500" fontSize="sm">
+																								<Icon as={MdChatBubble} mr={2} />
+																								総会話数
+																								</StatLabel>
 											<StatNumber
 												fontSize="3xl"
 												bgGradient="linear(to-r, blue.500, purple.500)"
 												bgClip="text"
 												fontWeight="bold"
+																									as="span"
+													whiteSpace="nowrap"
+													display="inline"
 											>
 												{chatCount}
+																									<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														回
+													</span>
 											</StatNumber>
-											<StatLabel fontSize="md" color="gray.600">
-												総会話数
-											</StatLabel>
 										</Stat>
 									</CardBody>
 								</MotionCard>
@@ -375,22 +387,23 @@ export default function ProfilePage() {
 									/>
 									<CardBody p={6}>
 										<Stat textAlign="center">
-											<HStack justify="center" mb={2}>
-												<FaBolt size={24} color="#805AD5" />
-											</HStack>
+											<StatLabel color="gray.500" fontSize="sm">
+												<Icon as={FaBolt} mr={2} />
+												最高信頼レベル
+											</StatLabel>
 											<StatNumber
 												fontSize="3xl"
 												bgGradient="linear(to-r, purple.500, pink.500)"
 												bgClip="text"
 												fontWeight="bold"
+																									as="span"
+													whiteSpace="nowrap"
+													display="inline"
 											>
 												{relationships?.filter(
 													(relationships) => relationships.trustLevelId === 5,
 												).length || 0}
 											</StatNumber>
-											<StatLabel fontSize="md" color="gray.600">
-												最高信頼レベル
-											</StatLabel>
 										</Stat>
 									</CardBody>
 								</MotionCard>
@@ -416,22 +429,28 @@ export default function ProfilePage() {
 									/>
 									<CardBody p={6}>
 										<Stat textAlign="center">
-											<HStack justify="center" mb={2}>
-												<FaHeart size={24} color="#E53E3E" />
-											</HStack>
+											<StatLabel color="gray.500" fontSize="sm">
+												<Icon as={FaHeart} mr={2} />
+												お気に入り
+											</StatLabel>
 											<StatNumber
 												fontSize="3xl"
 												bgGradient="linear(to-r, orange.500, red.500)"
 												bgClip="text"
 												fontWeight="bold"
+																									as="span"
+													whiteSpace="nowrap"
+													display="inline"
 											>
 												{relationships?.filter(
 													(relationships) => relationships.isFavorite,
 												).length || 0}
+																									<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														人
+													</span>
 											</StatNumber>
-											<StatLabel fontSize="md" color="gray.600">
-												お気に入り
-											</StatLabel>
 										</Stat>
 									</CardBody>
 								</MotionCard>
