@@ -1,4 +1,5 @@
 import { authTokenAtom } from "@/lib/atom/AuthAtom";
+import { isFirstTutorialAtom } from "@/lib/atom/BaseAtom";
 import {
 	Alert,
 	AlertIcon,
@@ -7,7 +8,7 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 
@@ -21,6 +22,8 @@ export default function CallbackPage() {
 	const setAuthToken = useSetAtom(authTokenAtom);
 	const [_, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const isFirstTutorial = useAtomValue(isFirstTutorialAtom);
+	console.log("isFirstTutorial", isFirstTutorial);
 
 	useEffect(() => {
 		const processCallback = async () => {
@@ -40,6 +43,11 @@ export default function CallbackPage() {
 
 				// トークンを保存
 				setAuthToken(accessToken);
+
+				if (isFirstTutorial) {
+					navigate("/tutorial");
+					return;
+				}
 
 				// リダイレクト先を決定
 				const returnUrl = sessionStorage.getItem("returnUrl") || "/home";

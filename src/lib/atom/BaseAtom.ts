@@ -7,6 +7,9 @@ export const isLevelUpModalOpenAtom = atom(false);
 export const isNewCharacterModalOpenAtom = atom(false);
 export const isNewStoryModalOpenAtom = atom(false);
 
+/* 初回のチュートリアル管理 */
+export const isFirstTutorialAtom = atom<boolean>(false);
+
 /** 音声効果が有効かどうかの状態 */
 export const soundEnabledAtom = atomWithStorage("ht-sb-sound-enabled", false);
 

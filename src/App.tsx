@@ -2,6 +2,7 @@ import { ProtectedRoute } from "@/lib/route/ProtectedRoute";
 import { useAtom, useSetAtom } from "jotai";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import {
+	isFirstTutorialAtom,
 	isLevelUpModalOpenAtom,
 	isNewCharacterModalOpenAtom,
 	isNewStoryModalOpenAtom,
@@ -50,6 +51,8 @@ function App() {
 	const setNewCharacterIds = useSetAtom(newlyUnlockedCharacterIdsAtom);
 	const setNewStory = useSetAtom(newStoryAtom);
 
+	const setIsFastTutorial = useSetAtom(isFirstTutorialAtom);
+
 	useEffect(() => {
 		setIsLevelUpModalOpen(false);
 		setIsNewCharacterModalOpen(false);
@@ -58,6 +61,7 @@ function App() {
 		setNewCharacterIds(new Set([]));
 		setIsNewStoryModalOpen(false);
 		setNewStory(null);
+		setIsFastTutorial(false);
 	}, []);
 
 	return (

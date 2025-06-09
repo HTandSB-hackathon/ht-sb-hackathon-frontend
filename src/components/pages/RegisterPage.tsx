@@ -2,6 +2,7 @@ import {
 	createAccountInPasswordAtom,
 	loginInGithubAtom,
 } from "@/lib/atom/AuthAtom";
+import { isFirstTutorialAtom } from "@/lib/atom/BaseAtom";
 import {
 	Badge,
 	Box,
@@ -41,8 +42,8 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSetAtom } from "jotai";
-import React from "react";
+import { useAtom, useSetAtom } from "jotai";
+import React, { useEffect } from "react";
 import {
 	FaApple,
 	FaArrowLeft,
@@ -127,6 +128,7 @@ const RegisterPage: React.FC = () => {
 	};
 
 	const passwordStrength = getPasswordStrength(formData.password);
+	const [isFirstTutorial, setIsFirstTutorial] = useAtom(isFirstTutorialAtom);
 
 	// バリデーション
 	const validateCurrentStep = () => {
@@ -173,11 +175,11 @@ const RegisterPage: React.FC = () => {
 
 		try {
 			// API呼び出し（モック）
-			await createUser({
-				email: formData.email,
-				password: formData.password,
-				name: formData.username,
-			});
+			// await createUser({
+			// 	email: formData.email,
+			// 	password: formData.password,
+			// 	name: formData.username,
+			// });
 
 			toast({
 				title: "登録完了！",
@@ -189,7 +191,11 @@ const RegisterPage: React.FC = () => {
 			});
 
 			setTimeout(() => {
-				navigate("/login");
+				if (isFirstTutorial) {
+					navigate("/tutorial");
+				} else {
+					navigate("/login");
+				}
 			}, 1000);
 		} catch (error) {
 			toast({
@@ -755,7 +761,10 @@ const RegisterPage: React.FC = () => {
 
 								<Button
 									colorScheme="purple"
-									onClick={handleSubmit}
+									onClick={() => {
+										setIsFirstTutorial(true);
+										handleSubmit();
+									}}
 									isLoading={isLoading}
 									loadingText={
 										activeStep < steps.length - 1 ? "処理中..." : "登録中..."
@@ -801,7 +810,10 @@ const RegisterPage: React.FC = () => {
 											icon: FaGithub,
 											name: "GitHub",
 											color: "gray",
-											onclick: () => setLoginInGithub(),
+											onclick: () => {
+												setIsFirstTutorial(true);
+												setLoginInGithub();
+											},
 										},
 										{
 											icon: FaGoogle,
