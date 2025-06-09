@@ -1,5 +1,6 @@
 import { chatAtom, fetchChatAtom, sendChatAtom } from "@/lib/atom/ChatAtom";
 import { municipalityAtomLoadable } from "@/lib/atom/CityAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import {
 	type Relationship,
 	getRelationship,
@@ -29,7 +30,7 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { FaArrowLeft, FaComment } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
@@ -37,6 +38,7 @@ import {
 	charactersAtomLoadable,
 	checkLevelUpRelationshipAtom,
 } from "../../lib/atom/CharacterAtom";
+import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionCard = motion(Card);
 
@@ -49,6 +51,7 @@ export const ChatPage: React.FC = () => {
 	const [relationship, setRelationship] = useState<Relationship>();
 	const municipalities = useLoadableAtom(municipalityAtomLoadable);
 	const checkLevelUp = useSetAtom(checkLevelUpRelationshipAtom);
+	const user = useAtomValue(userAtom);
 
 	const getMunicipality = () => {
 		if (!municipalities) return null;
@@ -162,6 +165,7 @@ export const ChatPage: React.FC = () => {
 			position="relative"
 			w="100vw"
 		>
+			<UserProfileMenu user={user} cardBg={cardBg} />
 			<Container
 				maxW="100vw"
 				h="100%"

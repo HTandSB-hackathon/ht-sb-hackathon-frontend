@@ -3,7 +3,6 @@ import {
 	municipalityAtomLoadable,
 	municipalityFascinatingAtomLoadable,
 } from "@/lib/atom/CityAtom";
-import { userAtom } from "@/lib/atom/UserAtom";
 import type { Relationship } from "@/lib/domain/CharacterQuery";
 import type { ChatCount } from "@/lib/domain/ChatQuery";
 import type {
@@ -44,7 +43,6 @@ import { MdLock, MdStar } from "react-icons/md";
 import { useNavigate } from "react-router";
 import type { Character } from "../../lib/domain/CharacterQuery";
 import { TRUST_LEVELS } from "../../lib/types/character";
-import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionCard = motion(Card);
 const MotionBox = motion(Box);
@@ -75,7 +73,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	const municipalitieFascinations = useLoadableAtom(
 		municipalityFascinatingAtomLoadable,
 	);
-	const user = useAtomValue(userAtom);
 	// 都道府県の市区町村データを取得
 	const getMunicipalityName = () => {
 		if (!municipalities) return null;
@@ -158,7 +155,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
 	return (
 		<>
-			<UserProfileMenu user={user} cardBg={cardBg} />
 			<MotionCard
 				initial={{ opacity: 0, y: 50, scale: 0.9 }}
 				animate={{ opacity: 1, y: 0, scale: 1 }}
