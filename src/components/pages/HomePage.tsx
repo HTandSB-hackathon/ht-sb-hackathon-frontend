@@ -67,7 +67,7 @@ const MotionCard = motion(Card);
 const MotionFlex = motion(Flex);
 
 /**
- * つな農 ホームページ
+ * つながっぺうつくしみ ホームページ
  * ユーザーが最初に体験する魅力的な世界
  */
 const HomePage: React.FC = () => {

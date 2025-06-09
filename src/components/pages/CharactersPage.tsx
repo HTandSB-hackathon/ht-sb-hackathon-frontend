@@ -69,6 +69,7 @@ import {
 	municipalityFascinatingAtomLoadable,
 } from "@/lib/atom/CityAtom";
 import { occupationsAtomLoadable } from "@/lib/atom/OccupationAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import type {
@@ -79,6 +80,7 @@ import type {
 import { CharacterCard } from "../atoms/CharacterCard";
 import { ClickSound } from "../atoms/ClickSound";
 import { SimpleHeader } from "../molecules/SimpleHeader";
+import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionBox = motion(Box);
 // const MotionFlex = motion(Flex);
@@ -105,6 +107,7 @@ export const CharactersPage: React.FC = () => {
 	const municipalitieFascinations = useLoadableAtom(
 		municipalityFascinatingAtomLoadable,
 	);
+	const user = useAtomValue(userAtom);
 
 	const { isOpen: isFilterOpen, onToggle: onFilterToggle } = useDisclosure();
 	const navigate = useNavigate();
@@ -155,6 +158,7 @@ export const CharactersPage: React.FC = () => {
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
+			<UserProfileMenu user={user} cardBg={cardBg} />
 			{/* 背景装飾 */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				<MotionBox
@@ -199,8 +203,8 @@ export const CharactersPage: React.FC = () => {
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
 					<SimpleHeader
-						title="つな農"
-						subtitle="美しい福島で出会う、温かい人々との特別なつながり"
+						title="つながっぺうつくしみ"
+						subtitle="福島のやさしさを、あなたにお裾分け"
 						navigateTo="/home"
 						navigateLavel="ホームへ戻る"
 					/>

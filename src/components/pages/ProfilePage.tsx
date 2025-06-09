@@ -188,7 +188,7 @@ export default function ProfilePage() {
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
 					<SimpleHeader
-						title="あなたの つな農 データ"
+						title="あなたの つながっぺうつくしみ データ"
 						navigateTo="/home"
 						navigateLavel="ホームへ戻る"
 					/>

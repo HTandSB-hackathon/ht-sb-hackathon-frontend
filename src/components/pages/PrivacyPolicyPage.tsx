@@ -16,7 +16,7 @@ const MotionBox = motion(Box);
 
 /**
  * プライバシーポリシーページ
- * つな農アプリのプライバシーポリシーを表示
+ * つながっぺうつくしみアプリのプライバシーポリシーを表示
  */
 const PrivacyPolicyPage: React.FC = () => {
 	const bgGradient =
@@ -70,7 +70,7 @@ const PrivacyPolicyPage: React.FC = () => {
 						</Heading>
 					</Box>
 					<Text fontSize="lg" color="gray.600" maxW="2xl" mx="auto">
-						つな農は、利用者のプライバシーを尊重し、個人情報の保護に努めています
+						つながっぺうつくしみは、利用者のプライバシーを尊重し、個人情報の保護に努めています
 					</Text>
 				</MotionBox>
 
@@ -98,7 +98,7 @@ const PrivacyPolicyPage: React.FC = () => {
 								1. 基本方針
 							</Heading>
 							<Text color="gray.700" lineHeight="1.8">
-								福島テレビが提供する「つな農」（以下「本サービス」）は、利用者の個人情報を適切に管理し、プライバシーの保護に努めます。本プライバシーポリシーは、本サービスにおける個人情報の取り扱いについて定めるものです。
+								福島テレビが提供する「つながっぺうつくしみ」（以下「本サービス」）は、利用者の個人情報を適切に管理し、プライバシーの保護に努めます。本プライバシーポリシーは、本サービスにおける個人情報の取り扱いについて定めるものです。
 							</Text>
 						</Box>
 
@@ -245,7 +245,7 @@ const PrivacyPolicyPage: React.FC = () => {
 								個人情報の取り扱いに関するお問い合わせは、以下までご連絡ください：
 							</Text>
 							<VStack align="start" spacing={2}>
-								<Text color="gray.700">福島テレビ つな農 運営事務局</Text>
+								<Text color="gray.700">福島テレビ つながっぺうつくしみ 運営事務局</Text>
 								<Text color="gray.700">
 									Email: tsunano-support@fukushima-tv.co.jp
 								</Text>

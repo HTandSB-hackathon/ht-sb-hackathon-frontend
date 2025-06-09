@@ -41,6 +41,7 @@ import {
 	FaShieldAlt,
 	FaTrash,
 	FaUser,
+	FaArrowLeft,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
 
@@ -188,6 +189,29 @@ const SettingsPage: React.FC = () => {
 			</Box>
 
 			<Container maxW="container.xl" position="relative" zIndex="1" py={8}>
+				{/* 戻るボタン */}
+				<MotionBox
+					initial={{ opacity: 0, x: -30 }}
+					animate={{ opacity: 1, x: 0 }}
+					transition={{ duration: 0.5 }}
+					mb={6}
+				>
+					<Button
+						leftIcon={<FaArrowLeft />}
+						variant="ghost"
+						colorScheme="purple"
+						onClick={() => navigate("/home")}
+						size="lg"
+						fontWeight="bold"
+						_hover={{
+							transform: "translateX(-4px)",
+							transition: "all 0.2s",
+						}}
+					>
+						ホームへ戻る
+					</Button>
+				</MotionBox>
+
 				{/* ヘッダー */}
 				<MotionBox
 					initial={{ opacity: 0, y: -30 }}
@@ -206,7 +230,7 @@ const SettingsPage: React.FC = () => {
 						設定
 					</Heading>
 					<Text fontSize="xl" color="gray.600" maxW="2xl" mx="auto">
-						アプリの設定をカスタマイズして、より快適につな農をお楽しみください
+						アプリの設定をカスタマイズして、より快適につながっぺうつくしみをお楽しみください
 					</Text>
 				</MotionBox>
 
