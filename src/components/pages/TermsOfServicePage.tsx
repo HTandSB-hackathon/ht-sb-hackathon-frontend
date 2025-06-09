@@ -16,7 +16,7 @@ const MotionBox = motion(Box);
 
 /**
  * 利用規約ページ
- * 福島のこころアプリの利用規約を表示
+ * つな農アプリの利用規約を表示
  */
 const TermsOfServicePage: React.FC = () => {
 	const bgGradient =
@@ -70,7 +70,7 @@ const TermsOfServicePage: React.FC = () => {
 						</Heading>
 					</Box>
 					<Text fontSize="lg" color="gray.600" maxW="2xl" mx="auto">
-						福島のこころをご利用いただくための重要な規約です
+						つな農をご利用いただくための重要な規約です
 					</Text>
 				</MotionBox>
 
@@ -98,7 +98,7 @@ const TermsOfServicePage: React.FC = () => {
 								第1条（適用）
 							</Heading>
 							<Text color="gray.700" lineHeight="1.8">
-								本利用規約（以下「本規約」）は、福島テレビが提供する「福島のこころ」（以下「本サービス」）の利用に関して、
+								本利用規約（以下「本規約」）は、福島テレビが提供する「つな農」（以下「本サービス」）の利用に関して、
 								本サービスを利用するお客様（以下「利用者」）と当社との間の権利義務関係を定めることを目的とし、
 								利用者と当社との間の本サービスの利用に関わる一切の関係に適用されるものとします。
 							</Text>

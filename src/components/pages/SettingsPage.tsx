@@ -206,7 +206,7 @@ const SettingsPage: React.FC = () => {
 						設定
 					</Heading>
 					<Text fontSize="xl" color="gray.600" maxW="2xl" mx="auto">
-						アプリの設定をカスタマイズして、より快適な福島のこころ体験をお楽しみください
+						アプリの設定をカスタマイズして、より快適につな農をお楽しみください
 					</Text>
 				</MotionBox>
 

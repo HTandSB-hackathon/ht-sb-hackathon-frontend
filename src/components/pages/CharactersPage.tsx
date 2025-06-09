@@ -199,7 +199,7 @@ export const CharactersPage: React.FC = () => {
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
 					<SimpleHeader
-						title="福島のこころ 🌸"
+						title="つな農"
 						subtitle="美しい福島で出会う、温かい人々との特別なつながり"
 						navigateTo="/home"
 						navigateLavel="ホームへ戻る"
