@@ -55,7 +55,7 @@ const MotionText = motion(Text);
 const MotionHeading = motion(Heading);
 
 /**
- * つな農 - 最高品質のランディングページ
+ * つながっぺうつくしみ - 最高品質のランディングページ
  * 誰もが魅力を感じる圧倒的なLPを実現
  */
 const LandingPage: React.FC = () => {
@@ -265,7 +265,7 @@ const LandingPage: React.FC = () => {
 							lineHeight="shorter"
 							maxW="4xl"
 						>
-							AIとつむぐ福島の物語
+							福島のやさしさを、あなたにお裾分け
 						</MotionHeading>
 
 						<VStack spacing={4} maxW="4xl">
@@ -431,7 +431,7 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								つな農で体験できること 🎁
+								つながっぺうつくしみで体験できること 🎁
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="4xl">
 								AIで再現された福島県民との会話を通じて信頼関係を構築し、人の温かさを体感することで実際の農産物贈り物や観光体験につながります
@@ -574,7 +574,7 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								3ステップで始めるつな農 📱
+								3ステップで始めるつながっぺうつくしみ 📱
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="3xl">
 								簡単な登録で、すぐにAIで再現された福島県民との深い対話が始まり、信頼関係を構築できます
@@ -705,7 +705,7 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								つな農の魅力 💖
+								つながっぺうつくしみの魅力 💖
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="3xl">
 								新しい形のコミュニケーション体験で、
@@ -1068,7 +1068,7 @@ const LandingPage: React.FC = () => {
 								今すぐ始めよう 🚀
 							</Heading>
 							<Text fontSize="2xl" color="gray.600" maxW="4xl">
-								つな農で、福島県民との信頼関係を築く
+								つながっぺうつくしみで、福島県民との信頼関係を築く
 								<br />
 								温かさの体験と実際の恩恵が待っています
 							</Text>
@@ -1132,7 +1132,7 @@ const LandingPage: React.FC = () => {
 						<Text color="gray.500">地域との絆を広げる特別な体験</Text>
 						<HStack spacing={6}>
 							<Text fontSize="sm" color="gray.400">
-								© 2024 つな農
+								© 2024 つながっぺうつくしみ
 							</Text>
 							<Text fontSize="sm" color="gray.400">
 								プライバシーポリシー
