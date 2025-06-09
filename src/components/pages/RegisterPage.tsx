@@ -45,14 +45,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAtom, useSetAtom } from "jotai";
 import React, { useEffect } from "react";
 import {
-	FaApple,
 	FaArrowLeft,
 	FaCheck,
 	FaEnvelope,
 	FaEye,
 	FaEyeSlash,
 	FaGithub,
-	FaGoogle,
 	FaLock,
 	FaRocket,
 	FaShieldAlt,
@@ -223,16 +221,6 @@ const RegisterPage: React.FC = () => {
 		} else {
 			navigate("/login");
 		}
-	};
-
-	const handleSocialLogin = (provider: string) => {
-		toast({
-			title: `${provider}で登録`,
-			description: "ソーシャルログイン機能は準備中です",
-			status: "info",
-			duration: 2000,
-			isClosable: true,
-		});
 	};
 
 	const setLoginInGithub = useSetAtom(loginInGithubAtom);
@@ -815,18 +803,6 @@ const RegisterPage: React.FC = () => {
 												setLoginInGithub();
 											},
 										},
-										{
-											icon: FaGoogle,
-											name: "Google",
-											color: "red",
-											onclick: () => handleSocialLogin("Google"),
-										},
-										{
-											icon: FaApple,
-											name: "Apple",
-											color: "gray",
-											onclick: () => handleSocialLogin("Apple"),
-										},
 									].map((social) => (
 										<Button
 											key={social.name}
@@ -840,7 +816,7 @@ const RegisterPage: React.FC = () => {
 											}}
 											flex="1"
 										>
-											{social.name}
+											{social.name}で登録
 										</Button>
 									))}
 								</HStack>
