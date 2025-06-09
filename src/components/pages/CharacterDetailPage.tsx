@@ -70,6 +70,7 @@ import {
 	municipalityFascinatingAtomLoadable,
 } from "@/lib/atom/CityAtom";
 import { occupationsAtomLoadable } from "@/lib/atom/OccupationAtom";
+import { userAtom } from "@/lib/atom/UserAtom";
 import type { Relationship, Story } from "@/lib/domain/CharacterQuery";
 import {
 	getLockedStories,
@@ -90,6 +91,7 @@ import {
 } from "../../lib/atom/CharacterAtom";
 import { TRUST_LEVELS } from "../../lib/types/character";
 import { SimpleHeader } from "../molecules/SimpleHeader";
+import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -111,6 +113,7 @@ export const CharacterDetailPage: React.FC = () => {
 	const [isLoading, setIsLoading] = useAtom(characterDetailLoadingAtom);
 	const [error, setError] = React.useState<string | null>(null);
 	const [tabIndex, setTabIndex] = React.useState(0);
+	const user = useAtomValue(userAtom);
 
 	const occupations = useLoadableAtom(occupationsAtomLoadable);
 	const municipalitieFascinations = useLoadableAtom(
@@ -329,6 +332,7 @@ export const CharacterDetailPage: React.FC = () => {
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
+		<UserProfileMenu user={user} cardBg={cardBg} />
 			{/* 背景装飾 */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				<MotionBox
