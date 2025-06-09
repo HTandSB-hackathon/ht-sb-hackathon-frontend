@@ -120,11 +120,8 @@ export default function LoginForm() {
 							fontWeight="extrabold"
 							mb={2}
 						>
-							おかえりなさい
+							つな農へログイン
 						</Heading>
-						<Text color="gray.600" fontSize="lg">
-							福島のこころへログイン
-						</Text>
 					</Box>
 
 					<form onSubmit={handleSubmit}>

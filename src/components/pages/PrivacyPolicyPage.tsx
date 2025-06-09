@@ -16,7 +16,7 @@ const MotionBox = motion(Box);
 
 /**
  * プライバシーポリシーページ
- * 福島のこころアプリのプライバシーポリシーを表示
+ * つな農アプリのプライバシーポリシーを表示
  */
 const PrivacyPolicyPage: React.FC = () => {
 	const bgGradient =
@@ -70,7 +70,7 @@ const PrivacyPolicyPage: React.FC = () => {
 						</Heading>
 					</Box>
 					<Text fontSize="lg" color="gray.600" maxW="2xl" mx="auto">
-						福島のこころは、利用者のプライバシーを尊重し、個人情報の保護に努めています
+						つな農は、利用者のプライバシーを尊重し、個人情報の保護に努めています
 					</Text>
 				</MotionBox>
 
@@ -98,7 +98,7 @@ const PrivacyPolicyPage: React.FC = () => {
 								1. 基本方針
 							</Heading>
 							<Text color="gray.700" lineHeight="1.8">
-								福島テレビが提供する「福島のこころ」（以下「本サービス」）は、利用者の個人情報を適切に管理し、プライバシーの保護に努めます。本プライバシーポリシーは、本サービスにおける個人情報の取り扱いについて定めるものです。
+								福島テレビが提供する「つな農」（以下「本サービス」）は、利用者の個人情報を適切に管理し、プライバシーの保護に努めます。本プライバシーポリシーは、本サービスにおける個人情報の取り扱いについて定めるものです。
 							</Text>
 						</Box>
 

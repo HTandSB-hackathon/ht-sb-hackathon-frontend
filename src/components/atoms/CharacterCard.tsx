@@ -276,21 +276,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 										</Box>
 									</Tooltip>
 								)}
-
-								{/* オンライン状態 */}
-								{relationship && !character.isLocked && (
-									<Box
-										position="absolute"
-										top="0"
-										right="0"
-										w="4"
-										h="4"
-										bg="green.400"
-										borderRadius="full"
-										border="2px solid white"
-										animation="pulse 2s infinite"
-									/>
-								)}
 							</Box>
 
 							<VStack align="start" spacing={2} flex="1" position="relative">

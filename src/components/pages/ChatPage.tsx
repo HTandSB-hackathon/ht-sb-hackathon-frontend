@@ -127,8 +127,12 @@ export const ChatPage: React.FC = () => {
 				inputRef.current.style.height = "auto";
 			}
 			const relationship = await getRelationship(Number(characterId));
-			setRelationship(relationship);
-			await checkLevelUp(Number(characterId), relationship.trustLevelId);
+			await checkLevelUp(Number(characterId), relationship.trustLevelId).then(
+				(updatedRelationship) => {
+					// 信頼度の更新を反映
+					setRelationship(updatedRelationship);
+				},
+			);
 		} catch {
 			toast({
 				title: "送信エラー",

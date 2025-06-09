@@ -46,7 +46,7 @@ const MotionHeading = motion(Heading);
 
 /**
  * つな農 - プレミアム チュートリアルページ
- * 福島のこころへようこそ！リーダブルコードで実装された最高級ガイド
+ * つな農へようこそ！リーダブルコードで実装された最高級ガイド
  */
 const TutorialPage: React.FC = () => {
 	const navigate = useNavigate();
@@ -101,13 +101,13 @@ const TutorialPage: React.FC = () => {
 	// チュートリアルステップデータ
 	const tutorialSteps = [
 		{
-			title: "福島のこころへようこそ",
+			title: "つな農へようこそ",
 			description: "AIで蘇った福島の魅力的な人々との出会い",
 			icon: FaHeart,
 			color: "pink",
 			gradient: "linear(135deg, pink.400 0%, purple.600 50%, blue.600 100%)",
 			content: {
-				heading: "福島のこころで体験できること 🌸",
+				heading: "つな農で体験できること 🌸",
 				subtext:
 					"AIで再現された福島の魅力的な人々との会話を通じて、親密度を上げることで福島の深い魅力が届きます",
 				features: [
@@ -462,7 +462,7 @@ const TutorialPage: React.FC = () => {
 								border="2px solid"
 								borderColor="whiteAlpha.300"
 							>
-								🌸 はじめての福島のこころ ✨
+								🌸 はじめてのつな農 ✨
 							</Badge>
 						</MotionBox>
 						<MotionHeading
@@ -474,7 +474,7 @@ const TutorialPage: React.FC = () => {
 							mb={6}
 							textShadow="2xl"
 						>
-							福島のこころへようこそ
+							つな農へようこそ
 						</MotionHeading>
 						<MotionText
 							fontSize="2xl"
@@ -491,7 +491,7 @@ const TutorialPage: React.FC = () => {
 								bgClip="text"
 								fontWeight="bold"
 							>
-								簡単なガイドで、福島のこころの使い方をご紹介します。
+								簡単なガイドで、つな農の使い方をご紹介します。
 							</Text>
 						</MotionText>
 					</MotionBox>
@@ -978,7 +978,7 @@ const TutorialPage: React.FC = () => {
 									shadow="xl"
 								>
 									{currentStep === tutorialSteps.length - 1
-										? "福島のこころを始める"
+										? "つな農を始める"
 										: "次へ"}
 								</Button>
 							</HStack>

@@ -203,7 +203,7 @@ export const CharactersPage: React.FC = () => {
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
 					<SimpleHeader
-						title="福島のこころ 🌸"
+						title="つな農"
 						subtitle="美しい福島で出会う、温かい人々との特別なつながり"
 						navigateTo="/home"
 						navigateLavel="ホームへ戻る"
@@ -230,7 +230,7 @@ export const CharactersPage: React.FC = () => {
 									出会った人
 								</StatLabel>
 								<StatNumber
-									fontSize="2xl"
+									fontSize="3xl"
 									bgGradient="linear(to-r, blue.600, purple.600)"
 									bgClip="text"
 									as="span"
@@ -258,7 +258,7 @@ export const CharactersPage: React.FC = () => {
 									家族同然
 								</StatLabel>
 								<StatNumber
-									fontSize="2xl"
+									fontSize="3xl"
 									bgGradient="linear(to-r, yellow.500, orange.500)"
 									bgClip="text"
 									as="span"
@@ -287,7 +287,7 @@ export const CharactersPage: React.FC = () => {
 								</StatLabel>
 								{municipalities && (
 									<StatNumber
-										fontSize="2xl"
+										fontSize="3xl"
 										bgGradient="linear(to-r, green.500, teal.500)"
 										bgClip="text"
 										as="span"
@@ -316,7 +316,7 @@ export const CharactersPage: React.FC = () => {
 									お気に入り
 								</StatLabel>
 								<StatNumber
-									fontSize="2xl"
+									fontSize="3xl"
 									bgGradient="linear(to-r, pink.500, red.500)"
 									bgClip="text"
 									as="span"
