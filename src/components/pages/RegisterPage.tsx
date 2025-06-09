@@ -306,7 +306,7 @@ const RegisterPage: React.FC = () => {
 									fontWeight="extrabold"
 									mb={2}
 								>
-									つな農に参加しよう 🌸
+									つながっぺうつくしみに参加しよう 🌸
 								</Heading>
 								<Text
 									fontSize="lg"
