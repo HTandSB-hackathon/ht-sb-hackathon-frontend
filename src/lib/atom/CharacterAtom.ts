@@ -249,7 +249,6 @@ export const checkLevelUpRelationshipAtom = atom(
 			if (relationship.trustLevelId > curretntTrustLevelId) {
 				const characters = await get(characterAtomAsync);
 				const character = characters.find((c) => c.id === characterId);
-				set(isLevelUpModalOpenAtom, true);
 				set(levelUpCharacterDetailAtom, {
 					character: character,
 					relationship: relationship,
@@ -265,6 +264,8 @@ export const checkLevelUpRelationshipAtom = atom(
 					set(isNewStoryModalOpenAtom, true);
 					set(newStoryAtom, newStory);
 				}
+				// ストーリー解放モーダルよりも上にレベルアップモーダルを表示するため、後から状態を更新する
+				set(isLevelUpModalOpenAtom, true);
 			}
 			return relationship;
 		} catch (error) {
