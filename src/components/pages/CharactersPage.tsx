@@ -226,7 +226,7 @@ export const CharactersPage: React.FC = () => {
 									出会った人
 								</StatLabel>
 								<StatNumber
-									fontSize="2xl"
+									fontSize="3xl"
 									bgGradient="linear(to-r, blue.600, purple.600)"
 									bgClip="text"
 									as="span"
@@ -254,7 +254,7 @@ export const CharactersPage: React.FC = () => {
 									家族同然
 								</StatLabel>
 								<StatNumber
-									fontSize="2xl"
+									fontSize="3xl"
 									bgGradient="linear(to-r, yellow.500, orange.500)"
 									bgClip="text"
 									as="span"
@@ -283,7 +283,7 @@ export const CharactersPage: React.FC = () => {
 								</StatLabel>
 								{municipalities && (
 									<StatNumber
-										fontSize="2xl"
+										fontSize="3xl"
 										bgGradient="linear(to-r, green.500, teal.500)"
 										bgClip="text"
 										as="span"
@@ -312,7 +312,7 @@ export const CharactersPage: React.FC = () => {
 									お気に入り
 								</StatLabel>
 								<StatNumber
-									fontSize="2xl"
+									fontSize="3xl"
 									bgGradient="linear(to-r, pink.500, red.500)"
 									bgClip="text"
 									as="span"

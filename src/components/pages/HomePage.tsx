@@ -345,7 +345,7 @@ const HomePage: React.FC = () => {
 										>
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={FaUsers} mr={1} />
+													<Icon as={FaUsers} mr={2} />
 													出会った人
 												</StatLabel>
 												<StatNumber
@@ -353,15 +353,20 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, blue.600, purple.600)"
 													bgClip="text"
 													fontWeight="bold"
+													as="span"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{totalCharacters}
+													<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+													人
+													</span>
 												</StatNumber>
-												<StatHelpText>人</StatHelpText>
 											</Stat>
 
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={FaCrown} mr={1} />
+													<Icon as={FaCrown} mr={2} />
 													家族同然
 												</StatLabel>
 												<StatNumber
@@ -369,15 +374,21 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, yellow.500, orange.500)"
 													bgClip="text"
 													fontWeight="bold"
+													as="span"
+																						whiteSpace="nowrap"
+									display="inline"
 												>
 													{trustLevel5Count}
+																					<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										人
+									</span>
 												</StatNumber>
-												<StatHelpText>人</StatHelpText>
+												
 											</Stat>
 
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={MdFavorite} mr={1} />
+													<Icon as={MdFavorite} mr={2} />
 													お気に入り
 												</StatLabel>
 												<StatNumber
@@ -385,15 +396,21 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, pink.500, red.500)"
 													bgClip="text"
 													fontWeight="bold"
+																							as="span"
+										whiteSpace="nowrap"
+										display="inline"
 												>
 													{totalFavorites}
+																						<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+											人
+										</span>
 												</StatNumber>
-												<StatHelpText>人</StatHelpText>
+												
 											</Stat>
 
 											<Stat textAlign="center">
 												<StatLabel color="gray.500" fontSize="sm">
-													<Icon as={MdChatBubble} mr={1} />
+													<Icon as={MdChatBubble} mr={2} />
 													総会話数
 												</StatLabel>
 												<StatNumber
@@ -401,10 +418,16 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, green.500, teal.500)"
 													bgClip="text"
 													fontWeight="bold"
+																						as="span"
+									whiteSpace="nowrap"
+									display="inline"
 												>
 													{chatCountAll}
+																					<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
+										回
+									</span>
 												</StatNumber>
-												<StatHelpText>回</StatHelpText>
+												
 											</Stat>
 										</SimpleGrid>
 									</CardBody>
