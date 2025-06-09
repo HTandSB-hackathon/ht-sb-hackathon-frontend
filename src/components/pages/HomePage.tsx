@@ -358,8 +358,10 @@ const HomePage: React.FC = () => {
 													display="inline"
 												>
 													{totalCharacters}
-													<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
-													人
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														人
 													</span>
 												</StatNumber>
 											</Stat>
@@ -375,15 +377,16 @@ const HomePage: React.FC = () => {
 													bgClip="text"
 													fontWeight="bold"
 													as="span"
-																						whiteSpace="nowrap"
-									display="inline"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{trustLevel5Count}
-																					<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
-										人
-									</span>
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														人
+													</span>
 												</StatNumber>
-												
 											</Stat>
 
 											<Stat textAlign="center">
@@ -396,16 +399,17 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, pink.500, red.500)"
 													bgClip="text"
 													fontWeight="bold"
-																							as="span"
-										whiteSpace="nowrap"
-										display="inline"
+													as="span"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{totalFavorites}
-																						<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
-											人
-										</span>
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														人
+													</span>
 												</StatNumber>
-												
 											</Stat>
 
 											<Stat textAlign="center">
@@ -418,16 +422,17 @@ const HomePage: React.FC = () => {
 													bgGradient="linear(to-r, green.500, teal.500)"
 													bgClip="text"
 													fontWeight="bold"
-																						as="span"
-									whiteSpace="nowrap"
-									display="inline"
+													as="span"
+													whiteSpace="nowrap"
+													display="inline"
 												>
 													{chatCountAll}
-																					<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
-										回
-									</span>
+													<span
+														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+													>
+														回
+													</span>
 												</StatNumber>
-												
 											</Stat>
 										</SimpleGrid>
 									</CardBody>
