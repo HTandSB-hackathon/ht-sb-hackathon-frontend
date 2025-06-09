@@ -37,6 +37,8 @@ import { useNavigate } from "react-router";
 import { TutorialProgressBar } from "@/components/atoms/TutorialProgressBar";
 import { TutorialStepCard } from "@/components/molecules/TutorialStepCard";
 import { TutorialStepper } from "@/components/organisms/TutorialStepper";
+import { isFirstTutorialAtom } from "@/lib/atom/BaseAtom";
+import { useSetAtom } from "jotai";
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -321,11 +323,14 @@ const TutorialPage: React.FC = () => {
 		},
 	];
 
+	const setIsFirstTutorial = useSetAtom(isFirstTutorialAtom);
+
 	// ナビゲーションハンドラー
 	const handleNext = () => {
 		if (currentStep < tutorialSteps.length - 1) {
 			setCurrentStep(currentStep + 1);
 		} else {
+			setIsFirstTutorial(false);
 			navigate("/home");
 		}
 	};
@@ -337,6 +342,7 @@ const TutorialPage: React.FC = () => {
 	};
 
 	const handleSkip = () => {
+		setIsFirstTutorial(false);
 		navigate("/home");
 	};
 
