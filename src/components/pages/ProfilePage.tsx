@@ -307,16 +307,17 @@ export default function ProfilePage() {
 												bgGradient="linear(to-r, green.500, teal.500)"
 												bgClip="text"
 												fontWeight="bold"
-																					as="span"
-									whiteSpace="nowrap"
-									display="inline"
+												as="span"
+												whiteSpace="nowrap"
+												display="inline"
 											>
 												{relationships?.length || 0}
-																					<span style={{ fontSize: "1rem", marginLeft: "0.25em" }}>
-										人
-									</span>
+												<span
+													style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+												>
+													人
+												</span>
 											</StatNumber>
-
 										</Stat>
 									</CardBody>
 								</MotionCard>
@@ -342,25 +343,25 @@ export default function ProfilePage() {
 									/>
 									<CardBody p={6}>
 										<Stat textAlign="center">
-																							<StatLabel color="gray.500" fontSize="sm">
-																								<Icon as={MdChatBubble} mr={2} />
-																								総会話数
-																								</StatLabel>
+											<StatLabel color="gray.500" fontSize="sm">
+												<Icon as={MdChatBubble} mr={2} />
+												総会話数
+											</StatLabel>
 											<StatNumber
 												fontSize="3xl"
 												bgGradient="linear(to-r, blue.500, purple.500)"
 												bgClip="text"
 												fontWeight="bold"
-																									as="span"
-													whiteSpace="nowrap"
-													display="inline"
+												as="span"
+												whiteSpace="nowrap"
+												display="inline"
 											>
 												{chatCount}
-																									<span
-														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
-													>
-														回
-													</span>
+												<span
+													style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+												>
+													回
+												</span>
 											</StatNumber>
 										</Stat>
 									</CardBody>
@@ -396,9 +397,9 @@ export default function ProfilePage() {
 												bgGradient="linear(to-r, purple.500, pink.500)"
 												bgClip="text"
 												fontWeight="bold"
-																									as="span"
-													whiteSpace="nowrap"
-													display="inline"
+												as="span"
+												whiteSpace="nowrap"
+												display="inline"
 											>
 												{relationships?.filter(
 													(relationships) => relationships.trustLevelId === 5,
@@ -438,18 +439,18 @@ export default function ProfilePage() {
 												bgGradient="linear(to-r, orange.500, red.500)"
 												bgClip="text"
 												fontWeight="bold"
-																									as="span"
-													whiteSpace="nowrap"
-													display="inline"
+												as="span"
+												whiteSpace="nowrap"
+												display="inline"
 											>
 												{relationships?.filter(
 													(relationships) => relationships.isFavorite,
 												).length || 0}
-																									<span
-														style={{ fontSize: "1rem", marginLeft: "0.25em" }}
-													>
-														人
-													</span>
+												<span
+													style={{ fontSize: "1rem", marginLeft: "0.25em" }}
+												>
+													人
+												</span>
 											</StatNumber>
 										</Stat>
 									</CardBody>
