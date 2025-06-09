@@ -332,7 +332,7 @@ export const CharacterDetailPage: React.FC = () => {
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
-		<UserProfileMenu user={user} cardBg={cardBg} />
+			<UserProfileMenu user={user} cardBg={cardBg} />
 			{/* 背景装飾 */}
 			<Box position="absolute" inset="0" overflow="hidden" pointerEvents="none">
 				<MotionBox
