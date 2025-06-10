@@ -319,9 +319,7 @@ const TermsOfServicePage: React.FC = () => {
 								本規約に関するお問い合わせは、以下までご連絡ください：
 							</Text>
 							<VStack align="start" spacing={2}>
-								<Text color="gray.700">
-									福島テレビ おふくわけ 運営事務局
-								</Text>
+								<Text color="gray.700">福島テレビ おふくわけ 運営事務局</Text>
 								<Text color="gray.700">
 									Email: ofukuwake-support@fukushima-tv.co.jp
 								</Text>
