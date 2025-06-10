@@ -33,6 +33,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import type React from "react";
 import { useState } from "react";
 import {
+	FaArrowLeft,
 	FaBell,
 	FaEye,
 	FaGlobe,
@@ -41,7 +42,6 @@ import {
 	FaShieldAlt,
 	FaTrash,
 	FaUser,
-	FaArrowLeft,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
 

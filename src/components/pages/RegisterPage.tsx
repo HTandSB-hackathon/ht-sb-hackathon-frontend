@@ -173,11 +173,11 @@ const RegisterPage: React.FC = () => {
 
 		try {
 			// API呼び出し（モック）
-			// await createUser({
-			// 	email: formData.email,
-			// 	password: formData.password,
-			// 	name: formData.username,
-			// });
+			await createUser({
+				email: formData.email,
+				password: formData.password,
+				name: formData.username,
+			});
 
 			toast({
 				title: "登録完了！",
