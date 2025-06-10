@@ -1132,7 +1132,7 @@ const LandingPage: React.FC = () => {
 						<Text color="gray.500">地域との絆を広げる特別な体験</Text>
 						<HStack spacing={6}>
 							<Text fontSize="sm" color="gray.400">
-								© 2024 おふくわけ
+								© 2025 おふくわけ
 							</Text>
 							<Text fontSize="sm" color="gray.400">
 								プライバシーポリシー
