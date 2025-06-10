@@ -16,7 +16,7 @@ const MotionBox = motion(Box);
 
 /**
  * 利用規約ページ
- * つながっぺうつくしみアプリの利用規約を表示
+ * おふくわけアプリの利用規約を表示
  */
 const TermsOfServicePage: React.FC = () => {
 	const bgGradient =
@@ -70,7 +70,7 @@ const TermsOfServicePage: React.FC = () => {
 						</Heading>
 					</Box>
 					<Text fontSize="lg" color="gray.600" maxW="2xl" mx="auto">
-						つながっぺうつくしみをご利用いただくための重要な規約です
+						おふくわけをご利用いただくための重要な規約です
 					</Text>
 				</MotionBox>
 
@@ -98,7 +98,7 @@ const TermsOfServicePage: React.FC = () => {
 								第1条（適用）
 							</Heading>
 							<Text color="gray.700" lineHeight="1.8">
-								本利用規約（以下「本規約」）は、福島テレビが提供する「つながっぺうつくしみ」（以下「本サービス」）の利用に関して、
+								本利用規約（以下「本規約」）は、福島テレビが提供する「おふくわけ」（以下「本サービス」）の利用に関して、
 								本サービスを利用するお客様（以下「利用者」）と当社との間の権利義務関係を定めることを目的とし、
 								利用者と当社との間の本サービスの利用に関わる一切の関係に適用されるものとします。
 							</Text>
@@ -319,11 +319,9 @@ const TermsOfServicePage: React.FC = () => {
 								本規約に関するお問い合わせは、以下までご連絡ください：
 							</Text>
 							<VStack align="start" spacing={2}>
+								<Text color="gray.700">福島テレビ おふくわけ 運営事務局</Text>
 								<Text color="gray.700">
-									福島テレビ つながっぺうつくしみ 運営事務局
-								</Text>
-								<Text color="gray.700">
-									Email: tsunano-support@fukushima-tv.co.jp
+									Email: ofukuwake-support@fukushima-tv.co.jp
 								</Text>
 								<Text color="gray.700">Tel: 024-536-8000</Text>
 								<Text color="gray.700">〒960-8531 福島県福島市西中央1-1</Text>

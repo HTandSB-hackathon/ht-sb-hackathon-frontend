@@ -120,7 +120,7 @@ export default function LoginForm() {
 							fontWeight="extrabold"
 							mb={2}
 						>
-							つながっぺうつくしみへログイン
+							おふくわけへログイン
 						</Heading>
 					</Box>
 

@@ -55,7 +55,7 @@ const MotionText = motion(Text);
 const MotionHeading = motion(Heading);
 
 /**
- * つながっぺうつくしみ - 最高品質のランディングページ
+ * おふくわけ - 最高品質のランディングページ
  * 誰もが魅力を感じる圧倒的なLPを実現
  */
 const LandingPage: React.FC = () => {
@@ -244,7 +244,7 @@ const LandingPage: React.FC = () => {
 							<Box
 								as="img"
 								src="/ht-sb/tsunano.svg"
-								alt="つな農ロゴ"
+								alt="おふくわけロゴ"
 								height="120px"
 								width="auto"
 								mx="auto"
@@ -431,7 +431,7 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								つながっぺうつくしみで体験できること 🎁
+								おふくわけで体験できること 🎁
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="4xl">
 								AIで再現された福島県民との会話を通じて信頼関係を構築し、人の温かさを体感することで実際の農産物贈り物や観光体験につながります
@@ -574,7 +574,7 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								3ステップで始めるつながっぺうつくしみ 📱
+								3ステップで始めるおふくわけ 📱
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="3xl">
 								簡単な登録で、すぐにAIで再現された福島県民との深い対話が始まり、信頼関係を構築できます
@@ -705,7 +705,7 @@ const LandingPage: React.FC = () => {
 					<VStack spacing={16}>
 						<MotionBox variants={fadeInUp} textAlign="center">
 							<Heading size="2xl" mb={4}>
-								つながっぺうつくしみの魅力 💖
+								おふくわけの魅力 💖
 							</Heading>
 							<Text fontSize="xl" color="gray.600" maxW="3xl">
 								新しい形のコミュニケーション体験で、
@@ -1068,7 +1068,7 @@ const LandingPage: React.FC = () => {
 								今すぐ始めよう 🚀
 							</Heading>
 							<Text fontSize="2xl" color="gray.600" maxW="4xl">
-								つながっぺうつくしみで、福島県民との信頼関係を築く
+								おふくわけで、福島県民との信頼関係を築く
 								<br />
 								温かさの体験と実際の恩恵が待っています
 							</Text>
@@ -1120,7 +1120,7 @@ const LandingPage: React.FC = () => {
 						<Box
 							as="img"
 							src="/ht-sb/tsunano.svg"
-							alt="つな農ロゴ"
+							alt="おふくわけロゴ"
 							height="60px"
 							width="auto"
 							mx="auto"
@@ -1132,7 +1132,7 @@ const LandingPage: React.FC = () => {
 						<Text color="gray.500">地域との絆を広げる特別な体験</Text>
 						<HStack spacing={6}>
 							<Text fontSize="sm" color="gray.400">
-								© 2024 つながっぺうつくしみ
+								© 2025 おふくわけ
 							</Text>
 							<Text fontSize="sm" color="gray.400">
 								プライバシーポリシー

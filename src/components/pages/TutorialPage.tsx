@@ -45,8 +45,8 @@ const MotionText = motion(Text);
 const MotionHeading = motion(Heading);
 
 /**
- * つながっぺうつくしみ - プレミアム チュートリアルページ
- * つながっぺうつくしみへようこそ！リーダブルコードで実装された最高級ガイド
+ * おふくわけ - プレミアム チュートリアルページ
+ * おふくわけへようこそ！リーダブルコードで実装された最高級ガイド
  */
 const TutorialPage: React.FC = () => {
 	const navigate = useNavigate();
@@ -101,13 +101,13 @@ const TutorialPage: React.FC = () => {
 	// チュートリアルステップデータ
 	const tutorialSteps = [
 		{
-			title: "つながっぺうつくしみへようこそ",
+			title: "おふくわけへようこそ",
 			description: "AIで蘇った福島の魅力的な人々との出会い",
 			icon: FaHeart,
 			color: "pink",
 			gradient: "linear(135deg, pink.400 0%, purple.600 50%, blue.600 100%)",
 			content: {
-				heading: "つながっぺうつくしみで体験できること 🌸",
+				heading: "おふくわけで体験できること 🌸",
 				subtext:
 					"AIで再現された福島の魅力的な人々との会話を通じて、親密度を上げることで福島の深い魅力が届きます",
 				features: [
@@ -447,6 +447,24 @@ const TutorialPage: React.FC = () => {
 				>
 					{/* ヘッダーセクション */}
 					<MotionBox variants={fadeInUp} textAlign="center" mb={12}>
+						<MotionBox {...floatingAnimation}>
+							<Badge
+								bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
+								color="white"
+								variant="solid"
+								px={8}
+								py={4}
+								borderRadius="full"
+								mb={8}
+								fontSize="xl"
+								fontWeight="bold"
+								shadow="2xl"
+								border="2px solid"
+								borderColor="whiteAlpha.300"
+							>
+								🌸 はじめてのおふくわけ ✨
+							</Badge>
+						</MotionBox>
 						<MotionHeading
 							size="4xl"
 							bgGradient={heroGradient}
@@ -456,7 +474,7 @@ const TutorialPage: React.FC = () => {
 							mb={6}
 							textShadow="2xl"
 						>
-							つながっぺうつくしみへようこそ
+							おふくわけへようこそ
 						</MotionHeading>
 						<MotionText
 							fontSize="2xl"
@@ -473,7 +491,7 @@ const TutorialPage: React.FC = () => {
 								bgClip="text"
 								fontWeight="bold"
 							>
-								簡単なガイドで、つながっぺうつくしみの使い方をご紹介します。
+								簡単なガイドで、おふくわけの使い方をご紹介します。
 							</Text>
 						</MotionText>
 					</MotionBox>
@@ -927,6 +945,50 @@ const TutorialPage: React.FC = () => {
 							>
 								スキップ
 							</Button>
+							<HStack spacing={6}>
+								{currentStep > 0 && (
+									<Button
+										variant="outline"
+										colorScheme="purple"
+										size={heroButtonSize}
+										onClick={handlePrev}
+										borderWidth="2px"
+										_hover={{
+											bg: "purple.500",
+											color: "white",
+											transform: "translateY(-2px)",
+											shadow: "xl",
+										}}
+									>
+										戻る
+									</Button>
+								)}
+								<Button
+									bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
+									color="white"
+									size={heroButtonSize}
+									rightIcon={
+										currentStep === tutorialSteps.length - 1 ? (
+											<FaRocket />
+										) : (
+											<FaArrowRight />
+										)
+									}
+									onClick={handleNext}
+									px={10}
+									_hover={{
+										bgGradient:
+											"linear(135deg, purple.600 0%, blue.600 50%, teal.600 100%)",
+										transform: "translateY(-3px)",
+										shadow: "2xl",
+									}}
+									shadow="xl"
+								>
+									{currentStep === tutorialSteps.length - 1
+										? "おふくわけを始める"
+										: "次へ"}
+								</Button>
+							</HStack>
 						</Flex>
 					</MotionBox>
 				</MotionBox>
