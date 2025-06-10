@@ -199,7 +199,7 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 											shadow: "2xl",
 										}}
 									>
-										つな農を始める
+										始める
 									</Button>
 								</>
 							) : (
