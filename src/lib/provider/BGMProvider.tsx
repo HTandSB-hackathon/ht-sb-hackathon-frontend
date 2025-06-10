@@ -13,6 +13,7 @@ const bgmMap: Record<string, string> = {
 export const BGMManagerProvider = () => {
 	const location = useLocation();
 	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const fadeAnimRef = useRef<number | null>(null);
 
 	const soundEnabled = useAtomValue(soundEnabledAtom);
 
@@ -25,6 +26,10 @@ export const BGMManagerProvider = () => {
 			audioRef.current.pause();
 			audioRef.current = null;
 		}
+		if (fadeAnimRef.current) {
+			cancelAnimationFrame(fadeAnimRef.current);
+			fadeAnimRef.current = null;
+		}
 
 		if (bgmSrc && soundEnabled) {
 			const audio = new Audio(import.meta.env.BASE_URL + bgmSrc);
@@ -32,6 +37,29 @@ export const BGMManagerProvider = () => {
 			audio.volume = 0.5;
 			audio.play().catch((e) => console.error("再生エラー:", e));
 			audioRef.current = audio;
+
+			const fadeDuration = 7000; // ms
+			const startVolume = 0.5;
+			let startTime: number | null = null;
+			const fadingAudio = audioRef.current;
+
+			const fade = (now: number) => {
+				if (!fadingAudio || audioRef.current !== fadingAudio) return;
+				if (startTime === null) startTime = now;
+				const elapsed = now - startTime;
+				const progress = Math.min(elapsed / fadeDuration, 1);
+				fadingAudio.volume = startVolume * (1 - progress);
+				if (progress < 1) {
+					fadeAnimRef.current = requestAnimationFrame(fade);
+				} else {
+					fadingAudio.volume = 0;
+					fadingAudio.pause();
+					if (audioRef.current === fadingAudio) {
+						audioRef.current = null;
+					}
+				}
+			};
+			fadeAnimRef.current = requestAnimationFrame(fade);
 		}
 
 		return () => {
@@ -39,8 +67,12 @@ export const BGMManagerProvider = () => {
 				audioRef.current.pause();
 				audioRef.current = null;
 			}
+			if (fadeAnimRef.current) {
+				cancelAnimationFrame(fadeAnimRef.current);
+				fadeAnimRef.current = null;
+			}
 		};
-	}, [location.pathname]);
+	}, [location.pathname, soundEnabled]);
 
 	return null;
 };
