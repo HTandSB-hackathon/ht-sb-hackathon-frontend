@@ -115,6 +115,16 @@ export interface RelationShipRequest {
 	is_favorite: boolean | null;
 }
 
+export interface NfcRequest {
+	nfc_uuid: string;
+}
+
+export interface NFCUuidResponse {
+	characterId: number;
+	unlocked: boolean;
+	message: string;
+}
+
 function createCharacter(res: CharacterResponse): Character {
 	return new Character(
 		res.id,
@@ -252,4 +262,14 @@ export async function checkStroyUnlock(characterId: number): Promise<Story> {
 		{},
 	);
 	return createStory(response.data);
+}
+
+// NFC UUIDを送信してキャラクターの解放状況を確認する関数
+export async function postNFCUuid(uuid: string): Promise<Relationship> {
+	const axiosClient = createAxiosClient();
+	const response = await axiosClient.post<NfcRequest, RelationshipResponse>(
+		"/characters/nfc",
+		{ nfc_uuid: uuid },
+	);
+	return createRelationship(response.data);
 }

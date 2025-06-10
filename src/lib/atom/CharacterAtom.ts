@@ -18,6 +18,7 @@ import {
 	getLockedCharacters,
 	getRelationships,
 	insertRelationship,
+	postNFCUuid,
 	updateRelationship,
 } from "../domain/CharacterQuery";
 import type { Municipality } from "../domain/CityQuery";
@@ -272,6 +273,25 @@ export const checkLevelUpRelationshipAtom = atom(
 			console.error("Error checking level up relationship:", error);
 			set(isLevelUpModalOpenAtom, false);
 			set(levelUpCharacterDetailAtom, null);
+			throw error;
+		} finally {
+		}
+	},
+);
+
+export const checkNFCCharacterAtom = atom(
+	null,
+	async (_, set, uuid: string) => {
+		try {
+			const relationship = await postNFCUuid(uuid);
+			if (relationship) {
+				set(characterAtomAsync);
+				set(lockedCharactersAtomAsync);
+				set(relationshipsAtomAsync);
+			}
+			return relationship;
+		} catch (error) {
+			console.error("Error checking NFC character:", error);
 			throw error;
 		} finally {
 		}

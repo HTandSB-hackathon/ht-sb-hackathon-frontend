@@ -12,6 +12,7 @@ import { LevelUpModal } from "./components/organisms/LevelUpModal";
 
 import CallbackPage from "@/components/pages/CallbackPage";
 import { CharacterDetailPage } from "@/components/pages/CharacterDetailPage";
+import { CharacterGetByNfcPage } from "@/components/pages/CharacterGetByNfcPage";
 import { CharactersPage } from "@/components/pages/CharactersPage";
 import ChatPage from "@/components/pages/ChatPage";
 import HomePage from "@/components/pages/HomePage";
@@ -87,6 +88,7 @@ function App() {
 						<Route path="/profile" element={<ProfilePage />} />
 						<Route path="/settings" element={<SettingsPage />} />
 						<Route path="/characters" element={<CharactersPage />} />
+						<Route path="/characters/nfc" element={<CharacterGetByNfcPage />} />
 						<Route path="/characters/:id" element={<CharacterDetailPage />} />
 						<Route path="/chats/:characterId" element={<ChatPage />} />
 						<Route path="*" element={<NotFoundPage />} />
