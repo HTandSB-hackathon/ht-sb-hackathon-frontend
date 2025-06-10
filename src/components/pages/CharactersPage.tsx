@@ -203,7 +203,7 @@ export const CharactersPage: React.FC = () => {
 				<VStack spacing={8} align="stretch">
 					{/* ヘッダー */}
 					<SimpleHeader
-						title="つながっぺうつくしみ"
+						title="おふくわけ"
 						subtitle="福島のやさしさを、あなたにお裾分け"
 						navigateTo="/home"
 						navigateLavel="ホームへ戻る"
