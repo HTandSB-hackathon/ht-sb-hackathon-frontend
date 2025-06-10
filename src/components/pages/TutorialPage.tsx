@@ -496,9 +496,16 @@ const TutorialPage: React.FC = () => {
 						</MotionText>
 					</MotionBox>
 
-					{/* 洗練されたステッパー */}
-					<MotionBox variants={fadeInUp} mb={12}>
-						<TutorialStepper steps={tutorialSteps} currentStep={currentStep} />
+					{/* 洗練されたプログレスバー */}
+					<MotionBox variants={fadeInUp} mt={12}>
+						<TutorialProgressBar
+							currentStep={currentStep}
+							totalSteps={tutorialSteps.length}
+							stepTitles={stepTitles}
+							size="lg"
+							showLabels={true}
+							animated={true}
+						/>
 					</MotionBox>
 
 					{/* メインコンテンツ - ステップカード */}
@@ -506,10 +513,13 @@ const TutorialPage: React.FC = () => {
 						<TutorialStepCard
 							title={currentStepData.title}
 							description={currentStepData.description}
-							icon={currentStepData.icon}
 							color={currentStepData.color}
 							gradient={currentStepData.gradient}
-							isActive={true}
+							onPrev={handlePrev}
+							onNext={handleNext}
+							showPrev={currentStep > 0}
+							showNext={true}
+							isLastStep={currentStep === tutorialSteps.length - 1}
 						>
 							{/* ステップ別コンテンツ */}
 							{currentStep === 0 && (
@@ -924,10 +934,8 @@ const TutorialPage: React.FC = () => {
 							)}
 						</TutorialStepCard>
 					</MotionBox>
-
-					{/* 美しいナビゲーションボタン */}
-					<MotionBox variants={fadeInUp}>
-						<Flex justify="space-between" align="center" gap={6}>
+					<MotionBox variants={fadeInUp} mt={-4}>
+						<Flex justify="center" align="center">
 							<Button
 								variant="ghost"
 								colorScheme="gray"
@@ -937,7 +945,6 @@ const TutorialPage: React.FC = () => {
 							>
 								スキップ
 							</Button>
-
 							<HStack spacing={6}>
 								{currentStep > 0 && (
 									<Button
@@ -983,18 +990,6 @@ const TutorialPage: React.FC = () => {
 								</Button>
 							</HStack>
 						</Flex>
-					</MotionBox>
-
-					{/* 洗練されたプログレスバー */}
-					<MotionBox variants={fadeInUp} mt={12}>
-						<TutorialProgressBar
-							currentStep={currentStep}
-							totalSteps={tutorialSteps.length}
-							stepTitles={stepTitles}
-							size="lg"
-							showLabels={true}
-							animated={true}
-						/>
 					</MotionBox>
 				</MotionBox>
 			</Container>

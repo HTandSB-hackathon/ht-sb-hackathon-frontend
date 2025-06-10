@@ -1,32 +1,34 @@
 import {
 	Box,
+	Button,
 	Card,
 	CardBody,
 	CardHeader,
 	Circle,
-	HStack,
+	Flex,
 	Heading,
-	Icon,
+	IconButton,
 	Text,
-	VStack,
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import type React from "react";
-import type { IconType } from "react-icons";
+import { FaArrowRight, FaRocket } from "react-icons/fa";
 
 const MotionCard = motion(Card);
-const MotionBox = motion(Box);
 
 interface TutorialStepCardProps {
 	title: string;
 	description: string;
-	icon: IconType;
 	color: string;
 	gradient: string;
-	isActive?: boolean;
 	children: React.ReactNode;
 	minHeight?: string;
+	onPrev?: () => void;
+	onNext?: () => void;
+	showPrev?: boolean;
+	showNext?: boolean;
+	isLastStep?: boolean;
 }
 
 /**
@@ -36,24 +38,16 @@ interface TutorialStepCardProps {
 export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 	title,
 	description,
-	icon,
 	gradient,
-	isActive = false,
 	children,
 	minHeight = "700px",
+	onPrev,
+	onNext,
+	showPrev = false,
+	showNext = false,
+	isLastStep = false,
 }) => {
 	const cardBg = useColorModeValue("whiteAlpha.200", "gray.800");
-
-	const floatingAnimation = {
-		animate: {
-			y: [-2, 2, -2],
-			transition: {
-				duration: 3,
-				repeat: Number.POSITIVE_INFINITY,
-				ease: "easeInOut",
-			},
-		},
-	};
 
 	return (
 		<MotionCard
@@ -88,42 +82,162 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 				/>
 
 				{/* ヘッダーコンテンツ */}
-				<HStack spacing={6} position="relative" zIndex="2">
-					<MotionBox {...floatingAnimation}>
-						<Circle size="80px" bg="whiteAlpha.300" shadow="xl">
-							<Icon as={icon} boxSize={10} />
-						</Circle>
-					</MotionBox>
-					<VStack align="start" spacing={2}>
-						<Heading size="2xl" textShadow="lg">
+				<Flex
+					position="relative"
+					zIndex={2}
+					w="full"
+					align="center"
+					justify="center"
+					gap={4}
+				>
+					{/* 左: 戻るボタン */}
+					<Box
+						flex="0 0 auto"
+						display="flex"
+						alignItems="center"
+						justifyContent="center"
+					>
+						{showPrev ? (
+							<Circle
+								size={{ base: "54px", md: "62px" }}
+								bg="whiteAlpha.300"
+								border="2px solid"
+								boxShadow="0 0 0 4px rgba(128,90,213,0.15)"
+								_hover={{ bg: "whiteAlpha.500" }}
+								transition="background 0.2s"
+								display="flex"
+								alignItems="center"
+								justifyContent="center"
+							>
+								<IconButton
+									variant="ghost"
+									colorScheme="whiteAlpha"
+									aria-label="前へ"
+									icon={
+										<FaArrowRight
+											style={{ transform: "rotate(180deg)" }}
+											size={28}
+										/>
+									}
+									onClick={onPrev}
+									borderRadius="full"
+									boxSize={{ base: "44px", md: "50px" }}
+									minW="unset"
+									p={0}
+									bg="transparent"
+									_hover={{
+										bg: "transparent",
+										transform: "translateY(-2px) scale(1.08)",
+										shadow: "md",
+									}}
+								/>
+							</Circle>
+						) : (
+							<Box boxSize={{ base: "54px", md: "62px" }} />
+						)}
+					</Box>
+
+					{/* 中央: タイトル・説明 */}
+					<Box
+						flex="1 1 0%"
+						display="flex"
+						flexDirection="column"
+						alignItems="center"
+						justifyContent="center"
+						minW={0}
+					>
+						<Heading
+							size="2xl"
+							textShadow="lg"
+							textAlign="center"
+							w="full"
+							whiteSpace="pre-line"
+							isTruncated={false}
+						>
 							{title}
 						</Heading>
-						<Text opacity="0.95" fontSize="lg">
+						<Text
+							opacity="0.95"
+							fontSize="lg"
+							textAlign="center"
+							w="full"
+							whiteSpace="pre-line"
+							isTruncated={false}
+						>
 							{description}
 						</Text>
-					</VStack>
-				</HStack>
+					</Box>
 
-				{/* アクティブインジケーター */}
-				{isActive && (
-					<MotionBox
-						position="absolute"
-						bottom="0"
-						left="0"
-						right="0"
-						height="4px"
-						bg="white"
-						opacity="0.8"
-						animate={{
-							scaleX: [0, 1, 0],
-						}}
-						transition={{
-							duration: 2,
-							repeat: Number.POSITIVE_INFINITY,
-							ease: "easeInOut",
-						}}
-					/>
-				)}
+					{/* 右: 次へボタン */}
+					<Box
+						flex="0 0 auto"
+						display="flex"
+						flexDirection="column"
+						alignItems="center"
+						justifyContent="center"
+					>
+						{showNext ? (
+							isLastStep ? (
+								<>
+									<Button
+										rightIcon={<FaRocket size={28} />}
+										colorScheme="purple"
+										bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
+										variant="solid"
+										size="lg"
+										onClick={onNext}
+										borderRadius="full"
+										px={6}
+										py={6}
+										shadow="xl"
+										fontWeight="bold"
+										fontSize="lg"
+										_hover={{
+											bgGradient:
+												"linear(135deg, purple.600 0%, blue.600 50%, teal.600 100%)",
+											transform: "translateY(-2px)",
+											shadow: "2xl",
+										}}
+									>
+										始める
+									</Button>
+								</>
+							) : (
+								<Circle
+									size={{ base: "54px", md: "62px" }}
+									bg="whiteAlpha.300"
+									border="2px solid"
+									boxShadow="0 0 0 4px rgba(128,90,213,0.15)"
+									_hover={{ bg: "whiteAlpha.500" }}
+									transition="background 0.2s"
+									display="flex"
+									alignItems="center"
+									justifyContent="center"
+								>
+									<IconButton
+										variant="ghost"
+										colorScheme="whiteAlpha"
+										aria-label="次へ"
+										icon={<FaArrowRight size={28} />}
+										onClick={onNext}
+										borderRadius="full"
+										boxSize={{ base: "44px", md: "50px" }}
+										minW="unset"
+										p={0}
+										bg="transparent"
+										_hover={{
+											bg: "transparent",
+											transform: "translateY(-2px) scale(1.08)",
+											shadow: "md",
+										}}
+									/>
+								</Circle>
+							)
+						) : (
+							<Box boxSize={{ base: "54px", md: "62px" }} />
+						)}
+					</Box>
+				</Flex>
 			</CardHeader>
 
 			{/* カードボディ */}

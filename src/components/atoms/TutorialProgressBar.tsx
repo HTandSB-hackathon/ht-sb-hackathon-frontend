@@ -51,25 +51,25 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 	// プレミアムサイズ設定
 	const sizeConfig = {
 		sm: {
-			circleSize: "48px",
+			circleSize: "32px",
 			fontSize: "sm",
 			lineThickness: "4px",
 			spacing: 5,
-			glowSize: "6px",
+			glowSize: "4px",
 		},
 		md: {
-			circleSize: "64px",
+			circleSize: "40px",
 			fontSize: "md",
 			lineThickness: "6px",
 			spacing: 8,
-			glowSize: "8px",
+			glowSize: "6px",
 		},
 		lg: {
-			circleSize: "80px",
+			circleSize: "56px",
 			fontSize: "lg",
 			lineThickness: "8px",
 			spacing: 10,
-			glowSize: "10px",
+			glowSize: "8px",
 		},
 	};
 
@@ -182,8 +182,7 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 									variants={animated ? circleVariants : undefined}
 									animate={animated ? status : undefined}
 									initial={animated ? "inactive" : undefined}
-									whileHover={{ scale: 1.05 }}
-									cursor="pointer"
+									cursor="default"
 									position="relative"
 								>
 									{isCompleted ? (
@@ -249,79 +248,6 @@ export const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({
 					})}
 				</HStack>
 			</Box>
-
-			{/* 詳細情報 */}
-			<MotionBox
-				initial={animated ? { opacity: 0, y: 20 } : undefined}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.5, delay: 0.5 }}
-				textAlign="center"
-			>
-				<VStack spacing={2}>
-					<HStack spacing={2} align="center">
-						<Text fontSize="lg" fontWeight="bold" color="gray.700">
-							ステップ {currentStep + 1}
-						</Text>
-						<Text fontSize="md" color="gray.500">
-							/ {totalSteps}
-						</Text>
-					</HStack>
-
-					{/* パーセンテージ表示 */}
-					<MotionBox
-						initial={animated ? { scale: 0 } : undefined}
-						animate={{ scale: 1 }}
-						transition={{ duration: 0.5, delay: 0.7 }}
-					>
-						<Text
-							fontSize="2xl"
-							fontWeight="black"
-							bgGradient={bgGradient}
-							bgClip="text"
-						>
-							{Math.round(progressPercentage)}%
-						</Text>
-					</MotionBox>
-
-					{/* サブプログレスバー */}
-					<Box
-						w="200px"
-						bg="gray.100"
-						h="8px"
-						borderRadius="full"
-						overflow="hidden"
-					>
-						<MotionBox
-							h="full"
-							bgGradient={bgGradient}
-							borderRadius="full"
-							initial={{ width: "0%" }}
-							animate={{ width: `${progressPercentage}%` }}
-							transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-							position="relative"
-						>
-							{/* プログレスバーのシャイン効果 */}
-							<MotionBox
-								position="absolute"
-								top="0"
-								left="-100%"
-								w="100%"
-								h="full"
-								bg="linear-gradient(90deg, transparent, white, transparent)"
-								opacity="0.3"
-								animate={{
-									left: ["100%", "200%"],
-								}}
-								transition={{
-									duration: 2,
-									repeat: Number.POSITIVE_INFINITY,
-									ease: "easeInOut",
-								}}
-							/>
-						</MotionBox>
-					</Box>
-				</VStack>
-			</MotionBox>
 		</VStack>
 	);
 };
