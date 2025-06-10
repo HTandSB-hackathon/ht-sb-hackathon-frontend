@@ -6,6 +6,7 @@ import {
 	getRelationship,
 } from "@/lib/domain/CharacterQuery";
 import type { Chat } from "@/lib/domain/ChatQuery";
+import { type ChatVoice, generateVoice } from "@/lib/domain/ChatQuery";
 import type { Municipality } from "@/lib/domain/CityQuery";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import {
@@ -18,12 +19,14 @@ import {
 	Flex,
 	HStack,
 	Heading,
+	IconButton,
 	Input,
 	Progress,
 	Spacer,
 	Stack,
 	Text,
 	Textarea,
+	Tooltip,
 	VStack,
 	useBreakpointValue,
 	useColorModeValue,
@@ -32,7 +35,14 @@ import {
 import { motion } from "framer-motion";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { FaArrowLeft, FaComment } from "react-icons/fa";
+import {
+	FaArrowLeft,
+	FaComment,
+	FaCopy,
+	FaPause,
+	FaPlay,
+	FaStop,
+} from "react-icons/fa";
 import { useNavigate, useParams } from "react-router";
 import {
 	charactersAtomLoadable,
@@ -41,6 +51,285 @@ import {
 import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionCard = motion(Card);
+
+// 音声再生の状態を管理する型
+type VoiceState = "idle" | "playing" | "paused" | "loading";
+
+// メッセージコンポーネント
+interface MessageBubbleProps {
+	message: Chat;
+	characterId?: string;
+	isUser: boolean;
+}
+
+const MessageBubble: React.FC<MessageBubbleProps> = ({
+	message,
+	characterId,
+	isUser,
+}) => {
+	const toast = useToast();
+	const [voiceState, setVoiceState] = useState<VoiceState>("idle");
+	const [currentVoice, setCurrentVoice] = useState<ChatVoice | null>(null);
+	const voiceRef = useRef<ChatVoice | null>(null);
+
+	// コンポーネントのクリーンアップ
+	useEffect(() => {
+		return () => {
+			if (voiceRef.current) {
+				voiceRef.current.stop();
+			}
+		};
+	}, []);
+
+	const handleCopy = async () => {
+		try {
+			await navigator.clipboard.writeText(message.content);
+			toast({
+				title: "コピーしました",
+				status: "success",
+				duration: 2000,
+				isClosable: true,
+			});
+		} catch (error) {
+			toast({
+				title: "コピーに失敗しました",
+				status: "error",
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	};
+
+	const handlePlayVoice = async () => {
+		if (!characterId || isUser) return;
+
+		try {
+			setVoiceState("loading");
+
+			// 新しい音声を生成
+			const voiceGeneration = await generateVoice(characterId, message.content);
+			setCurrentVoice(voiceGeneration);
+			voiceRef.current = voiceGeneration;
+
+			setVoiceState("playing");
+
+			// 音声再生開始
+			await voiceGeneration.play();
+
+			// 再生完了後の処理
+			setVoiceState("idle");
+			setCurrentVoice(null);
+			voiceRef.current = null;
+		} catch (error) {
+			console.error("Voice playback error:", error);
+			toast({
+				title: "音声再生に失敗しました",
+				status: "error",
+				duration: 2000,
+				isClosable: true,
+			});
+			setVoiceState("idle");
+			setCurrentVoice(null);
+			voiceRef.current = null;
+		}
+	};
+
+	const handlePauseVoice = () => {
+		if (currentVoice && voiceState === "playing") {
+			currentVoice.pause();
+			setVoiceState("paused");
+		}
+	};
+
+	const handleResumeVoice = () => {
+		if (currentVoice && voiceState === "paused") {
+			currentVoice.resume();
+			setVoiceState("playing");
+		}
+	};
+
+	const handleStopVoice = () => {
+		if (currentVoice) {
+			currentVoice.stop();
+			setVoiceState("idle");
+			setCurrentVoice(null);
+			voiceRef.current = null;
+		}
+	};
+
+	// 音声コントロールボタンのレンダリング
+	const renderVoiceControls = () => {
+		if (isUser) return null;
+
+		switch (voiceState) {
+			case "idle":
+				return (
+					<Tooltip label="音声再生" placement="top">
+						<IconButton
+							aria-label="音声を再生"
+							icon={<FaPlay />}
+							size="xs"
+							variant="ghost"
+							onClick={handlePlayVoice}
+							_hover={{ bg: "gray.100" }}
+							color="purple.500"
+						/>
+					</Tooltip>
+				);
+
+			case "loading":
+				return (
+					<Tooltip label="読み込み中..." placement="top">
+						<IconButton
+							aria-label="読み込み中"
+							icon={<FaPlay />}
+							size="xs"
+							variant="ghost"
+							isLoading={true}
+							_hover={{ bg: "gray.100" }}
+							color="purple.500"
+						/>
+					</Tooltip>
+				);
+
+			case "playing":
+				return (
+					<>
+						<Tooltip label="一時停止" placement="top">
+							<IconButton
+								aria-label="音声を一時停止"
+								icon={<FaPause />}
+								size="xs"
+								variant="ghost"
+								onClick={handlePauseVoice}
+								_hover={{ bg: "gray.100" }}
+								color="orange.500"
+							/>
+						</Tooltip>
+						<Tooltip label="停止" placement="top">
+							<IconButton
+								aria-label="音声を停止"
+								icon={<FaStop />}
+								size="xs"
+								variant="ghost"
+								onClick={handleStopVoice}
+								_hover={{ bg: "gray.100" }}
+								color="red.500"
+							/>
+						</Tooltip>
+					</>
+				);
+
+			case "paused":
+				return (
+					<>
+						<Tooltip label="再開" placement="top">
+							<IconButton
+								aria-label="音声を再開"
+								icon={<FaPlay />}
+								size="xs"
+								variant="ghost"
+								onClick={handleResumeVoice}
+								_hover={{ bg: "gray.100" }}
+								color="green.500"
+							/>
+						</Tooltip>
+						<Tooltip label="停止" placement="top">
+							<IconButton
+								aria-label="音声を停止"
+								icon={<FaStop />}
+								size="xs"
+								variant="ghost"
+								onClick={handleStopVoice}
+								_hover={{ bg: "gray.100" }}
+								color="red.500"
+							/>
+						</Tooltip>
+					</>
+				);
+
+			default:
+				return null;
+		}
+	};
+
+	return (
+		<Flex justify={isUser ? "flex-end" : "flex-start"} gap={2}>
+			<Box
+				bg={isUser ? "blue.400" : "gray.100"}
+				color={isUser ? "white" : "gray.800"}
+				px={4}
+				py={2}
+				borderRadius="2xl"
+				maxW="70%"
+				boxShadow="sm"
+				position="relative"
+				_hover={{
+					".message-actions": {
+						opacity: 1,
+					},
+				}}
+			>
+				{message.content}
+
+				{/* 音声再生状態のインジケーター */}
+				{voiceState === "playing" && (
+					<Box
+						position="absolute"
+						top={-1}
+						left={-1}
+						w={2}
+						h={2}
+						bg="green.400"
+						borderRadius="full"
+						animation="pulse 2s infinite"
+					/>
+				)}
+
+				{voiceState === "paused" && (
+					<Box
+						position="absolute"
+						top={-1}
+						left={-1}
+						w={2}
+						h={2}
+						bg="orange.400"
+						borderRadius="full"
+					/>
+				)}
+
+				{/* アクションボタン */}
+				<HStack
+					className="message-actions"
+					position="absolute"
+					top={-2}
+					right={isUser ? "auto" : -2}
+					left={isUser ? -2 : "auto"}
+					opacity={0}
+					transition="opacity 0.2s"
+					spacing={1}
+					bg="white"
+					borderRadius="lg"
+					boxShadow="md"
+					p={1}
+				>
+					<Tooltip label="コピー" placement="top">
+						<IconButton
+							aria-label="メッセージをコピー"
+							icon={<FaCopy />}
+							size="xs"
+							variant="ghost"
+							onClick={handleCopy}
+							_hover={{ bg: "gray.100" }}
+						/>
+					</Tooltip>
+
+					{renderVoiceControls()}
+				</HStack>
+			</Box>
+		</Flex>
+	);
+};
 
 export const ChatPage: React.FC = () => {
 	const { characterId } = useParams<{ characterId: string }>();
@@ -271,22 +560,12 @@ export const ChatPage: React.FC = () => {
 						<CardBody p={4} h="100%" display="flex" flexDirection="column">
 							<Stack spacing={4} flex={1} justify="flex-end">
 								{messages.map((msg, index) => (
-									<Flex
+									<MessageBubble
 										key={index}
-										justify={msg.role === "user" ? "flex-end" : "flex-start"}
-									>
-										<Box
-											bg={msg.role === "user" ? "blue.400" : "gray.100"}
-											color={msg.role === "user" ? "white" : "gray.800"}
-											px={4}
-											py={2}
-											borderRadius="2xl"
-											maxW="70%"
-											boxShadow="sm"
-										>
-											{msg.content}
-										</Box>
-									</Flex>
+										message={msg}
+										characterId={characterId}
+										isUser={msg.role === "user"}
+									/>
 								))}
 								<div ref={messagesEndRef} />
 							</Stack>
