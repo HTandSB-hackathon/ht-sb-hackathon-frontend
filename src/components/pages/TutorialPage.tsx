@@ -447,24 +447,6 @@ const TutorialPage: React.FC = () => {
 				>
 					{/* ヘッダーセクション */}
 					<MotionBox variants={fadeInUp} textAlign="center" mb={12}>
-						<MotionBox {...floatingAnimation}>
-							<Badge
-								bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
-								color="white"
-								variant="solid"
-								px={8}
-								py={4}
-								borderRadius="full"
-								mb={8}
-								fontSize="xl"
-								fontWeight="bold"
-								shadow="2xl"
-								border="2px solid"
-								borderColor="whiteAlpha.300"
-							>
-								🌸 はじめてのつながっぺうつくしみ ✨
-							</Badge>
-						</MotionBox>
 						<MotionHeading
 							size="4xl"
 							bgGradient={heroGradient}
@@ -496,9 +478,16 @@ const TutorialPage: React.FC = () => {
 						</MotionText>
 					</MotionBox>
 
-					{/* 洗練されたステッパー */}
-					<MotionBox variants={fadeInUp} mb={12}>
-						<TutorialStepper steps={tutorialSteps} currentStep={currentStep} />
+					{/* 洗練されたプログレスバー */}
+					<MotionBox variants={fadeInUp} mt={12}>
+						<TutorialProgressBar
+							currentStep={currentStep}
+							totalSteps={tutorialSteps.length}
+							stepTitles={stepTitles}
+							size="lg"
+							showLabels={true}
+							animated={true}
+						/>
 					</MotionBox>
 
 					{/* メインコンテンツ - ステップカード */}
@@ -506,10 +495,13 @@ const TutorialPage: React.FC = () => {
 						<TutorialStepCard
 							title={currentStepData.title}
 							description={currentStepData.description}
-							icon={currentStepData.icon}
 							color={currentStepData.color}
 							gradient={currentStepData.gradient}
-							isActive={true}
+							onPrev={handlePrev}
+							onNext={handleNext}
+							showPrev={currentStep > 0}
+							showNext={true}
+							isLastStep={currentStep === tutorialSteps.length - 1}
 						>
 							{/* ステップ別コンテンツ */}
 							{currentStep === 0 && (
@@ -924,10 +916,8 @@ const TutorialPage: React.FC = () => {
 							)}
 						</TutorialStepCard>
 					</MotionBox>
-
-					{/* 美しいナビゲーションボタン */}
-					<MotionBox variants={fadeInUp}>
-						<Flex justify="space-between" align="center" gap={6}>
+					<MotionBox variants={fadeInUp} mt={-4}>
+						<Flex justify="center" align="center">
 							<Button
 								variant="ghost"
 								colorScheme="gray"
@@ -937,64 +927,7 @@ const TutorialPage: React.FC = () => {
 							>
 								スキップ
 							</Button>
-
-							<HStack spacing={6}>
-								{currentStep > 0 && (
-									<Button
-										variant="outline"
-										colorScheme="purple"
-										size={heroButtonSize}
-										onClick={handlePrev}
-										borderWidth="2px"
-										_hover={{
-											bg: "purple.500",
-											color: "white",
-											transform: "translateY(-2px)",
-											shadow: "xl",
-										}}
-									>
-										戻る
-									</Button>
-								)}
-								<Button
-									bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
-									color="white"
-									size={heroButtonSize}
-									rightIcon={
-										currentStep === tutorialSteps.length - 1 ? (
-											<FaRocket />
-										) : (
-											<FaArrowRight />
-										)
-									}
-									onClick={handleNext}
-									px={10}
-									_hover={{
-										bgGradient:
-											"linear(135deg, purple.600 0%, blue.600 50%, teal.600 100%)",
-										transform: "translateY(-3px)",
-										shadow: "2xl",
-									}}
-									shadow="xl"
-								>
-									{currentStep === tutorialSteps.length - 1
-										? "つながっぺうつくしみを始める"
-										: "次へ"}
-								</Button>
-							</HStack>
 						</Flex>
-					</MotionBox>
-
-					{/* 洗練されたプログレスバー */}
-					<MotionBox variants={fadeInUp} mt={12}>
-						<TutorialProgressBar
-							currentStep={currentStep}
-							totalSteps={tutorialSteps.length}
-							stepTitles={stepTitles}
-							size="lg"
-							showLabels={true}
-							animated={true}
-						/>
 					</MotionBox>
 				</MotionBox>
 			</Container>
