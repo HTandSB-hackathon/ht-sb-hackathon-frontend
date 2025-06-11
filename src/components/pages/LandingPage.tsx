@@ -1119,7 +1119,7 @@ const LandingPage: React.FC = () => {
 						{/* フッターロゴ */}
 						<Box
 							as="img"
-							src="/ht-sb/tsunano.svg"
+							src="/ht-sb/logo_hs.png"
 							alt="おふくわけロゴ"
 							height="60px"
 							width="auto"
