@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useAtomValue } from "jotai";
-import type React from "react";
+import React, { useState } from "react";
 import {
 	FaArrowRight,
 	FaCrown,
@@ -202,6 +202,8 @@ const HomePage: React.FC = () => {
 			gradient: "linear(to-r, green.400, teal.400)",
 		},
 	];
+
+	const [hoveredMunicipality, setHoveredMunicipality] = useState<string | null>(null);
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
@@ -478,7 +480,12 @@ const HomePage: React.FC = () => {
 												</HStack>
 												<Text color="gray.700">{seasonInfo.message}</Text>
 											</Box>
-											<FukushimaMap fukushimaWeeks={fukushimaWeeks} seasonInfo={seasonInfo} />
+											<FukushimaMap
+												fukushimaWeeks={fukushimaWeeks}
+												seasonInfo={seasonInfo}
+												hoveredMunicipality={hoveredMunicipality}
+												setHoveredMunicipality={setHoveredMunicipality}
+											/>
 											<Box>
 												<Text fontWeight="bold" mb={4} color="gray.700">
 													🗾 過去の放送
@@ -501,6 +508,8 @@ const HomePage: React.FC = () => {
 															onClick={() =>
 																window.open(fukushimaWeek.url, "_blank")
 															}
+															onMouseEnter={() => setHoveredMunicipality(fukushimaWeek.municipality)}
+															onMouseLeave={() => setHoveredMunicipality(null)}
 														>
 															<HStack>
 																<Text fontSize="xl">

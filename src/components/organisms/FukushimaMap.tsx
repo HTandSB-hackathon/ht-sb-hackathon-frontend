@@ -18,10 +18,17 @@ interface Municipality {
 interface FukushimaMapProps {
   fukushimaWeeks?: FukushimaWeek[];
   seasonInfo?: { color: string }; // 追加: 季節カラー
+  hoveredMunicipality?: string | null;
+  setHoveredMunicipality?: (name: string | null) => void;
 }
 
-export const FukushimaMap: React.FC<FukushimaMapProps> = ({ fukushimaWeeks, seasonInfo }) => {
-  const [hovered, setHovered] = useState<string | null>(null);
+export const FukushimaMap: React.FC<FukushimaMapProps> = ({
+  fukushimaWeeks,
+  seasonInfo,
+  hoveredMunicipality,
+  setHoveredMunicipality,
+}) => {
+  const [internalHovered, setInternalHovered] = useState<string | null>(null);
   const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -99,6 +106,9 @@ export const FukushimaMap: React.FC<FukushimaMapProps> = ({ fukushimaWeeks, seas
     );
   }
 
+  // hovered: 外部props優先、なければ内部state
+  const hovered = hoveredMunicipality ?? internalHovered;
+
   return (
     <Box
       width="100%"
@@ -114,12 +124,12 @@ export const FukushimaMap: React.FC<FukushimaMapProps> = ({ fukushimaWeeks, seas
       alignItems="center"
     >
       <svg
-        viewBox="40 40 260 135"
-        width="85%"
+        viewBox="40 40 280 135"
+        width="90%"
         style={{
           display: "block",
           height: "auto",
-          aspectRatio: "260 / 160",
+          aspectRatio: "280 / 160",
           margin: "0 auto",
         }}
       >
@@ -147,16 +157,22 @@ export const FukushimaMap: React.FC<FukushimaMapProps> = ({ fukushimaWeeks, seas
             highlightStroke = "#2a4365";
           }
 
+          // ふちを細く
+          const strokeWidth = isHovered || isHighlighted ? 1.5 : 0.7;
+
           const fill = isHovered || isHighlighted ? fillColors.highlight : fillColors.base;
           const stroke = isHovered || isHighlighted ? highlightStroke : baseStroke;
-          const strokeWidth = isHovered || isHighlighted ? 2.5 : 1;
           const filter = undefined;
 
           return (
             <g
               key={`${m.name}-${index}`}
-              onMouseEnter={() => setHovered(m.name)}
-              onMouseLeave={() => setHovered(null)}
+              onMouseEnter={() => setInternalHovered(m.name)}
+              onMouseLeave={() => setInternalHovered(null)}
+              onFocus={() => setInternalHovered(m.name)}
+              onBlur={() => setInternalHovered(null)}
+              onPointerEnter={() => setHoveredMunicipality?.(m.name)}
+              onPointerLeave={() => setHoveredMunicipality?.(null)}
               style={{ cursor: "default" }}
             >
               <title>{m.name}</title>
