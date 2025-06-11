@@ -483,12 +483,14 @@ const HomePage: React.FC = () => {
 												</HStack>
 												<Text color="gray.700">{seasonInfo.message}</Text>
 											</Box>
-											<FukushimaMap
-												fukushimaWeeks={fukushimaWeeks}
-												seasonInfo={seasonInfo}
-												hoveredMunicipality={hoveredMunicipality}
-												setHoveredMunicipality={setHoveredMunicipality}
-											/>
+											{fukushimaWeeks && (
+												<FukushimaMap
+													fukushimaWeeks={fukushimaWeeks}
+													seasonInfo={seasonInfo}
+													hoveredMunicipality={hoveredMunicipality}
+													setHoveredMunicipality={setHoveredMunicipality}
+												/>
+											)}
 											<Box>
 												<Text fontWeight="bold" mb={4} color="gray.700">
 													🗾 過去の放送
