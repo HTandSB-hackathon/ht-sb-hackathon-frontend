@@ -61,6 +61,7 @@ import {
 import { userAtom } from "@/lib/atom/UserAtom";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
 import { UserProfileMenu } from "../organisms/UserProfileMenu";
+import { FukushimaMap } from "../organisms/FukushimaMap";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -316,7 +317,7 @@ const HomePage: React.FC = () => {
 							</VStack>
 						</VStack>
 					</MotionBox>
-
+					<FukushimaMap />
 					{/* メインコンテンツグリッド */}
 					<Grid templateColumns={gridTemplateColumns} gap={cardSpacing} mb={12}>
 						{/* 左カラム */}
