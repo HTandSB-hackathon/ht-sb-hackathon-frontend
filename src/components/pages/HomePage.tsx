@@ -61,8 +61,8 @@ import {
 } from "@/lib/atom/EventAtom";
 import { userAtom } from "@/lib/atom/UserAtom";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
-import { UserProfileMenu } from "../organisms/UserProfileMenu";
 import { FukushimaMap } from "../organisms/FukushimaMap";
+import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);

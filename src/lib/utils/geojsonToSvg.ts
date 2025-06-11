@@ -51,43 +51,27 @@ function projectToSVG(
 }
 
 // 座標データの正規化と検証
-function normalizeCoordinates(coordinates: any): number[][][] | null {
+function normalizeCoordinates(
+	coordinates: number[][][] | number[][][][] | unknown,
+): number[][][] | null {
 	if (!Array.isArray(coordinates)) return null;
-
-	const result: number[][][] = [];
-
-	for (const ring of coordinates) {
-		if (!Array.isArray(ring)) continue;
-
-		const normalizedRing: number[][] = [];
-
-		for (let i = 0; i < ring.length; i++) {
-			const point = ring[i];
-
-			// 座標ペアをチェック
-			if (Array.isArray(point) && point.length >= 2) {
-				const [lon, lat] = point;
-				if (typeof lon === "number" && typeof lat === "number") {
-					normalizedRing.push([lon, lat]);
-				}
-			} else if (
-				typeof point === "number" &&
-				i + 1 < ring.length &&
-				typeof ring[i + 1] === "number"
-			) {
-				// 連続する数値を座標ペアとして扱う
-				normalizedRing.push([point, ring[i + 1]]);
-				i++; // 次の要素をスキップ
-			}
-		}
-
-		if (normalizedRing.length >= 3) {
-			// ポリゴンには最低3点必要
-			result.push(normalizedRing);
-		}
+	// MultiPolygon: [ [ [ [x, y], ... ] ] ]
+	if (
+		Array.isArray(coordinates[0]) &&
+		Array.isArray((coordinates as number[][][][])[0][0]) &&
+		Array.isArray((coordinates as number[][][][])[0][0][0])
+	) {
+		// MultiPolygon
+		return (coordinates as number[][][][]).flat();
 	}
-
-	return result.length > 0 ? result : null;
+	// Polygon: [ [ [x, y], ... ] ]
+	if (
+		Array.isArray(coordinates[0]) &&
+		Array.isArray((coordinates as number[][][])[0][0])
+	) {
+		return coordinates as number[][][];
+	}
+	return null;
 }
 
 // 福島県の境界を取得
@@ -97,10 +81,10 @@ function getBounds(features: GeoJSONFeature[]): {
 	minLat: number;
 	maxLat: number;
 } {
-	let minLon = Number.POSITIVE_INFINITY,
-		maxLon = Number.NEGATIVE_INFINITY;
-	let minLat = Number.POSITIVE_INFINITY,
-		maxLat = Number.NEGATIVE_INFINITY;
+	let minLon = Number.POSITIVE_INFINITY;
+	let maxLon = Number.NEGATIVE_INFINITY;
+	let minLat = Number.POSITIVE_INFINITY;
+	let maxLat = Number.NEGATIVE_INFINITY;
 
 	for (const feature of features) {
 		const normalizedCoords = normalizeCoordinates(feature.geometry.coordinates);
@@ -216,12 +200,12 @@ export function convertGeoJSONToMunicipalities(
 				});
 			}
 
-			const municipality = municipalityMap.get(name)!;
+			const municipality = municipalityMap.get(name);
+			if (!municipality) continue;
 			municipality.paths.push(pathData);
 			municipality.centroids.push([centroidLon, centroidLat]);
 		} catch (error) {
 			console.warn(`市町村 ${name} の処理中にエラーが発生しました:`, error);
-			continue;
 		}
 	}
 

@@ -1,5 +1,5 @@
 import { Box, Text } from "@chakra-ui/react";
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { convertGeoJSONToMunicipalities } from "../../lib/utils/geojsonToSvg";
 
 // FukushimaWeek 型を受け取るための型定義
