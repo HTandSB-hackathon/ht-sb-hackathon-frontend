@@ -27,6 +27,7 @@ import {
 import { motion } from "framer-motion";
 import { useAtomValue } from "jotai";
 import type React from "react";
+import { useState } from "react";
 import {
 	FaArrowRight,
 	FaCrown,
@@ -60,6 +61,7 @@ import {
 } from "@/lib/atom/EventAtom";
 import { userAtom } from "@/lib/atom/UserAtom";
 import { useLoadableAtom } from "@/lib/hook/useLoadableAtom";
+import { FukushimaMap } from "../organisms/FukushimaMap";
 import { UserProfileMenu } from "../organisms/UserProfileMenu";
 
 const MotionBox = motion(Box);
@@ -202,6 +204,10 @@ const HomePage: React.FC = () => {
 		},
 	];
 
+	const [hoveredMunicipality, setHoveredMunicipality] = useState<string | null>(
+		null,
+	);
+
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
 			{/* フローティングナビゲーション */}
@@ -316,7 +322,6 @@ const HomePage: React.FC = () => {
 							</VStack>
 						</VStack>
 					</MotionBox>
-
 					{/* メインコンテンツグリッド */}
 					<Grid templateColumns={gridTemplateColumns} gap={cardSpacing} mb={12}>
 						{/* 左カラム */}
@@ -478,7 +483,12 @@ const HomePage: React.FC = () => {
 												</HStack>
 												<Text color="gray.700">{seasonInfo.message}</Text>
 											</Box>
-
+											<FukushimaMap
+												fukushimaWeeks={fukushimaWeeks}
+												seasonInfo={seasonInfo}
+												hoveredMunicipality={hoveredMunicipality}
+												setHoveredMunicipality={setHoveredMunicipality}
+											/>
 											<Box>
 												<Text fontWeight="bold" mb={4} color="gray.700">
 													🗾 過去の放送
@@ -501,6 +511,12 @@ const HomePage: React.FC = () => {
 															onClick={() =>
 																window.open(fukushimaWeek.url, "_blank")
 															}
+															onMouseEnter={() =>
+																setHoveredMunicipality(
+																	fukushimaWeek.municipality,
+																)
+															}
+															onMouseLeave={() => setHoveredMunicipality(null)}
 														>
 															<HStack>
 																<Text fontSize="xl">
