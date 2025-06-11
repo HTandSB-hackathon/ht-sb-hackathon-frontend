@@ -1,6 +1,7 @@
 "use client";
 
 import { isLoadingAuthAtom, loginInPasswordAtom } from "@/lib/atom/AuthAtom";
+import { isFirstTutorialAtom } from "@/lib/atom/BaseAtom";
 import {
 	Box,
 	Button,
@@ -22,7 +23,7 @@ import {
 	useColorModeValue,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useState } from "react";
 import {
 	FaEnvelope,
@@ -42,6 +43,8 @@ export default function LoginForm() {
 	const [errors, setErrors] = useState<{ email?: string; password?: string }>(
 		{},
 	);
+
+	const [isFirstTutorial, setIsFirstTutorial] = useAtom(isFirstTutorialAtom);
 
 	const login = useSetAtom(loginInPasswordAtom);
 	const setIsLoading = useSetAtom(isLoadingAuthAtom);
@@ -72,19 +75,20 @@ export default function LoginForm() {
 		}
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-
-		if (!validateForm()) return;
-
+	const handleSubmit = async () => {
 		setIsLoading(true);
+		console.log("isFirstTutorial", isFirstTutorial);
 
 		try {
 			const returnUrl = sessionStorage.getItem("returnUrl") || "/home";
 			sessionStorage.removeItem("returnUrl");
 
-			login({ username: email, password });
-			navigate(returnUrl);
+			await login({ username: email, password });
+			if (isFirstTutorial) {
+				navigate("/tutorial");
+			} else {
+				navigate(returnUrl);
+			}
 		} catch (error) {
 			console.error("Login failed:", error);
 		} finally {
@@ -124,7 +128,7 @@ export default function LoginForm() {
 						</Heading>
 					</Box>
 
-					<form onSubmit={handleSubmit}>
+					<form>
 						<VStack spacing={5}>
 							{/* メールアドレス */}
 							<FormControl isInvalid={!!errors.email}>
@@ -215,12 +219,13 @@ export default function LoginForm() {
 
 							{/* ログインボタン */}
 							<Button
-								type="submit"
+								type="button"
 								colorScheme="purple"
 								size="lg"
 								w="full"
 								borderRadius="xl"
 								rightIcon={<FaSignInAlt />}
+								onClick={handleSubmit}
 								isLoading={false}
 								loadingText="ログイン中..."
 								bgGradient="linear(to-r, purple.500, blue.500)"
