@@ -26,7 +26,8 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useAtomValue } from "jotai";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import {
 	FaArrowRight,
 	FaCrown,
@@ -203,7 +204,9 @@ const HomePage: React.FC = () => {
 		},
 	];
 
-	const [hoveredMunicipality, setHoveredMunicipality] = useState<string | null>(null);
+	const [hoveredMunicipality, setHoveredMunicipality] = useState<string | null>(
+		null,
+	);
 
 	return (
 		<Box minH="100vh" bgGradient={bgGradient} position="relative">
@@ -508,7 +511,11 @@ const HomePage: React.FC = () => {
 															onClick={() =>
 																window.open(fukushimaWeek.url, "_blank")
 															}
-															onMouseEnter={() => setHoveredMunicipality(fukushimaWeek.municipality)}
+															onMouseEnter={() =>
+																setHoveredMunicipality(
+																	fukushimaWeek.municipality,
+																)
+															}
 															onMouseLeave={() => setHoveredMunicipality(null)}
 														>
 															<HStack>
