@@ -189,11 +189,7 @@ const RegisterPage: React.FC = () => {
 			});
 
 			setTimeout(() => {
-				if (isFirstTutorial) {
-					navigate("/tutorial");
-				} else {
-					navigate("/login");
-				}
+				navigate("/login");
 			}, 1000);
 		} catch (error) {
 			toast({
