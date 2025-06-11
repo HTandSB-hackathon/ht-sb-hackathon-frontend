@@ -68,7 +68,8 @@ function App() {
 	return (
 		<div>
 			<BrowserRouter basename="/ht-sb">
-				<BGMManagerProvider />
+				{/* 意図せず初期状態でBGMが流れてしまう現象があるためコメントアウト */}
+				{/* <BGMManagerProvider /> */}
 				<Routes>
 					<Route path="" element={<LandingPage />} />
 					<Route path="/login" element={<LoginPage />} />
