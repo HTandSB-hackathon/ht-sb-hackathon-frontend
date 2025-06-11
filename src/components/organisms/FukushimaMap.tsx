@@ -16,7 +16,7 @@ export const FukushimaMap = () => {
   useEffect(() => {
     const loadGeoJSON = async () => {
       try {
-        const response = await fetch("/ht-sb/N03-20240101_07.geojson");
+        const response = await fetch("/ht-sb/N03-20240101_07.json");
         
         if (!response.ok) {
           throw new Error(`GeoJSONファイルの読み込みに失敗しました: ${response.status}`);
