@@ -8,7 +8,7 @@ export interface FukushimaWeek {
 	date?: string;
 	title?: string;
 	url?: string;
-	id?: string;
+	id?: number;
 }
 
 interface Municipality {
@@ -18,7 +18,7 @@ interface Municipality {
 }
 
 interface FukushimaMapProps {
-	fukushimaWeeks?: FukushimaWeek[];
+	fukushimaWeeks?: FukushimaWeek[] | null; // ふくしまウィークのデータ
 	seasonInfo?: { color: string }; // 追加: 季節カラー
 	hoveredMunicipality?: string | null;
 	setHoveredMunicipality?: (name: string | null) => void;
