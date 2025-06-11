@@ -68,7 +68,7 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 			<CardHeader
 				bgGradient={gradient}
 				color="white"
-				py={8}
+				py={{ base: 4, md: 8 }}
 				position="relative"
 				overflow="hidden"
 			>
@@ -145,6 +145,7 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 						alignItems="center"
 						justifyContent="center"
 						minW={0}
+						px={{ base: 1, md: 0 }}
 					>
 						<Heading
 							size="2xl"
@@ -153,12 +154,13 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 							w="full"
 							whiteSpace="pre-line"
 							isTruncated={false}
+							fontSize={{ base: "2xl", sm: "3xl", md: "4xl", lg: "5xl" }} // さらに大きく
 						>
 							{title}
 						</Heading>
 						<Text
 							opacity="0.95"
-							fontSize="lg"
+							fontSize={{ base: "md", sm: "lg", md: "xl" }} // さらに大きく
 							textAlign="center"
 							w="full"
 							whiteSpace="pre-line"
@@ -241,7 +243,7 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 			</CardHeader>
 
 			{/* カードボディ */}
-			<CardBody p={10}>{children}</CardBody>
+			<CardBody p={{ base: 4, md: 10 }}>{children}</CardBody>
 		</MotionCard>
 	);
 };
