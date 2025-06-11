@@ -57,7 +57,9 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
 					transform="translateY(-50%)"
 					zIndex={2}
 				>
+					{/* スマホ時はアイコンボタン、md以上はテキストボタン */}
 					<Button
+						display={{ base: "none", md: "inline-flex" }}
 						leftIcon={<FaArrowRight style={{ transform: "scaleX(-1)" }} />}
 						variant="ghost"
 						onClick={() => navigate(navigateTo)}
@@ -67,6 +69,18 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
 					>
 						{navigateLavel}
 					</Button>
+					<Button
+						display={{ base: "inline-flex", md: "none" }}
+						variant="ghost"
+						onClick={() => navigate(navigateTo)}
+						borderRadius="full"
+						_hover={{ bg: "whiteAlpha.200" }}
+						size="sm"
+						p={2}
+						minW="auto"
+					>
+						<FaArrowRight style={{ transform: "scaleX(-1)" }} />
+					</Button>
 				</Box>
 				<VStack spacing={4} textAlign="center">
 					<Heading
@@ -75,6 +89,7 @@ export const SimpleHeader: React.FC<SimpleHeaderProps> = ({
 						bgClip="text"
 						fontWeight="extrabold"
 						lineHeight={1.2}
+						fontSize={{ base: "3xl", sm: "4xl", md: "5xl", lg: "5xl" }}
 					>
 						{title}
 					</Heading>
