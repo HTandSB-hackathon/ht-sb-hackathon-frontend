@@ -638,7 +638,6 @@ const LandingPage: React.FC = () => {
 									{/* ステップ番号 */}
 									<Box
 										position="absolute"
-										top="-15px"
 										left="50%"
 										transform="translateX(-50%)"
 										bg={`${step.color}.500`}
