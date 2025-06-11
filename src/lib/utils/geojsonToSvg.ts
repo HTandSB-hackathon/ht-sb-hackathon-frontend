@@ -34,18 +34,39 @@ function projectToSVG(lon: number, lat: number, bounds: {
   return [x, y];
 }
 
-// ポリゴンの重心を計算
-function calculateCentroid(coordinates: number[][]): [number, number] {
-  let totalX = 0;
-  let totalY = 0;
-  const points = coordinates[0]; // 外周のみ使用
+// 座標データの正規化と検証
+function normalizeCoordinates(coordinates: any): number[][][] | null {
+  if (!Array.isArray(coordinates)) return null;
   
-  for (const [lon, lat] of points) {
-    totalX += lon;
-    totalY += lat;
+  const result: number[][][] = [];
+  
+  for (const ring of coordinates) {
+    if (!Array.isArray(ring)) continue;
+    
+    const normalizedRing: number[][] = [];
+    
+    for (let i = 0; i < ring.length; i++) {
+      const point = ring[i];
+      
+      // 座標ペアをチェック
+      if (Array.isArray(point) && point.length >= 2) {
+        const [lon, lat] = point;
+        if (typeof lon === 'number' && typeof lat === 'number') {
+          normalizedRing.push([lon, lat]);
+        }
+      } else if (typeof point === 'number' && i + 1 < ring.length && typeof ring[i + 1] === 'number') {
+        // 連続する数値を座標ペアとして扱う
+        normalizedRing.push([point, ring[i + 1]]);
+        i++; // 次の要素をスキップ
+      }
+    }
+    
+    if (normalizedRing.length >= 3) { // ポリゴンには最低3点必要
+      result.push(normalizedRing);
+    }
   }
   
-  return [totalX / points.length, totalY / points.length];
+  return result.length > 0 ? result : null;
 }
 
 // 福島県の境界を取得
@@ -59,14 +80,10 @@ function getBounds(features: GeoJSONFeature[]): {
   let minLat = Infinity, maxLat = -Infinity;
   
   for (const feature of features) {
-    if (feature.geometry.coordinates.length === 0) continue;
+    const normalizedCoords = normalizeCoordinates(feature.geometry.coordinates);
+    if (!normalizedCoords) continue;
     
-    const coords = feature.geometry.type === "Polygon" 
-      ? feature.geometry.coordinates 
-      : feature.geometry.coordinates.flat();
-      
-    for (const ring of coords) {
-      if (ring.length === 0) continue;
+    for (const ring of normalizedCoords) {
       for (const [lon, lat] of ring) {
         minLon = Math.min(minLon, lon);
         maxLon = Math.max(maxLon, lon);
@@ -76,16 +93,44 @@ function getBounds(features: GeoJSONFeature[]): {
     }
   }
   
+  if (minLon === Infinity || maxLon === -Infinity || minLat === Infinity || maxLat === -Infinity) {
+    throw new Error("No valid coordinate bounds found");
+  }
+  
   return { minLon, maxLon, minLat, maxLat };
+}
+
+// ポリゴンの重心を計算
+function calculateCentroid(coordinates: number[][][]): [number, number] {
+  let totalX = 0;
+  let totalY = 0;
+  let totalPoints = 0;
+  
+  // 全てのリングの座標を使用
+  for (const ring of coordinates) {
+    for (const [lon, lat] of ring) {
+      totalX += lon;
+      totalY += lat;
+      totalPoints++;
+    }
+  }
+  
+  if (totalPoints === 0) {
+    throw new Error("No valid coordinate points found");
+  }
+  
+  return [totalX / totalPoints, totalY / totalPoints];
 }
 
 // GeoJSONをSVGパスに変換
 export function convertGeoJSONToMunicipalities(geojsonData: GeoJSONData): Municipality[] {
-  // 空の座標を持つfeatureを除外
-  const validFeatures = geojsonData.features.filter(feature => 
-    feature.geometry.coordinates.length > 0 && 
-    feature.geometry.coordinates[0].length > 0
-  );
+  // 有効な座標を持つfeatureを除外
+  const validFeatures = geojsonData.features.filter(feature => {
+    if (!feature.geometry.coordinates) return false;
+    
+    const normalizedCoords = normalizeCoordinates(feature.geometry.coordinates);
+    return normalizedCoords !== null;
+  });
   
   if (validFeatures.length === 0) {
     throw new Error("有効なgeometry座標を持つfeatureが見つかりません");
@@ -105,41 +150,46 @@ export function convertGeoJSONToMunicipalities(geojsonData: GeoJSONData): Munici
     const name = feature.properties.N03_004;
     if (!name) continue;
     
-    const coordinates = feature.geometry.type === "Polygon"
-      ? feature.geometry.coordinates
-      : feature.geometry.coordinates[0];
+    const normalizedCoords = normalizeCoordinates(feature.geometry.coordinates);
+    if (!normalizedCoords) continue;
     
-    if (coordinates.length === 0 || coordinates[0].length === 0) continue;
-    
-    // SVGパスを生成
-    let pathData = "";
-    for (const ring of coordinates) {
-      if (ring.length === 0) continue;
-      const svgPoints = ring.map(([lon, lat]) => 
-        projectToSVG(lon, lat, bounds, svgBounds)
-      );
-      
-      pathData += `M${svgPoints[0][0]},${svgPoints[0][1]}`;
-      for (let i = 1; i < svgPoints.length; i++) {
-        pathData += `L${svgPoints[i][0]},${svgPoints[i][1]}`;
+    try {
+      // SVGパスを生成
+      let pathData = "";
+      for (const ring of normalizedCoords) {
+        if (ring.length < 3) continue; // ポリゴンには最低3点必要
+        
+        const svgPoints = ring.map(([lon, lat]) => 
+          projectToSVG(lon, lat, bounds, svgBounds)
+        );
+        
+        pathData += `M${svgPoints[0][0]},${svgPoints[0][1]}`;
+        for (let i = 1; i < svgPoints.length; i++) {
+          pathData += `L${svgPoints[i][0]},${svgPoints[i][1]}`;
+        }
+        pathData += "Z";
       }
-      pathData += "Z";
+      
+      if (pathData === "") continue; // 有効なパスが生成されなかった場合はスキップ
+      
+      // 重心を計算
+      const [centroidLon, centroidLat] = calculateCentroid(normalizedCoords);
+      
+      if (!municipalityMap.has(name)) {
+        municipalityMap.set(name, {
+          name,
+          paths: [],
+          centroids: []
+        });
+      }
+      
+      const municipality = municipalityMap.get(name)!;
+      municipality.paths.push(pathData);
+      municipality.centroids.push([centroidLon, centroidLat]);
+    } catch (error) {
+      console.warn(`市町村 ${name} の処理中にエラーが発生しました:`, error);
+      continue;
     }
-    
-    // 重心を計算
-    const [centroidLon, centroidLat] = calculateCentroid(coordinates);
-    
-    if (!municipalityMap.has(name)) {
-      municipalityMap.set(name, {
-        name,
-        paths: [],
-        centroids: []
-      });
-    }
-    
-    const municipality = municipalityMap.get(name)!;
-    municipality.paths.push(pathData);
-    municipality.centroids.push([centroidLon, centroidLat]);
   }
   
   // 統合されたデータからMunicipalityオブジェクトを作成
