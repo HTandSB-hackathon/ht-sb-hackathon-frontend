@@ -86,7 +86,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	// const cardSize = useBreakpointValue({ base: "sm", md: "md" });
 	const avatarSize = useBreakpointValue({ base: "lg", md: "xl" });
 	const spacing = useBreakpointValue({ base: 3, md: 4 });
-	const isMobile = useBreakpointValue({ base: true, md: false });
+	const isMobile = useBreakpointValue({ base: true, md: true, lg: false });
 
 	// カラーテーマ
 	const cardBg = useColorModeValue("white", "gray.800");
@@ -416,7 +416,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 								display="flex"
 								alignItems="center"
 								justifyContent="center"
-								minH="80px"
+								position="absolute"
+								top={0}
+								left={0}
+								right={0}
+								bottom={0}
+								width="100%"
+								height="100%"
+								zIndex={10}
+								bgColor="whiteAlpha.900"
+								backdropFilter="blur(2px)"
+								flexDirection="column"
 							>
 								<HStack spacing="2" justify="center" w="100%">
 									<MdLock size="16" color="gray.500" />
@@ -441,7 +451,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 							</HStack>
 						)}
 
-						{/* ホバー時の詳細情報 or モバイル時は常に表示 */}
+						{/* ホバー時の詳細情報 or モバイル・タブレット時は常に表示 */}
 						<AnimatePresence>
 							{((isHovered && !character.isLocked && !isMobile) ||
 								(isMobile && !character.isLocked)) && (
