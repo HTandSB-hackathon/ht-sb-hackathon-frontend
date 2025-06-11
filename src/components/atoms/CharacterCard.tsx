@@ -86,6 +86,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 	// const cardSize = useBreakpointValue({ base: "sm", md: "md" });
 	const avatarSize = useBreakpointValue({ base: "lg", md: "xl" });
 	const spacing = useBreakpointValue({ base: 3, md: 4 });
+	const isMobile = useBreakpointValue({ base: true, md: false });
 
 	// カラーテーマ
 	const cardBg = useColorModeValue("white", "gray.800");
@@ -440,9 +441,10 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 							</HStack>
 						)}
 
-						{/* ホバー時の詳細情報 */}
+						{/* ホバー時の詳細情報 or モバイル時は常に表示 */}
 						<AnimatePresence>
-							{isHovered && !character.isLocked && (
+							{((isHovered && !character.isLocked && !isMobile) ||
+								(isMobile && !character.isLocked)) && (
 								<MotionBox
 									initial={{ height: 0, opacity: 0 }}
 									animate={{ height: "auto", opacity: 1 }}
