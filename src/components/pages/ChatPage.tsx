@@ -493,9 +493,21 @@ export const ChatPage: React.FC = () => {
 									onClick={handleBack}
 									borderRadius="xl"
 									_hover={{ bg: "whiteAlpha.200" }}
+									size="sm"
+									display={{ base: "none", md: "inline-flex" }}
 								>
 									戻る
 								</Button>
+								<IconButton
+									aria-label="戻る"
+									icon={<FaArrowLeft />}
+									variant="ghost"
+									onClick={handleBack}
+									borderRadius="xl"
+									_hover={{ bg: "whiteAlpha.200" }}
+									size="sm"
+									display={{ base: "inline-flex", md: "none" }}
+								/>
 								<Spacer />
 								<Avatar
 									size="md"

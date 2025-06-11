@@ -32,13 +32,18 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 	const setUser = useSetAtom(userAtom);
 
 	return (
-		<Box position="fixed" top={4} right={4} zIndex="1000">
+		<Box
+			position="fixed"
+			top={{ base: 3, md: 4 }}
+			right={{ base: 3, md: 4 }}
+			zIndex="1000"
+		>
 			<Menu>
 				<MenuButton
 					as={IconButton}
 					icon={
 						<Avatar
-							size="lg"
+							size={{ base: "md", sm: "md", md: "lg" }} // スマホ時もmdに
 							name={user?.name ?? "ユーザー"}
 							bg="purple.500"
 							color="white"

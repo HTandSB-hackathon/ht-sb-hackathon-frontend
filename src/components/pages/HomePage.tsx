@@ -281,21 +281,30 @@ const HomePage: React.FC = () => {
 							backgroundSize="50px 50px"
 						/>
 
-						<VStack spacing={6} textAlign="center" color="white" zIndex="2">
+						<VStack
+							spacing={{ base: 3, sm: 4, md: 6 }}
+							textAlign="center"
+							color="white"
+							zIndex="2"
+							w="full"
+							maxW="2xl"
+						>
 							<Text
-								fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
+								fontSize={{ base: "md", sm: "lg", md: "2xl", lg: "3xl" }} // スマホ時は小さく
 								fontWeight="bold"
 								opacity="0.9"
+								whiteSpace="pre-line"
 							>
 								{getGreeting()}！
 							</Text>
 							<Text
-								fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
+								fontSize={{ base: "md", sm: "lg", md: "2xl", lg: "3xl" }} // スマホ時は小さく
 								maxW="2xl"
 								opacity="0.95"
 								lineHeight="tall"
-								px={{ base: 2, sm: 0 }}
+								px={{ base: 1, sm: 0 }}
 								fontWeight="extrabold"
+								whiteSpace="pre-line"
 							>
 								福島の魅力的な人々が、あなたを待っています！
 							</Text>

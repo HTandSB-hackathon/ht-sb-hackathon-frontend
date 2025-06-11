@@ -638,7 +638,6 @@ const LandingPage: React.FC = () => {
 									{/* ステップ番号 */}
 									<Box
 										position="absolute"
-										top="-15px"
 										left="50%"
 										transform="translateX(-50%)"
 										bg={`${step.color}.500`}
@@ -1119,7 +1118,7 @@ const LandingPage: React.FC = () => {
 						{/* フッターロゴ */}
 						<Box
 							as="img"
-							src="/ht-sb/tsunano.svg"
+							src="/ht-sb/logo_hs.png"
 							alt="おふくわけロゴ"
 							height="60px"
 							width="auto"
