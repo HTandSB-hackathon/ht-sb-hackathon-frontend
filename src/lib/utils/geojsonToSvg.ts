@@ -6,6 +6,7 @@ interface GeoJSONFeature {
   };
   properties: {
     N03_004: string; // 市町村名
+    N03_007?: string; // 行政区域コード
     [key: string]: any;
   };
 }
@@ -34,13 +35,12 @@ function projectToSVG(lon: number, lat: number, bounds: {
 }
 
 // ポリゴンの重心を計算
-function calculateCentroid(coordinates: number[][][]): [number, number] {
+function calculateCentroid(coordinates: number[][]): [number, number] {
   let totalX = 0;
   let totalY = 0;
   const points = coordinates[0]; // 外周のみ使用
   
-  for (const point of points) {
-    const [lon, lat] = point;
+  for (const [lon, lat] of points) {
     totalX += lon;
     totalY += lat;
   }
@@ -59,19 +59,19 @@ function getBounds(features: GeoJSONFeature[]): {
   let minLat = Infinity, maxLat = -Infinity;
   
   for (const feature of features) {
+    if (feature.geometry.coordinates.length === 0) continue;
+    
     const coords = feature.geometry.type === "Polygon" 
       ? feature.geometry.coordinates 
       : feature.geometry.coordinates.flat();
       
     for (const ring of coords) {
-      if (Array.isArray(ring[0])) {
-        // ring is an array of [lon, lat] pairs
-        for (const [lon, lat] of ring as number[][]) {
-          minLon = Math.min(minLon, lon);
-          maxLon = Math.max(maxLon, lon);
-          minLat = Math.min(minLat, lat);
-          maxLat = Math.max(maxLat, lat);
-        }
+      if (ring.length === 0) continue;
+      for (const [lon, lat] of ring) {
+        minLon = Math.min(minLon, lon);
+        maxLon = Math.max(maxLon, lon);
+        minLat = Math.min(minLat, lat);
+        maxLat = Math.max(maxLat, lat);
       }
     }
   }
@@ -81,43 +81,80 @@ function getBounds(features: GeoJSONFeature[]): {
 
 // GeoJSONをSVGパスに変換
 export function convertGeoJSONToMunicipalities(geojsonData: GeoJSONData): Municipality[] {
-  const bounds = getBounds(geojsonData.features);
-  const svgBounds = { width: 260, height: 140, offsetX: 40, offsetY: 40 }; // viewBox="40 40 300 180"に合わせる
+  // 空の座標を持つfeatureを除外
+  const validFeatures = geojsonData.features.filter(feature => 
+    feature.geometry.coordinates.length > 0 && 
+    feature.geometry.coordinates[0].length > 0
+  );
   
-  return geojsonData.features.map(feature => {
+  if (validFeatures.length === 0) {
+    throw new Error("有効なgeometry座標を持つfeatureが見つかりません");
+  }
+  
+  const bounds = getBounds(validFeatures);
+  const svgBounds = { width: 260, height: 140, offsetX: 40, offsetY: 40 };
+  
+  // 市町村名でグループ化して重複を統合
+  const municipalityMap = new Map<string, {
+    name: string;
+    paths: string[];
+    centroids: [number, number][];
+  }>();
+  
+  for (const feature of validFeatures) {
     const name = feature.properties.N03_004;
+    if (!name) continue;
     
-    // Polygonの処理
     const coordinates = feature.geometry.type === "Polygon"
       ? feature.geometry.coordinates
-      : feature.geometry.coordinates[0]; // MultiPolygonの場合は最初のポリゴンを使用
+      : feature.geometry.coordinates[0];
+    
+    if (coordinates.length === 0 || coordinates[0].length === 0) continue;
     
     // SVGパスを生成
     let pathData = "";
     for (const ring of coordinates) {
-      if (Array.isArray(ring) && Array.isArray(ring[0])) {
-        const svgPoints = (ring as number[][]).map(([lon, lat]) =>
-          projectToSVG(lon, lat, bounds, svgBounds)
-        );
-
-        pathData += `M${svgPoints[0][0]},${svgPoints[0][1]}`;
-        for (let i = 1; i < svgPoints.length; i++) {
-          pathData += `L${svgPoints[i][0]},${svgPoints[i][1]}`;
-        }
-        pathData += "Z";
+      if (ring.length === 0) continue;
+      const svgPoints = ring.map(([lon, lat]) => 
+        projectToSVG(lon, lat, bounds, svgBounds)
+      );
+      
+      pathData += `M${svgPoints[0][0]},${svgPoints[0][1]}`;
+      for (let i = 1; i < svgPoints.length; i++) {
+        pathData += `L${svgPoints[i][0]},${svgPoints[i][1]}`;
       }
+      pathData += "Z";
     }
+    
     // 重心を計算
-    const [centroidLon, centroidLat] = calculateCentroid(
-      feature.geometry.type === "Polygon"
-        ? feature.geometry.coordinates as number[][][]
-        : (feature.geometry.coordinates as number[][][][])[0]
-    );
-    const [centerX, centerY] = projectToSVG(centroidLon, centroidLat, bounds, svgBounds);
+    const [centroidLon, centroidLat] = calculateCentroid(coordinates);
+    
+    if (!municipalityMap.has(name)) {
+      municipalityMap.set(name, {
+        name,
+        paths: [],
+        centroids: []
+      });
+    }
+    
+    const municipality = municipalityMap.get(name)!;
+    municipality.paths.push(pathData);
+    municipality.centroids.push([centroidLon, centroidLat]);
+  }
+  
+  // 統合されたデータからMunicipalityオブジェクトを作成
+  return Array.from(municipalityMap.values()).map(({ name, paths, centroids }) => {
+    // 複数のパスを結合
+    const combinedPath = paths.join(" ");
+    
+    // 重心の平均を計算
+    const avgLon = centroids.reduce((sum, [lon]) => sum + lon, 0) / centroids.length;
+    const avgLat = centroids.reduce((sum, [, lat]) => sum + lat, 0) / centroids.length;
+    const [centerX, centerY] = projectToSVG(avgLon, avgLat, bounds, svgBounds);
     
     return {
       name,
-      path: pathData,
+      path: combinedPath,
       center: { x: Math.round(centerX), y: Math.round(centerY) }
     };
   });

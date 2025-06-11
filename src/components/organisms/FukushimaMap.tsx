@@ -174,12 +174,15 @@ export const FukushimaMap = () => {
       <svg
         viewBox="40 40 300 180"
         width="100%"
-        height="auto"
-        style={{ display: "block" }}
+        style={{ 
+          display: "block",
+          height: "auto",
+          aspectRatio: "300 / 180"
+        }}
       >
-        {municipalities.map((m) => (
+        {municipalities.map((m, index) => (
           <g
-            key={m.name}
+            key={`${m.name}-${index}`}
             onMouseEnter={() => setHovered(m.name)}
             onMouseLeave={() => setHovered(null)}
             style={{ cursor: "pointer" }}
