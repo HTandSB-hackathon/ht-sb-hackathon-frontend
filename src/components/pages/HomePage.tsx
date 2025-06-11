@@ -317,7 +317,6 @@ const HomePage: React.FC = () => {
 							</VStack>
 						</VStack>
 					</MotionBox>
-					<FukushimaMap />
 					{/* メインコンテンツグリッド */}
 					<Grid templateColumns={gridTemplateColumns} gap={cardSpacing} mb={12}>
 						{/* 左カラム */}
@@ -479,7 +478,7 @@ const HomePage: React.FC = () => {
 												</HStack>
 												<Text color="gray.700">{seasonInfo.message}</Text>
 											</Box>
-
+											<FukushimaMap fukushimaWeeks={fukushimaWeeks} />
 											<Box>
 												<Text fontWeight="bold" mb={4} color="gray.700">
 													🗾 過去の放送
