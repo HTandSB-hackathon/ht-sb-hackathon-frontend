@@ -258,12 +258,16 @@ export const checkLevelUpRelationshipAtom = atom(
 				set(lockedCharactersAtomAsync);
 				set(relationshipsAtomAsync);
 
-				const newStory = await checkStroyUnlock(characterId);
-				if (newStory.requiredTrustLevel === relationship.trustLevelId) {
-					// 新しいストーリーが解放された場合の処理
-					console.log("新しいストーリーが解放されました:", newStory);
-					set(isNewStoryModalOpenAtom, true);
-					set(newStoryAtom, newStory);
+				try {
+					const newStory = await checkStroyUnlock(characterId);
+					if (newStory.requiredTrustLevel === relationship.trustLevelId) {
+						// 新しいストーリーが解放された場合の処理
+						console.log("新しいストーリーが解放されました:", newStory);
+						set(isNewStoryModalOpenAtom, true);
+						set(newStoryAtom, newStory);
+					}
+				} catch (error) {
+					console.error("Error checking story unlock:", error);
 				}
 				// ストーリー解放モーダルよりも上にレベルアップモーダルを表示するため、後から状態を更新する
 				set(isLevelUpModalOpenAtom, true);
