@@ -181,8 +181,11 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 						{showNext ? (
 							isLastStep ? (
 								<>
+									{/* モバイルはアイコンのみ、md以上は「始める」+アイコン */}
 									<Button
-										rightIcon={<FaRocket size={28} />}
+										rightIcon={
+											<FaRocket size={28} />
+										}
 										colorScheme="purple"
 										bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
 										variant="solid"
@@ -200,9 +203,28 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 											transform: "translateY(-2px)",
 											shadow: "2xl",
 										}}
+										display={{ base: "none", md: "inline-flex" }}
 									>
 										始める
 									</Button>
+									<IconButton
+										aria-label="始める"
+										icon={<FaRocket size={28} />}
+										colorScheme="purple"
+										bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
+										variant="solid"
+										size="lg"
+										onClick={onNext}
+										borderRadius="full"
+										shadow="xl"
+										_hover={{
+											bgGradient:
+												"linear(135deg, purple.600 0%, blue.600 50%, teal.600 100%)",
+											transform: "translateY(-2px)",
+											shadow: "2xl",
+										}}
+										display={{ base: "inline-flex", md: "none" }}
+									/>
 								</>
 							) : (
 								<Circle
