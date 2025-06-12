@@ -210,67 +210,94 @@ export default function ProfilePage() {
 							overflow="hidden"
 							position="relative"
 						>
-							<CardBody p={8} position="relative">
-								<HStack spacing={6} align="start">
-									<MotionBox
-										whileHover={{ scale: 1.05 }}
-										transition={{ duration: 0.2 }}
+							<CardBody p={{ base: 4, md: 8 }} position="relative">
+								<VStack spacing={4} align="stretch">
+									{/* スマホ版では縦並び、PC版では横並び */}
+									<Flex
+										direction={{ base: "column", md: "row" }}
+										align={{ base: "stretch", md: "flex-start" }}
+										gap={{ base: 4, md: 6 }}
 									>
-										<Avatar
-											size="2xl"
-											name={user?.name || "ユーザー"}
-											src={user?.avatarUrl || undefined}
-											border="4px solid white"
-											shadow="xl"
-										/>
-									</MotionBox>
-									<VStack align="start" spacing={3} flex={1}>
-										<HStack>
-											<Heading
-												size="2xl"
-												bgGradient={gradientText}
-												bgClip="text"
-												fontWeight="bold"
-											>
-												{user?.name || "ユーザー名"}
-											</Heading>
-											<Badge
-												colorScheme="green"
-												variant="solid"
-												px={3}
-												py={1}
-												borderRadius="full"
-												fontSize="sm"
-											>
-												🌟 アクティブ
-											</Badge>
-										</HStack>
-										<Box>
-											<HStack spacing={2}>
-												<FaMailBulk color="purple.500" />
-												<Text fontSize="md" color="gray.600">
-													メールアドレス: {user?.email}
-												</Text>
-											</HStack>
-											<HStack spacing={2}>
-												<FaCalendarAlt color="purple.500" />
-												<Text fontSize="md" color="gray.600">
-													登録日: {new Date().toLocaleDateString("ja-JP")}
-												</Text>
-											</HStack>
-										</Box>
-									</VStack>
-									<VStack spacing={3}>
-										<IconButton
-											aria-label="プロフィール編集"
-											icon={<MdEdit />}
-											colorScheme="purple"
-											variant="ghost"
-											size="lg"
-											borderRadius="full"
-										/>
-									</VStack>
-								</HStack>
+										{/* アバター部分 */}
+										<MotionBox
+											whileHover={{ scale: 1.05 }}
+											transition={{ duration: 0.2 }}
+											alignSelf={{ base: "center", md: "flex-start" }}
+										>
+											<Avatar
+												size={{ base: "xl", md: "2xl" }}
+												name={user?.name || "ユーザー"}
+												src={user?.avatarUrl || undefined}
+												border="4px solid white"
+												shadow="xl"
+											/>
+										</MotionBox>
+
+										{/* ユーザー情報部分 */}
+										<VStack
+											align={{ base: "start", md: "start" }}
+											spacing={3}
+											flex={1}
+											textAlign="left"
+										>
+											<VStack spacing={2} align="start">
+												<Heading
+													size={{ base: "xl", md: "2xl" }}
+													bgGradient={gradientText}
+													bgClip="text"
+													fontWeight="bold"
+													textAlign="left"
+												>
+													{user?.name || "ユーザー名"}
+												</Heading>
+												<Badge
+													colorScheme="green"
+													variant="solid"
+													px={3}
+													py={1}
+													borderRadius="full"
+													fontSize="sm"
+												>
+													🌟 アクティブ
+												</Badge>
+											</VStack>
+
+											<VStack spacing={2} align="start">
+												<HStack spacing={2}>
+													<Icon as={FaMailBulk} color="purple.500" />
+													<Text
+														fontSize={{ base: "sm", md: "md" }}
+														color="gray.600"
+														wordBreak="break-all"
+													>
+														{user?.email}
+													</Text>
+												</HStack>
+												<HStack spacing={2}>
+													<Icon as={FaCalendarAlt} color="purple.500" />
+													<Text
+														fontSize={{ base: "sm", md: "md" }}
+														color="gray.600"
+													>
+														登録日: {new Date().toLocaleDateString("ja-JP")}
+													</Text>
+												</HStack>
+											</VStack>
+										</VStack>
+
+										{/* 編集ボタン部分 */}
+										{/* <Box alignSelf={{ base: "center", md: "flex-start" }}>
+                                            <IconButton
+                                                aria-label="プロフィール編集"
+                                                icon={<MdEdit />}
+                                                colorScheme="purple"
+                                                variant="ghost"
+                                                size={{ base: "md", md: "lg" }}
+                                                borderRadius="full"
+                                            />
+                                        </Box> */}
+									</Flex>
+								</VStack>
 							</CardBody>
 						</MotionCard>
 
