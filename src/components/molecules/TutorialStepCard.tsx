@@ -183,9 +183,7 @@ export const TutorialStepCard: React.FC<TutorialStepCardProps> = ({
 								<>
 									{/* モバイルはアイコンのみ、md以上は「始める」+アイコン */}
 									<Button
-										rightIcon={
-											<FaRocket size={28} />
-										}
+										rightIcon={<FaRocket size={28} />}
 										colorScheme="purple"
 										bgGradient="linear(135deg, purple.500 0%, blue.500 50%, teal.500 100%)"
 										variant="solid"
